@@ -1,6 +1,6 @@
 import { User } from '@wasp/entities';
 import { useQuery } from '@wasp/queries'
-import getRelatedObjects from '@wasp/queries/getRelatedObjects'
+// import getRelatedObjects from '@wasp/queries/getRelatedObjects'
 import logout from '@wasp/auth/logout';
 import stripePayment from '@wasp/actions/stripePayment';
 import { useState, Dispatch, SetStateAction } from 'react';
@@ -11,7 +11,7 @@ const CUSTOMER_PORTAL_LINK = 'https://billing.stripe.com/p/login/test_8wM8x17JN7
 export default function Example({ user }: { user: User }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { data: relatedObjects, isLoading: isLoadingRelatedObjects } = useQuery(getRelatedObjects)
+  // const { data: relatedObjects, isLoading: isLoadingRelatedObjects } = useQuery(getRelatedObjects)
 
   return (
     <div className='mt-10 px-6'>
@@ -45,14 +45,14 @@ export default function Example({ user }: { user: User }) {
               <dt className='text-sm font-medium text-gray-500'>About</dt>
               <dd className='mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0'>I'm a cool customer.</dd>
             </div>
-            <div className='py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6'>
-              <dt className='text-sm font-medium text-gray-500'>Most Recent User RelatedObject</dt>
-              <dd className='mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0'>
+            {/* <div className='py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6'> */}
+              {/* <dt className='text-sm font-medium text-gray-500'>Most Recent User RelatedObject</dt> */}
+              {/* <dd className='mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0'>
                 {!!relatedObjects && relatedObjects.length > 0
                   ? relatedObjects[relatedObjects.length - 1].content
                   : "You don't have any at this time."}
-              </dd>
-            </div>
+              </dd> */}
+            {/* </div> */}
           </dl>
         </div>
       </div>

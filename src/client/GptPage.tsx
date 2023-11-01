@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { RelatedObject } from '@wasp/entities';
+// import { RelatedObject } from '@wasp/entities';
 import generateGptResponse from '@wasp/actions/generateGptResponse';
 import useAuth from '@wasp/auth/useAuth';
 

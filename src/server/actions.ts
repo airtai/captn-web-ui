@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import HttpError from '@wasp/core/HttpError.js';
-import type { RelatedObject } from '@wasp/entities';
+// import type { RelatedObject } from '@wasp/entities';
 import type { Chat } from '@wasp/entities';
 import type { Conversation } from '@wasp/entities';
 import type { GenerateGptResponse, StripePayment, CreateChat } from '@wasp/actions/types';
@@ -76,7 +76,8 @@ type GptPayload = {
   temperature: number;
 };
 
-export const generateGptResponse: GenerateGptResponse<GptPayload, RelatedObject> = async (
+// export const generateGptResponse: GenerateGptResponse<GptPayload, RelatedObject> = async (
+export const generateGptResponse: GenerateGptResponse<GptPayload> = async (
   { instructions, command, temperature },
   context
 ) => {
@@ -129,12 +130,15 @@ export const generateGptResponse: GenerateGptResponse<GptPayload, RelatedObject>
 
     const json = (await response.json()) as OpenAIResponse;
     console.log('response json', json);
-    return context.entities.RelatedObject.create({
-      data: {
-        content: json?.choices[0].message.content,
-        user: { connect: { id: context.user.id } },
-      },
-    });
+    // return context.entities.RelatedObject.create({
+    //   data: {
+    //     content: json?.choices[0].message.content,
+    //     user: { connect: { id: context.user.id } },
+    //   },
+    // });
+    return {
+      content: json?.choices[0].message.content,
+    }
   } catch (error: any) {
     if (!context.user.hasPaid && error?.statusCode != 402) {
       await context.entities.User.update({

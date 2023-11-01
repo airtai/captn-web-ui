@@ -35,7 +35,7 @@ app chatApp {
         configFn: import { config } from "@server/auth/google.js",
       },
     },
-    onAuthFailedRedirectTo: "/",
+    onAuthFailedRedirectTo: "/login",
   },
   db: { 
     system: PostgreSQL
@@ -83,11 +83,11 @@ entity User {=psl
   subscriptionStatus        String?
   datePaid                  DateTime?
   credits                   Int             @default(3)
-  relatedObject             RelatedObject[]
+  
   externalAuthAssociations  SocialLogin[]
   chats    Chat[]
 psl=}
-
+// relatedObject             RelatedObject[] - add in line 86
 entity SocialLogin {=psl
   id                        String          @id @default(uuid())
   provider                  String
@@ -98,15 +98,15 @@ entity SocialLogin {=psl
   @@unique([provider, providerId, userId])
 psl=}
 
-// This can be anything. In most cases, this will be your product
-entity RelatedObject {=psl
-  id                        String          @id @default(uuid())
-  content                   String
-  user                      User            @relation(fields: [userId], references: [id])
-  userId                    Int
-  createdAt                 DateTime        @default(now())
-  updatedAt                 DateTime        @updatedAt
-psl=}
+// // This can be anything. In most cases, this will be your product
+// entity RelatedObject {=psl
+//   id                        String          @id @default(uuid())
+//   content                   String
+//   user                      User            @relation(fields: [userId], references: [id])
+//   userId                    Int
+//   createdAt                 DateTime        @default(now())
+//   updatedAt                 DateTime        @updatedAt
+// psl=}
 
 entity Chat {=psl
     id          Int     @id @default(autoincrement())
@@ -197,7 +197,8 @@ page ChatPage {
 
 action generateGptResponse {
   fn: import { generateGptResponse } from "@server/actions.js",
-  entities: [User, RelatedObject]
+  // entities: [User, RelatedObject]
+  entities: [User]
 }
 
 action stripePayment {
@@ -222,10 +223,10 @@ action createChat {
 
 // 📚 Queries
 
-query getRelatedObjects {
-  fn: import { getRelatedObjects } from "@server/queries.js",
-  entities: [User, RelatedObject]
-}
+// query getRelatedObjects {
+//   fn: import { getRelatedObjects } from "@server/queries.js",
+//   entities: [User, RelatedObject]
+// }
 
 query getChats {
   fn: import { getChats } from "@server/queries.js",

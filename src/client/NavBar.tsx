@@ -27,9 +27,9 @@ export default function NavBar() {
                   <a href='/' className={current === '/' ? active : inactive}>
                     Landing Page
                   </a>
-                  <a href='/pricing' className={current.includes('pricing') ? active : inactive}>
+                  {/* <a href='/pricing' className={current.includes('pricing') ? active : inactive}>
                     Pricing
-                  </a>
+                  </a> */}
                   <a href='/gpt' className={current.includes('gpt') ? active : inactive}>
                     GPT
                   </a>
