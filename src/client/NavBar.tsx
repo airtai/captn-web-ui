@@ -33,6 +33,9 @@ export default function NavBar() {
                   <a href='/gpt' className={current.includes('gpt') ? active : inactive}>
                     GPT
                   </a>
+                  <a href='/chat' className={current.includes('chat') ? active : inactive}>
+                    Chat
+                  </a>
                 </div>
               </div>
               <div className='hidden sm:ml-6 sm:flex sm:space-x-8'>

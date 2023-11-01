@@ -1,7 +1,9 @@
 import fetch from 'node-fetch';
 import HttpError from '@wasp/core/HttpError.js';
 import type { RelatedObject } from '@wasp/entities';
-import type { GenerateGptResponse, StripePayment } from '@wasp/actions/types';
+import type { Chat } from '@wasp/entities';
+import type { Conversation } from '@wasp/entities';
+import type { GenerateGptResponse, StripePayment, CreateChat } from '@wasp/actions/types';
 import type { StripePaymentResult, OpenAIResponse } from './types';
 import Stripe from 'stripe';
 
@@ -149,3 +151,14 @@ export const generateGptResponse: GenerateGptResponse<GptPayload, RelatedObject>
 
   throw new HttpError(500, 'Something went wrong');
 };
+
+export const createChat: CreateChat<void, Chat> = async (_args, context) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+  return context.entities.Chat.create({
+    data: {
+      user: { connect: { id: context.user.id } },
+    },
+  });
+}
