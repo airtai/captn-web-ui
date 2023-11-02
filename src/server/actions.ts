@@ -3,7 +3,7 @@ import HttpError from '@wasp/core/HttpError.js';
 // import type { RelatedObject } from '@wasp/entities';
 import type { Chat } from '@wasp/entities';
 import type { Conversation } from '@wasp/entities';
-import type { GenerateGptResponse, StripePayment, CreateChat } from '@wasp/actions/types';
+import type { GenerateGptResponse, StripePayment, CreateChat, UpdateConversation, GenerateOpenAIResponse } from '@wasp/actions/types';
 import type { StripePaymentResult, OpenAIResponse } from './types';
 import Stripe from 'stripe';
 
@@ -156,6 +156,8 @@ export const generateGptResponse: GenerateGptResponse<GptPayload> = async (
   throw new HttpError(500, 'Something went wrong');
 };
 
+
+
 export const createChat: CreateChat<void, Conversation> = async (_args, context) => {
   if (!context.user) {
     throw new HttpError(401);
@@ -168,8 +170,70 @@ export const createChat: CreateChat<void, Conversation> = async (_args, context)
 
   return await context.entities.Conversation.create({
     data: {
-      conversation: "Hi, I am captn chat. How can I help you?",
+      conversation: [
+        {
+            role: 'assistant',
+            content: `Hi, I am captn AI. How can I help you?. ${chat.id}`,
+        },
+    ],
       chat: { connect: { id: chat.id } },
     },
   });
 }
+
+type UpdateConversationPayload = {
+  conversation_id: number;
+  conversations: any;
+};
+
+export const updateConversation: UpdateConversation<UpdateConversationPayload, Conversation> = async (args, context) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+  return context.entities.Conversation.update({
+    where: { id: args.conversation_id },
+    data: {
+      conversation: args.conversations
+    },
+  })
+}
+
+type OpenAIPayload = {
+  conversation: any;
+};
+
+export const generateOpenAIResponse: GenerateOpenAIResponse<OpenAIPayload> = async (
+  { conversation },
+  context
+) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+
+  const payload = {
+    messages: conversation,
+    temperature: 0.7,
+  };
+
+  try {
+    console.log('fetching', payload);
+    const response = await fetch('https://airt-openai-canada.openai.azure.com/openai/deployments/airt-canada-gpt35-turbo-16k/chat/completions?api-version=2023-07-01-preview', {
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': `${process.env.AZURE_OPENAI_API_KEY!}`,
+      },
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+
+    const json = (await response.json()) as OpenAIResponse; // this should be AzureOpenAIResponse
+    console.log('response json', json);
+    return {
+      content: json?.choices[0].message.content,
+    }
+  } catch (error: any) {
+    console.error(error);
+  }
+
+  throw new HttpError(500, 'Something went wrong');
+};
