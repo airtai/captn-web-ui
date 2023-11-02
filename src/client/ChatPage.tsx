@@ -8,24 +8,30 @@ import { Chat } from '@wasp/entities'
 import createChat from '@wasp/actions/createChat'
 
 const ChatsList = ({ chats }: { chats: Chat[] }) => {
+    const [chatConversation, setChatConversation] = useState('');
     const handleClick = async (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault()
         try {
-            await createChat()
+            const newChatConversation = await createChat();
+            setChatConversation(newChatConversation.conversation);
           } catch (err: any) {
             window.alert('Error: ' + err.message)
           }
-        console.log(event.target);
-        console.log(event.currentTarget);
+        // console.log(event.target);
+        // console.log(event.currentTarget);
       };
     if (!chats?.length) return <div>No chats</div>
   
     return (
       <div>
         {chats.map((chat, idx) => (
-          <div>{chat.id}</div>
+          <div key={idx}>{chat.id}</div>
         ))}
+        <hr />
         <button onClick={handleClick}>Create new chat</button> 
+        <hr />
+        <h3>Chat conversation is below:</h3>
+        {chatConversation}
       </div>
     )
   }

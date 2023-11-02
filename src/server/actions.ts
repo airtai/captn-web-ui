@@ -156,13 +156,20 @@ export const generateGptResponse: GenerateGptResponse<GptPayload> = async (
   throw new HttpError(500, 'Something went wrong');
 };
 
-export const createChat: CreateChat<void, Chat> = async (_args, context) => {
+export const createChat: CreateChat<void, Conversation> = async (_args, context) => {
   if (!context.user) {
     throw new HttpError(401);
   }
-  return context.entities.Chat.create({
+  const chat = await context.entities.Chat.create({
     data: {
       user: { connect: { id: context.user.id } },
+    },
+  });
+
+  return await context.entities.Conversation.create({
+    data: {
+      conversation: "Hi, I am captn chat. How can I help you?",
+      chat: { connect: { id: chat.id } },
     },
   });
 }
