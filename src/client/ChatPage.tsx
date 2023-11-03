@@ -51,7 +51,7 @@ const ConversationsList = ({ conversations }: { conversations: Conversation[] })
                     <span className="absolute inline-block" style={{"left": "-15px", "top": "6px", "height":" 45px", "width": "45px"}}>
                         {conversationLogo}
                     </span>
-                    <span>
+                    <span className="text-base">
                         {conversation.content}
                     </span>
                 </div>

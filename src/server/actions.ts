@@ -173,7 +173,7 @@ export const createChat: CreateChat<void, Conversation> = async (_args, context)
       conversation: [
         {
             role: 'assistant',
-            content: `Hi, I am captn AI. How can I help you?. ${chat.id}`,
+            content: `Hi, I'm Capt'n AI. How can I help you today?`,
         },
     ],
       chat: { connect: { id: chat.id } },
