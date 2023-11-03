@@ -5,9 +5,9 @@ app chatApp {
   title: "Capt'n.ai",
   head: [
         "<meta property='og:type' content='website' />",
-        "<meta property='og:url' content='https://mySaaSapp.com' />",
-        "<meta property='og:description' content='I made a SaaS App. Buy my stuff.' />",
-        "<meta property='og:image' content='src/client/static/image.png' />",
+        "<meta property='og:url' content='' />",
+        "<meta property='og:description' content='Captn AI product page' />",
+        "<meta property='og:image' content='src/client/static/captn-logo-large.png' />",
         // you can put your google analytics script here, too!
   ],
   // 🔐 Auth out of the box! https://wasp-lang.dev/docs/auth/overview
