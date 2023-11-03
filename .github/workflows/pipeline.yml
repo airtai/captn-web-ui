@@ -50,7 +50,7 @@ jobs:
             run:
                 shell: bash
         needs: [docker_build_push]
-        if: github.ref_name == 'main'
+        if: github.ref_name == 'main' || github.ref_name == 'fix-backend-deploy'
         container:
             image: python:3.7-stretch
         env:
@@ -63,7 +63,6 @@ jobs:
             - run: chown -R $(id -u):$(id -g) $PWD
             - run: echo "TAG=latest" >> $GITHUB_ENV
             # - run: if [[ $GITHUB_REF_NAME == "main" ]]; then printenv PROD_CONFIG > "$(pwd)/.env" ; else printenv STAGING_CONFIG > "$(pwd)/.env" ; fi;
-            - run: sed 's/\"//g' .env >> $GITHUB_ENV
             - run: echo "PATH=$PATH:/github/home/.local/bin" >> $GITHUB_ENV
             - run: 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
             - run: eval $(ssh-agent -s)
