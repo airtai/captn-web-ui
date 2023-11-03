@@ -61,7 +61,7 @@ jobs:
             GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
             GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v3
             # This is to fix GIT not liking owner of the checkout dir - https://github.com/actions/runner/issues/2033#issuecomment-1204205989
             - run: chown -R $(id -u):$(id -g) $PWD
             - run: echo "TAG=latest" >> $GITHUB_ENV
@@ -94,7 +94,7 @@ jobs:
         container:
             image: python:3.7-stretch
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
               with:
                 node-version: 18
