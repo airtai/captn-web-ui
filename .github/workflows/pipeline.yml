@@ -90,7 +90,7 @@ jobs:
         needs: [docker_build_push]
         permissions:
             contents: write
-        if: github.ref_name == 'main' || github.ref.name == 'add-frontend'
+        if: github.ref_name == 'main'
         container:
             image: python:3.7-stretch
         steps:
