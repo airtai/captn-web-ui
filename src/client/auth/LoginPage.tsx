@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { LoginForm } from '@wasp/auth/forms/Login';
 import { AuthWrapper } from './authWrapper';
 import useAuth from '@wasp/auth/useAuth';
+import { appearance } from '../appearance'
 
 export default function Login() {
   const history = useHistory();
@@ -18,7 +19,7 @@ export default function Login() {
 
   return (
     <AuthWrapper>
-      <LoginForm />
+      <LoginForm appearance={appearance}/>
       <br />
       <span className='text-sm font-medium text-gray-900'>
         Don't have an account yet?{' '}

@@ -170,7 +170,7 @@ export default function ChatPage(props: RouteComponentProps<{ id: string }>) {
                                     <button type="submit" className="text-white absolute right-2.5 bottom-2.5 bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-captn-cta-green dark:hover:bg-captn-cta-green-hover dark:focus:ring-blue-800">Send</button>
                                 </div>
                             </form>
-                        </div>) : <p className="text-gray-500" style={{"position": "absolute", "top": "50%", "left": "50%", "transform": "translate(-50%, -50%)", "fontSize": "60px"}}>Please initiate a new chat or select existing chats to resume your conversation.</p>}
+                        </div>) : <p className="text-captn-light-cream opacity-70" style={{"position": "absolute", "top": "50%", "left": "50%", "transform": "translate(-50%, -50%)", "fontSize": "60px"}}>Please initiate a new chat or select existing chats to resume your conversation.</p>}
                         </div>
                     </div>
                 </div>

@@ -32,6 +32,7 @@ export const getChats: GetChats<void, Chat[]> = async (args, context) => {
         id: context.user.id
       }
     },
+    orderBy: { id: 'desc' },
   })
 }
 
