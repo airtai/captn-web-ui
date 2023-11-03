@@ -6,9 +6,10 @@ env:
     IMAGE_NAME: ${{ github.repository }}
     PORT: ${{ vars.PORT }}
     WASP_WEB_CLIENT_URL: ${{ vars.WASP_WEB_CLIENT_URL }}
+    BACKEND_DOMAIN: ${{ vars.BACKEND_DOMAIN }}
+    REACT_APP_API_URL: ${{ vars.REACT_APP_API_URL }}
     DATABASE_URL: ${{ secrets.DATABASE_URL }}
     JWT_SECRET: ${{ secrets.JWT_SECRET }}
-    BACKEND_DOMAIN: ${{ vars.BACKEND_DOMAIN }}
 
 jobs:
     docker_build_push:
@@ -56,11 +57,11 @@ jobs:
         env:
             GITHUB_USERNAME: ${{ github.actor }}
             GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-            GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
             SSH_KEY: ${{ secrets.SSH_KEY }}
+            GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
             GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             # This is to fix GIT not liking owner of the checkout dir - https://github.com/actions/runner/issues/2033#issuecomment-1204205989
             - run: chown -R $(id -u):$(id -g) $PWD
             - run: echo "TAG=latest" >> $GITHUB_ENV
@@ -80,3 +81,41 @@ jobs:
             - run: sh scripts/deploy_backend.sh
 
             - run: rm key.pem
+
+    deploy_frontend:
+        runs-on: ubuntu-22.04
+        defaults:
+            run:
+                shell: bash
+        needs: [docker_build_push]
+        permissions:
+            contents: write
+        if: github.ref_name == 'main' || github.ref.name == 'add-frontend'
+        container:
+            image: python:3.7-stretch
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v3
+              with:
+                node-version: 18
+
+            - name: Install wasp
+              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh
+
+            - name: Log in to the Container registry
+              uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+              with:
+                  registry: ${{ env.REGISTRY }}
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
+            - run: docker pull ghcr.io/$GITHUB_REPOSITORY:$GITHUB_REF_NAME || docker pull ghcr.io/$GITHUB_REPOSITORY || true
+            - name: Build wasp
+              run: wasp build
+            - name: Build frontend
+              run: cd .wasp/build/web-app && npm install && REACT_APP_API_URL=$REACT_APP_API_URL npm run build
+
+            - name: Deploy to github pages
+              uses: JamesIves/github-pages-deploy-action@v4
+              with:
+                folder: .wasp/build/web-app/build
