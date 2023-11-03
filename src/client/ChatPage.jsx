@@ -6,6 +6,7 @@ import logout from '@wasp/auth/logout';
 import { useState, Dispatch, SetStateAction } from 'react';
 // import { Chat, Conversation } from '@wasp/entities'
 import { Link } from '@wasp/router'
+import Markdown from 'react-markdown'
 
 import logo from './static/captn-logo.png'
 import createChat from '@wasp/actions/createChat'
@@ -53,9 +54,9 @@ const ConversationsList = ({ conversations }) => {
                     <span className="absolute inline-block" style={{"left": "-15px", "top": "6px", "height":" 45px", "width": "45px"}}>
                         {conversationLogo}
                     </span>
-                    <span className="text-base">
-                        {conversation.content}
-                    </span>
+                    <div className="chat-conversations text-base flex flex-col gap-2">
+                        <Markdown>{conversation.content}</Markdown>
+                    </div>
                 </div>
                 </div>
             </div>

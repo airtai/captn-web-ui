@@ -34,3 +34,8 @@ a {
 a:hover {
   color: rgb(99 102 241 / var(--tw-text-opacity));
 }
+
+.chat-conversations ol, .chat-conversations  ul, .chat-conversations  li{
+  list-style: auto;
+  margin:10px;
+}
