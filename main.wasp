@@ -2,7 +2,7 @@ app chatApp {
   wasp: {
     version: "^0.11.7"
   },
-  title: "chatApp",
+  title: "Capt'n.ai",
   head: [
         "<meta property='og:type' content='website' />",
         "<meta property='og:url' content='https://mySaaSapp.com' />",
@@ -36,6 +36,7 @@ app chatApp {
       },
     },
     onAuthFailedRedirectTo: "/login",
+    onAuthSucceededRedirectTo: "/chat"
   },
   db: { 
     system: PostgreSQL

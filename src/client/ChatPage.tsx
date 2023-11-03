@@ -42,12 +42,8 @@ const ConversationsList = ({ conversations }: { conversations: Conversation[] })
         <div>
           {conversations.map((conversation, idx) => (
             <div key={idx}>
-                <div className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white group">
-                <svg className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
-                    <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-                    <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
-                </svg>
-                <span className="ml-3 block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                <div className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white group bg-captn-dark-blue">
+                <span className="ml-3 block w-full p-4 pl-10 text-sm text-gray-900 border border-captn-dark-blue rounded-lg bg-captn-dark-blue dark:bg-captn-dark-blue dark:border-captn-dark-blue dark:placeholder-gray-400 dark:text-white">
                     {conversation.content}
                 </span>
                 </div>
@@ -125,12 +121,12 @@ export default function ChatPage(props: RouteComponentProps<{ id: string }>) {
 
     return (
         <div className='relative z-0 flex h-full w-full overflow-hidden h-screen'>
-            <div id="default-sidebar" style={{width: '260px'}} className="flex-shrink-0 overflow-x-hidden dark bg-gray-900 gizmo:bg-black" aria-label="Sidebar">
-            <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+            <div id="default-sidebar" style={{width: '260px'}} className="flex-shrink-0 overflow-x-hidden dark bg-captn-dark-blue gizmo:bg-black" aria-label="Sidebar">
+            <div className="h-full px-3 py-4 overflow-y-auto bg-captn-dark-blue dark:bg-captn-dark-blue">
                 <div className='mb-1 flex flex-row gap-2'>
                 <button
                 onClick={handleClick}
-                className='flex px-3 min-h-[44px] py-1 items-center gap-3 transition-colors duration-200 dark:text-white cursor-pointer text-sm rounded-md rounded-md text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex-grow overflow-hidden'
+                className='flex px-3 min-h-[44px] py-1 items-center gap-3 transition-colors duration-200 dark:text-white cursor-pointer text-sm rounded-md rounded-md text-white bg-captn-cta-green hover:bg-captn-cta-green-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex-grow overflow-hidden'
                 >
                 <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm shrink-0" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 New chat
@@ -144,11 +140,11 @@ export default function ChatPage(props: RouteComponentProps<{ id: string }>) {
                 </div>
             </div>
             </div>
-            <div className="relative flex h-full max-w-full flex-1 flex-col overflow-hidden">
+            <div className="relative flex h-full max-w-full flex-1 flex-col overflow-hidden bg-captn-light-blue">
                 <div className="relative h-full w-full flex-1 overflow-auto transition-width">
                     <div className="flex h-full flex-col">
                         <div className="flex-1 overflow-hidden">
-                        <div className="flex h-full flex-col items-center justify-between pb-24 overflow-y-auto" style={{"height": "80%"}}>
+                        <div className="flex h-full flex-col items-center justify-between pb-24 overflow-y-auto bg-captn-light-blue" style={{"height": "85%"}}>
                             {conversations && <ConversationsList conversations={conversations.conversation} />}
                         </div>
                         <div className="w-full pt-2 md:pt-0 border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:pl-2 gizmo:pl-0 gizmo:md:pl-0 md:w-[calc(100%-.5rem)] absolute bottom-100 left-0 md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient">
@@ -160,8 +156,8 @@ export default function ChatPage(props: RouteComponentProps<{ id: string }>) {
                                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                                         </svg>
                                     </div>
-                                    <input type="search" id="userQuery" name="search" className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search" required />
-                                    <button type="submit" className="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Send</button>
+                                    <input type="search" id="userQuery" name="search" className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-captn-dark-blue focus:ring-blue-500 focus:border-blue-500 dark:bg-captn-dark-blue dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search" required />
+                                    <button type="submit" className="text-white absolute right-2.5 bottom-2.5 bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-captn-cta-green dark:hover:bg-captn-cta-green-hover dark:focus:ring-blue-800">Send</button>
                                 </div>
                             </form>
                         </div>

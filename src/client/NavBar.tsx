@@ -1,5 +1,5 @@
 
-import logo from './static/logo.png'
+import logo from './static/captn-logo.png'
 import { Disclosure } from '@headlessui/react';
 import { AiOutlineBars, AiOutlineClose, AiOutlineUser } from 'react-icons/ai';
 import useAuth from '@wasp/auth/useAuth';
@@ -12,7 +12,7 @@ export default function NavBar() {
   const { data: user } = useAuth();
 
   return (
-    <Disclosure as='nav' className='bg-white shadow sticky top-0 z-50 '>
+    <Disclosure as='nav' className='bg-captn-light-cream shadow sticky top-0 z-50 '>
       {({ open }) => (
         <>
           <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-16'>
@@ -25,14 +25,14 @@ export default function NavBar() {
                 </div>
                 <div className='hidden sm:ml-6 sm:flex sm:space-x-8'>
                   <a href='/' className={current === '/' ? active : inactive}>
-                    Landing Page
+                    Home
                   </a>
                   {/* <a href='/pricing' className={current.includes('pricing') ? active : inactive}>
                     Pricing
                   </a> */}
-                  <a href='/gpt' className={current.includes('gpt') ? active : inactive}>
+                  {/* <a href='/gpt' className={current.includes('gpt') ? active : inactive}>
                     GPT
-                  </a>
+                  </a> */}
                   <a href='/chat' className={current.includes('chat') ? active : inactive}>
                     Chat
                   </a>
