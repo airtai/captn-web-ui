@@ -56,20 +56,21 @@ jobs:
         env:
             GITHUB_USERNAME: ${{ github.actor }}
             GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-            PROD_SSH_KEY: ${{ secrets.PROD_SSH_KEY }}
+            GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+            SSH_KEY: ${{ secrets.SSH_KEY }}
+            GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
         steps:
             - uses: actions/checkout@v3
             # This is to fix GIT not liking owner of the checkout dir - https://github.com/actions/runner/issues/2033#issuecomment-1204205989
             - run: chown -R $(id -u):$(id -g) $PWD
             - run: echo "TAG=latest" >> $GITHUB_ENV
             # - run: if [[ $GITHUB_REF_NAME == "main" ]]; then printenv PROD_CONFIG > "$(pwd)/.env" ; else printenv STAGING_CONFIG > "$(pwd)/.env" ; fi;
-            - run: sed 's/\"//g' .env >> $GITHUB_ENV
             - run: echo "PATH=$PATH:/github/home/.local/bin" >> $GITHUB_ENV
             - run: 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
             - run: eval $(ssh-agent -s)
             - run: mkdir -p ~/.ssh
             - run: chmod 700 ~/.ssh
-            - run: ssh-keyscan "$DOMAIN" >> ~/.ssh/known_hosts
+            - run: ssh-keyscan "$BACKEND_DOMAIN" >> ~/.ssh/known_hosts
             - run: chmod 644 ~/.ssh/known_hosts
             - run: echo "$SSH_KEY" | base64 --decode > key.pem
             - run: chmod 600 key.pem
