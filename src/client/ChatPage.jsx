@@ -1,26 +1,26 @@
-import { User } from '@wasp/entities';
+// import { User } from '@wasp/entities';
 import { useQuery } from '@wasp/queries'
 import getChats from '@wasp/queries/getChats'
 import getConversations from '@wasp/queries/getConversations'
 import logout from '@wasp/auth/logout';
 import { useState, Dispatch, SetStateAction } from 'react';
-import { Chat, Conversation } from '@wasp/entities'
+// import { Chat, Conversation } from '@wasp/entities'
 import { Link } from '@wasp/router'
 
 import logo from './static/captn-logo.png'
 import createChat from '@wasp/actions/createChat'
 import updateConversation from '@wasp/actions/updateConversation'
 import generateOpenAIResponse from '@wasp/actions/generateOpenAIResponse'
-import { RouteComponentProps, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
-const ChatsList = ({ chats }: { chats: Chat[] }) => {
+const ChatsList = ({ chats }) => {
     if (!chats?.length) return <div>No chats</div>
     return (
       <div>
         {chats.map((chat, idx) => (
             <Link
             key={chat.id}
-            to="/chat/:id"
+            to="/chat/:id?"
             params={{ id: chat.id }}>
                 <li key={idx}>
                     <div className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
@@ -36,7 +36,7 @@ const ChatsList = ({ chats }: { chats: Chat[] }) => {
     )
   }
 
-const ConversationsList = ({ conversations }: { conversations: Conversation[] }) => {
+const ConversationsList = ({ conversations }) => {
     if (!conversations?.length) return <div>No conversations</div>
     return (
         <div className="w-full">
@@ -65,8 +65,8 @@ const ConversationsList = ({ conversations }: { conversations: Conversation[] })
 }
 
 // export default function ChatPage({ user }: { user: User }, props: RouteComponentProps<{ id: string }>) {
-export default function ChatPage(props: RouteComponentProps<{ id: string }>) {
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+export default function ChatPage(props) {
+    const [isLoading, setIsLoading] = useState(false);
     const [chatConversations, setChatConversations] = useState([{}]);
     const [conversationId, setConversationId] = useState(null);
     // const [chatId, setChatId] = useState(null);
@@ -86,14 +86,14 @@ export default function ChatPage(props: RouteComponentProps<{ id: string }>) {
     
     const history = useHistory();
     
-    const handleClick = async (event: React.MouseEvent<HTMLElement>) => {
+    const handleClick = async (event) => {
         event.preventDefault()
         try {
             const newChatConversations = await createChat();
             setChatConversations(newChatConversations.conversation);
             setConversationId(newChatConversations.id);
             history.push(`/chat/${newChatConversations.chatId}`);
-          } catch (err: any) {
+          } catch (err) {
             window.alert('Error: ' + err.message)
           }
         // console.log(event.target);

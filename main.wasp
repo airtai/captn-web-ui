@@ -163,10 +163,10 @@ page EmailVerificationPage {
   component: import { EmailVerification } from "@client/auth/EmailVerification",
 }
 
-route GptRoute { path: "/gpt", to: GptPage }
-page GptPage {
-  component: import GptPage from "@client/GptPage"
-}
+// route GptRoute { path: "/gpt", to: GptPage }
+// page GptPage {
+//   component: import GptPage from "@client/GptPage"
+// }
 
 route PricingRoute { path: "/pricing", to: PricingPage }
 page PricingPage {
