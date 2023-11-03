@@ -157,7 +157,7 @@ export default function ChatPage(props: RouteComponentProps<{ id: string }>) {
                         <div className="flex h-full flex-col items-center justify-between pb-24 overflow-y-auto bg-captn-light-blue" style={{"height": "85%"}}>
                             {conversations && <ConversationsList conversations={conversations.conversation} />}
                         </div>
-                        <div className="w-full pt-2 md:pt-0 border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:pl-2 gizmo:pl-0 gizmo:md:pl-0 md:w-[calc(100%-.5rem)] absolute bottom-100 left-0 md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient">
+                        {props.match.params.id ? (<div className="w-full pt-2 md:pt-0 border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:pl-2 gizmo:pl-0 gizmo:md:pl-0 md:w-[calc(100%-.5rem)] absolute bottom-100 left-0 md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient">
                             <form onSubmit={handleFormSubmit} className="">    
                                 <label htmlFor="search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                                 <div className="relative">
@@ -170,7 +170,7 @@ export default function ChatPage(props: RouteComponentProps<{ id: string }>) {
                                     <button type="submit" className="text-white absolute right-2.5 bottom-2.5 bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-captn-cta-green dark:hover:bg-captn-cta-green-hover dark:focus:ring-blue-800">Send</button>
                                 </div>
                             </form>
-                        </div>
+                        </div>) : <p className="text-gray-500" style={{"position": "absolute", "top": "50%", "left": "50%", "transform": "translate(-50%, -50%)", "fontSize": "60px"}}>Please initiate a new chat or select existing chats to resume your conversation.</p>}
                         </div>
                     </div>
                 </div>
