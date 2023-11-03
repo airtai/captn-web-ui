@@ -7,7 +7,7 @@ export default function MainPage() {
         <div className='px-6 lg:px-0 lg:pt-4'>
           <div className='mx-auto max-w-2xl'>
             <div className='max-w-lg'>
-              <h1 className=' text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl'>Capt'n AI</h1>
+              <h1 className=' text-4xl font-bold tracking-tight text-captn-dark-blue sm:text-6xl'>Capt'n AI</h1>
 
               {/* <h2 className='ml-4 max-w-2xl text-2xl f tracking-tight text-gray-800 slg:col-span-2 xl:col-auto'>
                 Product home page
@@ -16,7 +16,7 @@ export default function MainPage() {
                 Postgres/Prisma, Express, React, Node
               </h2> */}
 
-              <p className='mt-4 text-lg leading-8 text-gray-600'>
+              <p className='mt-4 text-lg leading-8 text-captn-dark-blue'>
               Hey 🧙‍♂️! This is a sneak peek at my product's evolving homepage. Get ready for an amazing launch soon!
               </p>
               {/* <ul className='list-disc ml-8 my-2 leading-8 text-gray-600'>
