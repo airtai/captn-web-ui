@@ -68,7 +68,7 @@ jobs:
             - run: eval $(ssh-agent -s)
             - run: mkdir -p ~/.ssh
             - run: chmod 700 ~/.ssh
-            - run: ssh-keyscan "$DOMAIN" >> ~/.ssh/known_hosts
+            - run: ssh-keyscan "$BACKEND_DOMAIN" >> ~/.ssh/known_hosts
             - run: chmod 644 ~/.ssh/known_hosts
             - run: echo "$SSH_KEY" | base64 --decode > key.pem
             - run: chmod 600 key.pem
