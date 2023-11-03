@@ -84,17 +84,13 @@ jobs:
 
     deploy_frontend:
         runs-on: ubuntu-22.04
-        defaults:
-            run:
-                shell: bash
         needs: [docker_build_push]
         permissions:
             contents: write
         if: github.ref_name == 'main'
-        container:
-            image: python:3.7-stretch
         steps:
-            - uses: actions/checkout@v3
+            - name: Checkout repository
+              uses: actions/checkout@v4
             - uses: actions/setup-node@v3
               with:
                 node-version: 18
@@ -102,14 +98,6 @@ jobs:
             - name: Install wasp
               run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh
 
-            - name: Log in to the Container registry
-              uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-              with:
-                  registry: ${{ env.REGISTRY }}
-                  username: ${{ github.actor }}
-                  password: ${{ secrets.GITHUB_TOKEN }}
-
-            - run: docker pull ghcr.io/$GITHUB_REPOSITORY:$GITHUB_REF_NAME || docker pull ghcr.io/$GITHUB_REPOSITORY || true
             - name: Build wasp
               run: wasp build
             - name: Build frontend
