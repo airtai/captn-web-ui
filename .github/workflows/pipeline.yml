@@ -87,7 +87,7 @@ jobs:
         needs: [docker_build_push]
         permissions:
             contents: write
-        if: github.ref_name == 'main' || github.ref_name == 'fix-frontend-deploy'
+        if: github.ref_name == 'main'
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
