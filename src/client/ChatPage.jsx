@@ -38,16 +38,18 @@ const ChatsList = ({ chats }) => {
 
 const ConversationsList = ({ conversations }) => {
     if (!conversations?.length) return <div>No conversations</div>
+    const filteredConversations = conversations.filter((conversation) => conversation.role !== 'system');
+
     return (
         <div className="w-full">
-          {conversations.map((conversation, idx) => {
+          {filteredConversations.map((conversation, idx) => {
             const conversationBgColor = conversation.role === "user" ? "captn-light-blue" : "captn-dark-blue";
             const conversationLogo = conversation.role === "user" ? <div style={{"alignItems": "center","background": "#fff","borderRadius": "50%","color": "#444654","display": "flex","flexBasis": "40px","flexGrow": "0","flexShrink": "0","fontSize": "14px","height": "40px","justifyContent": "center","padding": "5px","position": "relative","width": "40px"}} className="flex"><div>You</div></div>: <img alt="captn logo" src={logo} className="w-full h-full" style={{"borderRadius": "50%"}} />
             return (
             <div key={idx}>
                 <div style={{"minHeight": "85px"}} className={`flex items-center p-2 text-gray-900 dark:text-white group bg-${conversationBgColor}`}>
                     
-                <div style={{"maxWidth": "640px", "margin": "auto"}} className={`relative ml-3 block w-full p-4 pl-10 text-sm text-gray-900  border-${conversationBgColor} rounded-lg bg-${conversationBgColor} dark:bg-${conversationBgColor} dark:border-${conversationBgColor} dark:placeholder-gray-400 dark:text-white`}>
+                <div style={{"maxWidth": "840px", "margin": "auto"}} className={`relative ml-3 block w-full p-4 pl-10 text-sm text-gray-900  border-${conversationBgColor} rounded-lg bg-${conversationBgColor} dark:bg-${conversationBgColor} dark:border-${conversationBgColor} dark:placeholder-gray-400 dark:text-white`}>
                     <span className="absolute inline-block" style={{"left": "-15px", "top": "6px", "height":" 45px", "width": "45px"}}>
                         {conversationLogo}
                     </span>
@@ -162,11 +164,11 @@ export default function ChatPage(props) {
                                 <label htmlFor="search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                        <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                        {/* <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                                        </svg>
+                                        </svg> */}
                                     </div>
-                                    <input type="search" id="userQuery" name="search" className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-captn-dark-blue focus:ring-blue-500 focus:border-blue-500 dark:bg-captn-dark-blue dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search" required />
+                                    <input type="search" id="userQuery" name="search" className="block w-full p-4 pl-5 text-sm text-gray-900 border border-gray-300 rounded-lg bg-captn-dark-blue focus:ring-blue-500 focus:border-blue-500 dark:bg-captn-dark-blue dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Send a message" required />
                                     <button type="submit" className="text-white absolute right-2.5 bottom-2.5 bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-captn-cta-green dark:hover:bg-captn-cta-green-hover dark:focus:ring-blue-800">Send</button>
                                 </div>
                             </form>
