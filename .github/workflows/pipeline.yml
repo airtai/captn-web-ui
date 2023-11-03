@@ -84,9 +84,6 @@ jobs:
 
     deploy_frontend:
         runs-on: ubuntu-22.04
-        defaults:
-            run:
-                shell: bash
         needs: [docker_build_push]
         permissions:
             contents: write
@@ -100,7 +97,7 @@ jobs:
                 node-version: 18
 
             - name: Install wasp
-              run: curl -sSLk https://get.wasp-lang.dev/installer.sh | sh
+              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh
 
             - name: Build wasp
               run: wasp build
