@@ -9,9 +9,9 @@ export default function App({ children }: { children: ReactNode }) {
    * in this case the NavBar will always be rendered
    */
   return (
-    <div>
+    <div className="relative flex-col z-0 flex h-screen w-full overflow-hidden">
       <NavBar />
-      <div className='mx-auto max-w-7xl sm:px-6 lg:px-8 '>{children}</div>
+      <div className='max-w-full px-0'>{children}</div>
     </div>
   );
 }
