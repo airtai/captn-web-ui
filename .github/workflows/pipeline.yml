@@ -33,6 +33,7 @@ jobs:
                   password: ${{ secrets.GITHUB_TOKEN }}
 
             - run: docker pull ghcr.io/$GITHUB_REPOSITORY:$GITHUB_REF_NAME || docker pull ghcr.io/$GITHUB_REPOSITORY || true
+            - run: ls -la
             - run: docker build --build-arg PORT=$PORT -t ghcr.io/$GITHUB_REPOSITORY:$GITHUB_REF_NAME ./.wasp/build/
             - name: Add tag latest if branch is main
               if: github.ref_name == 'main'
