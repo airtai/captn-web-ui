@@ -25,7 +25,7 @@ export default function Example({ user }: { user: User }) {
               <dt className='text-sm font-medium text-gray-500'>Email address</dt>
               <dd className='mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0'>{user.email}</dd>
             </div>
-            <div className='py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6'>
+            {/* <div className='py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6'>
               <dt className='text-sm font-medium text-gray-500'>Your Plan</dt>
               {user.hasPaid ? (
                 <>
@@ -40,11 +40,11 @@ export default function Example({ user }: { user: User }) {
                   <BuyMoreButton isLoading={isLoading} setIsLoading={setIsLoading} />
                 </>
               )}
-            </div>
-            <div className='py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6'>
+            </div> */}
+            {/* <div className='py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6'>
               <dt className='text-sm font-medium text-gray-500'>About</dt>
               <dd className='mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0'>I'm a cool customer.</dd>
-            </div>
+            </div> */}
             {/* <div className='py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6'> */}
               {/* <dt className='text-sm font-medium text-gray-500'>Most Recent User RelatedObject</dt> */}
               {/* <dd className='mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0'>
@@ -59,7 +59,7 @@ export default function Example({ user }: { user: User }) {
       <div className='inline-flex w-full justify-end'>
         <button
           onClick={logout}
-          className='inline-flex justify-center mx-8 py-2 px-4 border border-transparent shadow-md text-sm font-medium rounded-md text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+          className='inline-flex justify-center mx-8 py-2 px-4 border border-transparent shadow-md text-sm font-medium rounded-md text-white bg-captn-cta-red hover:bg-captn-cta-red-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
         >
           logout
         </button>

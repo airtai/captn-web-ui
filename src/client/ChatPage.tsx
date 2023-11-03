@@ -7,7 +7,7 @@ import { useState, Dispatch, SetStateAction } from 'react';
 import { Chat, Conversation } from '@wasp/entities'
 import { Link } from '@wasp/router'
 
-
+import logo from './static/captn-logo.png'
 import createChat from '@wasp/actions/createChat'
 import updateConversation from '@wasp/actions/updateConversation'
 import generateOpenAIResponse from '@wasp/actions/generateOpenAIResponse'
@@ -24,7 +24,7 @@ const ChatsList = ({ chats }: { chats: Chat[] }) => {
             params={{ id: chat.id }}>
                 <li key={idx}>
                     <div className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                     <span className="ml-3">
                         {chat.id}
                     </span>
@@ -39,16 +39,26 @@ const ChatsList = ({ chats }: { chats: Chat[] }) => {
 const ConversationsList = ({ conversations }: { conversations: Conversation[] }) => {
     if (!conversations?.length) return <div>No conversations</div>
     return (
-        <div>
-          {conversations.map((conversation, idx) => (
+        <div className="w-full">
+          {conversations.map((conversation, idx) => {
+            const conversationBgColor = conversation.role === "user" ? "captn-light-blue" : "captn-dark-blue";
+            const conversationLogo = conversation.role === "user" ? <div style={{"alignItems": "center","background": "#fff","borderRadius": "50%","color": "#444654","display": "flex","flexBasis": "40px","flexGrow": "0","flexShrink": "0","fontSize": "14px","height": "40px","justifyContent": "center","padding": "5px","position": "relative","width": "40px"}} className="flex"><div>You</div></div>: <img alt="captn logo" src={logo} className="w-full h-full" style={{"borderRadius": "50%"}} />
+            return (
             <div key={idx}>
-                <div className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white group bg-captn-dark-blue">
-                <span className="ml-3 block w-full p-4 pl-10 text-sm text-gray-900 border border-captn-dark-blue rounded-lg bg-captn-dark-blue dark:bg-captn-dark-blue dark:border-captn-dark-blue dark:placeholder-gray-400 dark:text-white">
-                    {conversation.content}
-                </span>
+                <div style={{"minHeight": "85px"}} className={`flex items-center p-2 text-gray-900 dark:text-white group bg-${conversationBgColor}`}>
+                    
+                <div style={{"maxWidth": "640px", "margin": "auto"}} className={`relative ml-3 block w-full p-4 pl-10 text-sm text-gray-900  border-${conversationBgColor} rounded-lg bg-${conversationBgColor} dark:bg-${conversationBgColor} dark:border-${conversationBgColor} dark:placeholder-gray-400 dark:text-white`}>
+                    <span className="absolute inline-block" style={{"left": "-15px", "top": "6px", "height":" 45px", "width": "45px"}}>
+                        {conversationLogo}
+                    </span>
+                    <span>
+                        {conversation.content}
+                    </span>
+                </div>
                 </div>
             </div>
-          ))}
+            );
+        })}
         </div>
       )
 
@@ -122,13 +132,13 @@ export default function ChatPage(props: RouteComponentProps<{ id: string }>) {
     return (
         <div className='relative z-0 flex h-full w-full overflow-hidden h-screen'>
             <div id="default-sidebar" style={{width: '260px'}} className="flex-shrink-0 overflow-x-hidden dark bg-captn-dark-blue gizmo:bg-black" aria-label="Sidebar">
-            <div className="h-full px-3 py-4 overflow-y-auto bg-captn-dark-blue dark:bg-captn-dark-blue">
+            <div className="border-x-captn-light-cream h-full px-3 py-4 overflow-y-auto bg-captn-dark-blue dark:bg-captn-dark-blue">
                 <div className='mb-1 flex flex-row gap-2'>
                 <button
                 onClick={handleClick}
                 className='flex px-3 min-h-[44px] py-1 items-center gap-3 transition-colors duration-200 dark:text-white cursor-pointer text-sm rounded-md rounded-md text-white bg-captn-cta-green hover:bg-captn-cta-green-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex-grow overflow-hidden'
                 >
-                <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm shrink-0" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="icon-sm shrink-0" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 New chat
                 </button>
             </div>
