@@ -14,8 +14,8 @@ export default function Example({ user }: { user: User }) {
   // const { data: relatedObjects, isLoading: isLoadingRelatedObjects } = useQuery(getRelatedObjects)
 
   return (
-    <div className='mt-10 px-6 mx-auto w-1/2'>
-      <div className='overflow-hidden bg-white ring-1 ring-gray-900/10 shadow-lg sm:rounded-lg lg:m-8 '>
+    <div className='mt-10 px-6 mx-auto w-auto md:w-1/2'>
+      <div className='overflow-hidden bg-white ring-1 ring-gray-900/10 shadow-lg sm:rounded-lg m-8 '>
         <div className='px-4 py-5 sm:px-6 lg:px-8'>
           <h3 className='text-base font-semibold leading-6 text-gray-900'>Account Information</h3>
         </div>

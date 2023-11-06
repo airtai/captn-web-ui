@@ -49,7 +49,7 @@ const ConversationsList = ({ conversations }) => {
             const conversationLogo = conversation.role === "user" ? <div style={{"alignItems": "center","background": "#fff","borderRadius": "50%","color": "#444654","display": "flex","flexBasis": "40px","flexGrow": "0","flexShrink": "0","fontSize": "14px","height": "40px","justifyContent": "center","padding": "5px","position": "relative","width": "40px"}} className="flex"><div>You</div></div>: <img alt="captn logo" src={logo} className="w-full h-full" style={{"borderRadius": "50%"}} />
             return (
             <div key={idx}>
-                <div style={{"minHeight": "85px"}} className={`flex items-center p-2 group bg-${conversationBgColor}`}>
+                <div style={{"minHeight": "85px"}} className={`flex items-center px-5 py-2 group bg-${conversationBgColor}`}>
                     
                 <div style={{"maxWidth": "840px", "margin": "auto"}} className={`relative ml-3 block w-full p-4 pl-10 text-sm text-${conversationTextColor}  border-${conversationBgColor} rounded-lg bg-${conversationBgColor} `}>
                     <span className="absolute inline-block" style={{"left": "-15px", "top": "6px", "height":" 45px", "width": "45px"}}>
@@ -135,7 +135,7 @@ export default function ChatPage(props) {
 
     return (
         <div className='relative z-0 flex h-full w-full overflow-hidden h-screen'>
-            <div id="default-sidebar" style={{width: '260px'}} className="flex-shrink-0 overflow-x-hidden dark bg-captn-dark-blue gizmo:bg-black" aria-label="Sidebar">
+            <div id="default-sidebar" className="md:w-[260px] flex-shrink-0 overflow-x-hidden dark bg-captn-dark-blue gizmo:bg-black" aria-label="Sidebar">
             <div style={{"borderRight": "1px solid #eae4d9"}} className="border-x-captn-light-cream h-full px-3 py-4 overflow-y-auto bg-captn-dark-blue dark:bg-captn-dark-blue">
                 <div className='mb-1 flex flex-row gap-2'>
                 <button
@@ -143,7 +143,8 @@ export default function ChatPage(props) {
                 className='flex px-3 min-h-[44px] py-1 items-center gap-3 transition-colors duration-200 dark:text-white cursor-pointer text-sm rounded-md rounded-md text-white bg-captn-cta-green hover:bg-captn-cta-green-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex-grow overflow-hidden'
                 >
                 <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="icon-sm shrink-0" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                New chat
+                <span className="m-0 p-0 md:hidden">New</span>
+                <span className="m-0 p-0 hidden md:inline-block">New chat</span>
                 </button>
             </div>
 
@@ -161,7 +162,7 @@ export default function ChatPage(props) {
                         <div className="flex h-full flex-col items-center justify-between pb-24 overflow-y-auto bg-captn-light-blue" style={{"height": "85%"}}>
                             {conversations && <ConversationsList conversations={conversations.conversation} />}
                         </div>
-                        {props.match.params.id ? (<div className="w-full pt-2 md:pt-0 border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:pl-2 gizmo:pl-0 gizmo:md:pl-0 md:w-[calc(100%-.5rem)] absolute bottom-100 left-0 md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient">
+                        {props.match.params.id ? (<div className="w-full pt-0 md:pt-2 md:pt-0 border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:pl-2 gizmo:pl-0 gizmo:md:pl-0 md:w-[calc(100%-.5rem)] absolute bottom-100 left-0 md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient">
                             <form onSubmit={handleFormSubmit} className="">    
                                 <label htmlFor="search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                                 <div className="relative">
@@ -174,7 +175,7 @@ export default function ChatPage(props) {
                                     <button type="submit" className="text-white absolute right-2.5 bottom-2.5 bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-captn-cta-green dark:hover:bg-captn-cta-green-hover dark:focus:ring-blue-800">Send</button>
                                 </div>
                             </form>
-                        </div>) : <p className="text-captn-light-cream opacity-70" style={{"position": "absolute", "top": "50%", "left": "50%", "transform": "translate(-50%, -50%)", "fontSize": "60px"}}>Please initiate a new chat or select existing chats to resume your conversation.</p>}
+                        </div>) : <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xl md:text-6xl text-captn-light-cream opacity-70" style={{"lineHeight": "normal"}}>Please initiate a new chat or select existing chats to resume your conversation.</p>}
                         </div>
                     </div>
                 </div>

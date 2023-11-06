@@ -63,28 +63,21 @@ export default function NavBar() {
               <Disclosure.Button
                 as='a'
                 href='/'
-                className='block border-l-4 border-indigo-300 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-500'
+                className={`${current === '/' ? "bg-captn-light-blue" : ""} block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-captn-dark-blue hover:border-gray-300 hover:bg-gray-50 hover:text-captn-dark-blue`}
               >
-                Landing Page
+                Home
               </Disclosure.Button>
               <Disclosure.Button
                 as='a'
-                href='/pricing'
-                className='block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700'
+                href='/chat'
+                className={`${current.includes('chat') ? "bg-captn-light-blue" : ""} block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-captn-dark-blue hover:border-gray-300 hover:bg-gray-50 hover:text-captn-dark-blue`}
               >
-                Pricing
-              </Disclosure.Button>
-              <Disclosure.Button
-                as='a'
-                href='/gpt'
-                className='block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700'
-              >
-                GPT
+                Chat
               </Disclosure.Button>
               <Disclosure.Button
                 as='a'
                 href='/account'
-                className='block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800'
+                className={`${current.includes('account') ? "bg-captn-light-blue" : ""} block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-captn-dark-blue hover:border-gray-300 hover:bg-gray-50 hover:text-captn-dark-blue`}
               >
                 Account
               </Disclosure.Button>
