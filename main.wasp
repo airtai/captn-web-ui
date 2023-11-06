@@ -8,6 +8,7 @@ app chatApp {
         "<meta property='og:url' content='' />",
         "<meta property='og:description' content='Captn AI product page' />",
         "<meta property='og:image' content='src/client/static/captn-logo-large.png' />",
+         "<script type='text/javascript'> (function(l) { if (l.search[1] === '/' ) { var decoded = l.search.slice(1).split('&').map(function(s) { return s.replace(/~and~/g, '&') }).join('?'); window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded + l.hash ); } }(window.location)) </script>"
         // you can put your google analytics script here, too!
   ],
   // 🔐 Auth out of the box! https://wasp-lang.dev/docs/auth/overview
