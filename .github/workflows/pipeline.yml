@@ -103,6 +103,8 @@ jobs:
               run: wasp build
             - name: Build frontend
               run: cd .wasp/build/web-app && npm install && REACT_APP_API_URL=$REACT_APP_API_URL npm run build
+            - name: Copy 404.html
+              run: cp 404.html .wasp/build/web-app/build
 
             - name: Deploy to github pages
               uses: JamesIves/github-pages-deploy-action@v4
