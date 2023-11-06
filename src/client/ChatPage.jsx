@@ -15,7 +15,7 @@ import generateOpenAIResponse from '@wasp/actions/generateOpenAIResponse'
 import { useHistory } from 'react-router-dom';
 
 const ChatsList = ({ chats }) => {
-    if (!chats?.length) return <div>No chats</div>
+    if (!chats?.length) return <p></p>
     return (
       <div>
         {chats.map((chat, idx) => (
@@ -135,7 +135,7 @@ export default function ChatPage(props) {
     return (
         <div className='relative z-0 flex h-full w-full overflow-hidden h-screen'>
             <div id="default-sidebar" style={{width: '260px'}} className="flex-shrink-0 overflow-x-hidden dark bg-captn-dark-blue gizmo:bg-black" aria-label="Sidebar">
-            <div className="border-x-captn-light-cream h-full px-3 py-4 overflow-y-auto bg-captn-dark-blue dark:bg-captn-dark-blue">
+            <div style={{"borderRight": "1px solid #eae4d9"}} className="border-x-captn-light-cream h-full px-3 py-4 overflow-y-auto bg-captn-dark-blue dark:bg-captn-dark-blue">
                 <div className='mb-1 flex flex-row gap-2'>
                 <button
                 onClick={handleClick}
