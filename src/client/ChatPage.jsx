@@ -24,7 +24,7 @@ const ChatsList = ({ chats }) => {
             to="/chat/:id?"
             params={{ id: chat.id }}>
                 <li key={idx}>
-                    <div className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <div className="flex items-center p-2 text-white hover:bg-captn-light-blue hover:text-captn-dark-blue group rounded-lg ">
                     <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                     <span className="ml-3">
                         {chat.id}
@@ -45,12 +45,13 @@ const ConversationsList = ({ conversations }) => {
         <div className="w-full">
           {filteredConversations.map((conversation, idx) => {
             const conversationBgColor = conversation.role === "user" ? "captn-light-blue" : "captn-dark-blue";
+            const conversationTextColor = conversation.role === "user" ? "captn-dark-blue" : "captn-light-cream";
             const conversationLogo = conversation.role === "user" ? <div style={{"alignItems": "center","background": "#fff","borderRadius": "50%","color": "#444654","display": "flex","flexBasis": "40px","flexGrow": "0","flexShrink": "0","fontSize": "14px","height": "40px","justifyContent": "center","padding": "5px","position": "relative","width": "40px"}} className="flex"><div>You</div></div>: <img alt="captn logo" src={logo} className="w-full h-full" style={{"borderRadius": "50%"}} />
             return (
             <div key={idx}>
-                <div style={{"minHeight": "85px"}} className={`flex items-center p-2 text-gray-900 dark:text-white group bg-${conversationBgColor}`}>
+                <div style={{"minHeight": "85px"}} className={`flex items-center p-2 group bg-${conversationBgColor}`}>
                     
-                <div style={{"maxWidth": "840px", "margin": "auto"}} className={`relative ml-3 block w-full p-4 pl-10 text-sm text-gray-900  border-${conversationBgColor} rounded-lg bg-${conversationBgColor} dark:bg-${conversationBgColor} dark:border-${conversationBgColor} dark:placeholder-gray-400 dark:text-white`}>
+                <div style={{"maxWidth": "840px", "margin": "auto"}} className={`relative ml-3 block w-full p-4 pl-10 text-sm text-${conversationTextColor}  border-${conversationBgColor} rounded-lg bg-${conversationBgColor} `}>
                     <span className="absolute inline-block" style={{"left": "-15px", "top": "6px", "height":" 45px", "width": "45px"}}>
                         {conversationLogo}
                     </span>
