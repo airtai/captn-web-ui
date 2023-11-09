@@ -3,7 +3,7 @@ import HttpError from '@wasp/core/HttpError.js';
 // import type { RelatedObject } from '@wasp/entities';
 import type { Chat } from '@wasp/entities';
 import type { Conversation } from '@wasp/entities';
-import type { GenerateGptResponse, StripePayment, CreateChat, UpdateConversation, GenerateOpenAIResponse } from '@wasp/actions/types';
+import type { GenerateGptResponse, StripePayment, CreateChat, UpdateConversation, GetAgentResponse } from '@wasp/actions/types';
 import type { StripePaymentResult, OpenAIResponse } from './types';
 import Stripe from 'stripe';
 
@@ -201,11 +201,11 @@ export const updateConversation: UpdateConversation<UpdateConversationPayload, C
   })
 }
 
-type OpenAIPayload = {
+type AgentPayload = {
   conversation: any;
 };
 
-export const generateOpenAIResponse: GenerateOpenAIResponse<OpenAIPayload> = async (
+export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
   { conversation },
   context
 ) => {

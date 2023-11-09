@@ -11,7 +11,7 @@ import Markdown from 'react-markdown'
 import logo from './static/captn-logo.png'
 import createChat from '@wasp/actions/createChat'
 import updateConversation from '@wasp/actions/updateConversation'
-import generateOpenAIResponse from '@wasp/actions/generateOpenAIResponse'
+import getAgentResponse from '@wasp/actions/getAgentResponse'
 import { useHistory } from 'react-router-dom';
 
 const ChatsList = ({ chats }) => {
@@ -39,11 +39,10 @@ const ChatsList = ({ chats }) => {
 
 const ConversationsList = ({ conversations }) => {
     if (!conversations?.length) return <div>No conversations</div>
-    const filteredConversations = conversations.filter((conversation) => conversation.role !== 'system');
 
     return (
         <div className="w-full">
-          {filteredConversations.map((conversation, idx) => {
+          {conversations.map((conversation, idx) => {
             const conversationBgColor = conversation.role === "user" ? "captn-light-blue" : "captn-dark-blue";
             const conversationTextColor = conversation.role === "user" ? "captn-dark-blue" : "captn-light-cream";
             const conversationLogo = conversation.role === "user" ? <div style={{"alignItems": "center","background": "#fff","borderRadius": "50%","color": "#444654","display": "flex","flexBasis": "40px","flexGrow": "0","flexShrink": "0","fontSize": "14px","height": "40px","justifyContent": "center","padding": "5px","position": "relative","width": "40px"}} className="flex"><div>You</div></div>: <img alt="captn logo" src={logo} className="w-full h-full" style={{"borderRadius": "50%"}} />
@@ -106,8 +105,6 @@ export default function ChatPage(props) {
 
       const handleFormSubmit = async (event) => {
         event.preventDefault()
-        console.log("conversationId")
-        console.log(conversationId)
         try {
           const target = event.target
           const userQuery = target.userQuery.value
@@ -119,9 +116,9 @@ export default function ChatPage(props) {
               conversations: [...conversations.conversation, ...[{ "role": "user", "content": userQuery }]]
           }
           await updateConversation(payload)
-          // 2. call python server
-          const response = await generateOpenAIResponse({conversation: payload.conversations})
-          // 3. add open ai response as new conversation to table
+          // 2. call backend python server to get agent response
+          const response = await getAgentResponse({conversation: payload.conversations})
+          // 3. add agent response as new conversation in the table
           const openAIPayload = {
               conversation_id: conversations.id,
               conversations: [...payload.conversations, ...[{ "role": "assistant", "content": response.content }]]

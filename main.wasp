@@ -222,8 +222,8 @@ action updateConversation {
   entities: [Chat, Conversation]
 }
 
-action generateOpenAIResponse {
-  fn: import { generateOpenAIResponse } from "@server/actions.js",
+action getAgentResponse {
+  fn: import { getAgentResponse } from "@server/actions.js",
   entities: [Chat, Conversation]
 }
 
