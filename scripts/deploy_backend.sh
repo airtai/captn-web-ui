@@ -56,6 +56,12 @@ then
 	exit -1
 fi
 
+if test -z "$ADS_SERVER_URL"
+then
+	echo "ERROR: ADS_SERVER_URL variable must be defined, exiting"
+	exit -1
+fi
+
 echo "INFO: stopping already running docker container"
 ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$BACKEND_DOMAIN" "docker stop wasp-backend || echo 'No containers available to stop'"
 ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$BACKEND_DOMAIN" "docker container prune -f || echo 'No stopped containers to delete'"
@@ -69,4 +75,4 @@ echo "Deleting old image"
 ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$BACKEND_DOMAIN" "docker system prune -f || echo 'No images to delete'"
 
 echo "INFO: starting docker container"
-ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$BACKEND_DOMAIN" "docker run --name wasp-backend -p $PORT:$PORT -e PORT='$PORT' -e DATABASE_URL='$DATABASE_URL' -e WASP_WEB_CLIENT_URL='$WASP_WEB_CLIENT_URL' -e JWT_SECRET='$JWT_SECRET' -e GOOGLE_CLIENT_ID='$GOOGLE_CLIENT_ID' -e GOOGLE_CLIENT_SECRET='$GOOGLE_CLIENT_SECRET' -e AZURE_OPENAI_API_KEY='$AZURE_OPENAI_API_KEY' -d ghcr.io/$GITHUB_REPOSITORY:$TAG"
+ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$BACKEND_DOMAIN" "docker run --name wasp-backend -p $PORT:$PORT -e PORT='$PORT' -e DATABASE_URL='$DATABASE_URL' -e WASP_WEB_CLIENT_URL='$WASP_WEB_CLIENT_URL' -e JWT_SECRET='$JWT_SECRET' -e GOOGLE_CLIENT_ID='$GOOGLE_CLIENT_ID' -e GOOGLE_CLIENT_SECRET='$GOOGLE_CLIENT_SECRET' -e AZURE_OPENAI_API_KEY='$AZURE_OPENAI_API_KEY' -e ADS_SERVER_URL='$ADS_SERVER_URL' -d ghcr.io/$GITHUB_REPOSITORY:$TAG"

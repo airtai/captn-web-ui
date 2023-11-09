@@ -218,7 +218,7 @@ export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
   };
 
   try {
-    const response = await fetch(`${ADS_SERVER_URL}/conversation`, {
+    const response = await fetch(`${ADS_SERVER_URL}/chat`, {
       method: 'POST',
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
