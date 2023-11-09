@@ -119,7 +119,7 @@ export default function ChatPage(props) {
               conversations: [...conversations.conversation, ...[{ "role": "user", "content": userQuery }]]
           }
           await updateConversation(payload)
-          // 2. call open api with the whole conversation
+          // 2. call python server
           const response = await generateOpenAIResponse({conversation: payload.conversations})
           // 3. add open ai response as new conversation to table
           const openAIPayload = {
