@@ -15,7 +15,7 @@ const stripe = new Stripe(process.env.STRIPE_KEY!, {
 const DOMAIN = process.env.WASP_WEB_CLIENT_URL || 'http://localhost:3000';
 
 // Python ADS_SERVER_URL
-const ADS_SERVER_URL = process.env.ADS_SERVER_URL || 'http://127.0.0.1:8000';
+const ADS_SERVER_URL = process.env.ADS_SERVER_URL || 'http://127.0.0.1:9000';
 
 export const stripePayment: StripePayment<void, StripePaymentResult> = async (_args, context) => {
   if (!context.user) {
