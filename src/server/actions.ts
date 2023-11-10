@@ -213,10 +213,7 @@ export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
     throw new HttpError(401);
   }
 
-  const payload = {
-    conversation: conversation,
-  };
-
+  const payload = { conversation: conversation };
   try {
     const response = await fetch(`${ADS_SERVER_URL}/chat`, {
       method: 'POST',
@@ -224,13 +221,17 @@ export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
       body: JSON.stringify(payload),
     });
 
-    const json = (await response.json()) as OpenAIResponse; // this should be AzureOpenAIResponse
-    return {
-      content: json
-    }
-  } catch (error: any) {
-    console.error(error);
-  }
+    const json = await response.json() as { detail?: string }; // Parse JSON once
 
-  throw new HttpError(500, 'Something went wrong');
+    if (!response.ok) {
+      const errorMsg = json.detail || `HTTP error with status code ${response.status}`;
+      console.error('Server Error:', errorMsg);
+      throw new Error(errorMsg);
+    }
+
+    return { content: json };
+
+  } catch (error: any) {
+    throw new HttpError(500, 'Something went wrong. Please try again later');
+  }
 };
