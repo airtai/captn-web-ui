@@ -5,6 +5,7 @@ import HttpError from '@wasp/core/HttpError.js';
 
 import type { Chat, Conversation } from '@wasp/entities';
 import type { GetChats, GetConversations } from '@wasp/queries/types';
+import internal from 'stream';
 
 // import type { Conversation } from '@wasp/entities';
 // import type { GetConversations } from '@wasp/queries/types';
@@ -40,12 +41,35 @@ type GetConversationPayload = {
   chatId: number
 }
 
+type Chats = {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: number;
+  name: string;
+}
+
 export const getConversations: GetConversations<GetConversationPayload, Conversation> = async (args, context) => {
   if (!context.user) {
     throw new HttpError(401);
   }
+  const chats: Chats[] = await context.entities.Chat.findMany({
+    where: {
+      user: {
+        id: context.user.id
+      }
+    },
+    orderBy: { id: 'desc' },
+  })
+  const chatIds: number[] = chats.map((item) => item.id);
+  if (args.chatId && !chatIds.includes(args.chatId)) {
+    return {}
+  }
+
   return context.entities.Conversation.findFirstOrThrow({
-    where: { chatId: args.chatId },
+    where: { 
+      chatId: args.chatId 
+    },
   })
 }
 

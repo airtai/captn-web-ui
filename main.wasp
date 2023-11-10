@@ -251,7 +251,7 @@ query getChats {
 
 query getConversations {
   fn: import { getConversations } from "@server/queries.js",
-  entities: [Conversation]
+  entities: [Chat, Conversation]
 }
 
 // query getConversations {
