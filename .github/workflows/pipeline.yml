@@ -10,6 +10,7 @@ env:
     REACT_APP_API_URL: ${{ vars.REACT_APP_API_URL }}
     DATABASE_URL: ${{ secrets.DATABASE_URL }}
     JWT_SECRET: ${{ secrets.JWT_SECRET }}
+    ADS_SERVER_URL: ${{ vars.ADS_SERVER_URL }}
 
 jobs:
     docker_build_push:

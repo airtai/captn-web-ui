@@ -3,7 +3,7 @@ import HttpError from '@wasp/core/HttpError.js';
 // import type { RelatedObject } from '@wasp/entities';
 import type { Chat } from '@wasp/entities';
 import type { Conversation } from '@wasp/entities';
-import type { GenerateGptResponse, StripePayment, CreateChat, UpdateConversation, GenerateOpenAIResponse } from '@wasp/actions/types';
+import type { GenerateGptResponse, StripePayment, CreateChat, UpdateConversation, GetAgentResponse } from '@wasp/actions/types';
 import type { StripePaymentResult, OpenAIResponse } from './types';
 import Stripe from 'stripe';
 
@@ -13,6 +13,9 @@ const stripe = new Stripe(process.env.STRIPE_KEY!, {
 
 // WASP_WEB_CLIENT_URL will be set up by Wasp when deploying to production: https://wasp-lang.dev/docs/deploying
 const DOMAIN = process.env.WASP_WEB_CLIENT_URL || 'http://localhost:3000';
+
+// Python ADS_SERVER_URL
+const ADS_SERVER_URL = process.env.ADS_SERVER_URL || 'http://127.0.0.1:9000';
 
 export const stripePayment: StripePayment<void, StripePaymentResult> = async (_args, context) => {
   if (!context.user) {
@@ -172,27 +175,6 @@ export const createChat: CreateChat<void, Conversation> = async (_args, context)
     data: {
       conversation: [
         {
-          role: 'system',
-          content: `You are Captn AI, a digital marketing assistant for small businesses. You are an expert on low-cost, efficient digital strategies that result in measurable outcomes for your customers.
-
-          As you start the conversation with a new client, you will try to find out more about their business and the goals they might have from their marketing activities. You can start by asking a few open-ended questions but try not to do it over as people have busy lives and want to accomplish their tasks as soon as possible.
-          
-          You can write and execute Python code. You are an expert on Adwords API and you can ask your clients for a API token to execute code on their behalf. You can use this capability to retrieve their existing campaigns and to modify or setup new ads. Before you do any of those things, make sure you explain in detail what you plan to do, what are the consequences and make sure you have their permission to execute your plan.
-          
-          GUIDELINES:
-          Be concise and to the point. Avoid long sentences. When asking questions, prefer questions with simple yes/no answers.
-          
-          You are Captn and your language should reflect that. Use sailing metaphors whenever possible, but don't over do it.
-          
-          Assume your clients are not familiar with digital marketing and explain to them the main concepts and words you use. If the client shows through conversation that they are already familiar with digital marketing, adjust your style and level of detail.
-          
-          Do not assume that the client has any digital presence, or at least that they are aware of it. E.g. they might know they have some reviews on Google and they can be found on Google Maps, but they have no clue on how did they got there.
-          
-          Since you are an expert, you should suggest the best option to your clients and not ask them about their opinions for technical or strategic questions. Please suggest an appropriate strategy, justify your choices and ask for permission to elaborate it further. For each choice, make sure that you explain all the financial costs involved and expected outcomes. If there is no cost, make it clear.  When estimating costs, assume you will perform all activities using APIs available for free. Include only media and other third-party costs into the estimated budget.
-          
-          Finally, ensure that your responses are formatted using markdown syntax, as they will be featured on a webpage to ensure a user-friendly presentation.`,
-      },
-        {
             role: 'assistant',
             content: `Hi! I am Captn and I am here to help you with digital marketing. I can create and optimise marketing campaigns for you.  But before I propose any activities, please let me know a little bit about your business and what your marketing goals are.`,
         },
@@ -219,11 +201,11 @@ export const updateConversation: UpdateConversation<UpdateConversationPayload, C
   })
 }
 
-type OpenAIPayload = {
+type AgentPayload = {
   conversation: any;
 };
 
-export const generateOpenAIResponse: GenerateOpenAIResponse<OpenAIPayload> = async (
+export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
   { conversation },
   context
 ) => {
@@ -231,30 +213,25 @@ export const generateOpenAIResponse: GenerateOpenAIResponse<OpenAIPayload> = asy
     throw new HttpError(401);
   }
 
-  const payload = {
-    messages: conversation,
-    temperature: 0.7,
-  };
-
+  const payload = { conversation: conversation };
   try {
-    console.log('fetching', payload);
-    const response = await fetch('https://airt-openai-canada.openai.azure.com/openai/deployments/airt-canada-gpt35-turbo-16k/chat/completions?api-version=2023-07-01-preview', {
-      headers: {
-        'Content-Type': 'application/json',
-        'api-key': `${process.env.AZURE_OPENAI_API_KEY!}`,
-      },
+    const response = await fetch(`${ADS_SERVER_URL}/chat`, {
       method: 'POST',
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
 
-    const json = (await response.json()) as OpenAIResponse; // this should be AzureOpenAIResponse
-    console.log('response json', json);
-    return {
-      content: json?.choices[0].message.content,
-    }
-  } catch (error: any) {
-    console.error(error);
-  }
+    const json = await response.json() as { detail?: string }; // Parse JSON once
 
-  throw new HttpError(500, 'Something went wrong');
+    if (!response.ok) {
+      const errorMsg = json.detail || `HTTP error with status code ${response.status}`;
+      console.error('Server Error:', errorMsg);
+      throw new Error(errorMsg);
+    }
+
+    return { content: json };
+
+  } catch (error: any) {
+    throw new HttpError(500, 'Something went wrong. Please try again later');
+  }
 };
