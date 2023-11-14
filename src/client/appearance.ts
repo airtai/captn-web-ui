@@ -2,8 +2,8 @@ import type { CustomizationOptions } from '@wasp/auth/forms/types'
 
 export const appearance: CustomizationOptions['appearance'] = {
   colors: {
-    brand: '#f7ff00', 
-    brandAccent: '#f7ff00',
-    submitButtonText: 'black',
+    brand: '#0da37f', 
+    brandAccent: '#066d55',
+    submitButtonText: 'white',
   },
 }

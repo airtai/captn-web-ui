@@ -1,18 +1,18 @@
 
-import logo from './static/rba-logo.png'
+import logo from './static/captn-logo.png'
 import { Disclosure } from '@headlessui/react';
 import { AiOutlineBars, AiOutlineClose, AiOutlineUser } from 'react-icons/ai';
 import useAuth from '@wasp/auth/useAuth';
 
-const active = 'inline-flex items-center border-b-8 mt-1 border-rba-yellow px-1 pt-1 text-sm text-black font-black hover:text-black hover:font-black';
-const inactive = 'inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-black font-thin hover:border-rba-yellow hover:text-black hover:font-black'
+const active = 'inline-flex items-center border-b-2 border-indigo-300 px-1 pt-1 text-sm font-medium text-gray-900';
+const inactive = 'inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700'
 const current = window.location.pathname;
 
 export default function NavBar() {
   const { data: user } = useAuth();
 
   return (
-    <Disclosure as='nav' className='bg-white shadow sticky top-0 z-50 '>
+    <Disclosure as='nav' className='bg-captn-light-cream shadow sticky top-0 z-50 '>
       {({ open }) => (
         <>
           <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-16'>
@@ -63,21 +63,21 @@ export default function NavBar() {
               <Disclosure.Button
                 as='a'
                 href='/'
-                className={`${current === '/' ? "bg-rba-yellow" : ""} block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-captn-dark-blue hover:border-gray-300 hover:bg-gray-50 hover:text-captn-dark-blue`}
+                className={`${current === '/' ? "bg-captn-light-blue" : ""} block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-captn-dark-blue hover:border-gray-300 hover:bg-gray-50 hover:text-captn-dark-blue`}
               >
                 Home
               </Disclosure.Button>
               <Disclosure.Button
                 as='a'
                 href='/chat'
-                className={`${current.includes('chat') ? "bg-rba-yellow" : ""} block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-captn-dark-blue hover:border-gray-300 hover:bg-gray-50 hover:text-captn-dark-blue`}
+                className={`${current.includes('chat') ? "bg-captn-light-blue" : ""} block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-captn-dark-blue hover:border-gray-300 hover:bg-gray-50 hover:text-captn-dark-blue`}
               >
                 Chat
               </Disclosure.Button>
               <Disclosure.Button
                 as='a'
                 href='/account'
-                className={`${current.includes('account') ? "bg-rba-yellow" : ""} block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-captn-dark-blue hover:border-gray-300 hover:bg-gray-50 hover:text-captn-dark-blue`}
+                className={`${current.includes('account') ? "bg-captn-light-blue" : ""} block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-captn-dark-blue hover:border-gray-300 hover:bg-gray-50 hover:text-captn-dark-blue`}
               >
                 Account
               </Disclosure.Button>
