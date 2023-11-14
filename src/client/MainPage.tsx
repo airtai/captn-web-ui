@@ -1,4 +1,4 @@
-import imgUrl from './static/captn-logo-large.png'
+import imgUrl from './static/rba-logo-large.png'
 
 export default function MainPage() {
   return (
@@ -7,7 +7,7 @@ export default function MainPage() {
         <div className='px-6 lg:px-0 lg:pt-4'>
           <div className='mx-auto max-w-2xl'>
             <div className='max-w-lg'>
-              <h1 className=' text-4xl font-bold tracking-tight text-captn-dark-blue sm:text-6xl'>Capt'n AI</h1>
+              <h1 className=' text-4xl font-bold tracking-tight text-captn-dark-blue sm:text-6xl'>RBA Demo</h1>
 
               {/* <h2 className='ml-4 max-w-2xl text-2xl f tracking-tight text-gray-800 slg:col-span-2 xl:col-auto'>
                 Product home page
@@ -17,7 +17,7 @@ export default function MainPage() {
               </h2> */}
 
               <p className='mt-4 text-lg leading-8 text-captn-dark-blue'>
-              Hey 🧙‍♂️! This is a sneak peek at my product's evolving homepage. Get ready for an amazing launch soon!
+              Hi there! 🧙‍♂️ Tell us what you need, and we'll create a loan offer just for you.
               </p>
               {/* <ul className='list-disc ml-8 my-2 leading-8 text-gray-600'>
                 <li>Stripe integration</li>
@@ -51,15 +51,9 @@ export default function MainPage() {
         </div>
         <div className='mt-20 sm:mt-24 lg:mx-0 md:mx-auto md:max-w-2xl lg:w-screen lg:mt-0 '>
           <div className='shadow-lg md:rounded-3xl relative isolate overflow-hidden'>
-            <div className='bg-captn-light-blue [clip-path:inset(0)] md:[clip-path:inset(0_round_theme(borderRadius.3xl))]'>
-              <div
-                className='absolute -inset-y-px -z-10 ml-40 w-[200%] bg-captn-light-cream ring-1 ring-inset ring-white '
-                aria-hidden='true'
-              />
-              <div className='relative px-6 pt-8 sm:pt-16 md:pl-16 md:pr-0'>
-                <img src={imgUrl} />
-              </div>
-            </div>
+          <div className='relative'>
+              <img className='w-full' src={imgUrl} />
+          </div>
           </div>
         </div>
       </div>
