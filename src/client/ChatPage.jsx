@@ -3,7 +3,7 @@ import { useQuery } from '@wasp/queries'
 import getChats from '@wasp/queries/getChats'
 import getConversations from '@wasp/queries/getConversations'
 import logout from '@wasp/auth/logout';
-import { useState, Dispatch, SetStateAction } from 'react';
+import { useState, useEffect, useRef } from 'react';
 // import { Chat, Conversation } from '@wasp/entities'
 import { Link } from '@wasp/router'
 import Markdown from 'react-markdown'
@@ -36,6 +36,14 @@ const ChatsList = ({ chats }) => {
       </div>
     )
   }
+
+const Loader = () => {
+    return (
+        <div className="absolute top-[38%] left-[45%] -translate-y-2/4 -translate-x-2/4">
+            <div className="w-12 h-12 border-4 border-white rounded-full animate-spin border-t-captn-light-blue border-t-4"></div>
+        </div>
+    )
+}
 
 const ConversationsList = ({ conversations }) => {
     if (!conversations?.length) return <div>No conversations</div>
@@ -72,6 +80,7 @@ export default function ChatPage(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [chatConversations, setChatConversations] = useState([{}]);
     const [conversationId, setConversationId] = useState(null);
+    const chatContainerRef = useRef(null);
     // const [chatId, setChatId] = useState(null);
 
     const { data: chats, isLoading: isLoadingChats } = useQuery(getChats)
@@ -85,9 +94,17 @@ export default function ChatPage(props) {
     // }
     // setChatId(props.match.params.id)
     // console.log(`chatId: ${chatId}`)
+
+    useEffect(() => {
+        if (chatContainerRef.current) {
+          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+      }, [conversations]);
     
     
     const history = useHistory();
+
+    const chatContainerClass = `flex h-full flex-col items-center justify-between pb-24 overflow-y-auto bg-captn-light-blue ${isLoading ? 'opacity-40' : 'opacity-100'}`
     
     const handleClick = async (event) => {
         event.preventDefault()
@@ -117,7 +134,12 @@ export default function ChatPage(props) {
           }
           await updateConversation(payload)
           // 2. call backend python server to get agent response
-          const response = await getAgentResponse({conversation: payload.conversations})
+          setIsLoading(true)
+          const response = await getAgentResponse({
+              message: userQuery,
+              conv_id: payload.conversation_id,
+            })
+            setIsLoading(false)
           // 3. add agent response as new conversation in the table
           const openAIPayload = {
               conversation_id: conversations.id,
@@ -156,9 +178,10 @@ export default function ChatPage(props) {
                 <div className="relative h-full w-full flex-1 overflow-auto transition-width">
                     <div className="flex h-full flex-col">
                         <div className="flex-1 overflow-hidden">
-                        <div className="flex h-full flex-col items-center justify-between pb-24 overflow-y-auto bg-rba-light-gray" style={{"height": "85%"}}>
+                        <div ref={chatContainerRef} className={`${chatContainerClass}`} style={{"height": "85%"}}>
                             {conversations && <ConversationsList conversations={conversations.conversation} />}
                         </div>
+                        {isLoading && <Loader />}
                         {props.match.params.id ? (<div className="w-full pt-0 md:pt-2 md:pt-0 border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:pl-2 gizmo:pl-0 gizmo:md:pl-0 md:w-[calc(100%-.5rem)] absolute bottom-100 left-0 md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient">
                             <form onSubmit={handleFormSubmit} className="">    
                                 <label htmlFor="search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
