@@ -5,9 +5,10 @@ module.exports = {
   theme: {
     extend: {},
     colors: {
-      'captn-light-blue': '#6faabc',
+      'rba-yellow': '#f7ff00',
       'captn-dark-blue': '#003851',
-      'captn-light-cream': '#eae4d9',
+      'rba-dark-gray': '#34393c',
+      'rba-light-gray':'#f7f7f7',
       'captn-cta-green': '#0da37f',
       'captn-cta-red': '#e57373',
       'captn-cta-green-hover': '#066d55',
