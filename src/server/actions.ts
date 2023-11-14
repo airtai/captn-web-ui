@@ -215,6 +215,10 @@ export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
   }
 
   const payload = { message: message, conv_id: conv_id, user_id: context.user.id };
+  console.log("===========")
+  console.log("Payload to Python server")
+  console.log(payload)
+  console.log("===========")
   try {
     const response = await fetch(`${ADS_SERVER_URL}/chat`, {
       method: 'POST',
