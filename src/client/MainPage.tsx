@@ -17,7 +17,7 @@ export default function MainPage() {
               </h2> */}
 
               <p className='mt-4 text-lg leading-8 text-black'>
-              Hi there! 🧙‍♂️ Tell us what you need, and we'll create a loan offer just for you.
+              Hi there! 🧙‍♂️ Tell us your needs, and we'll create an exclusive, tailor-made loan offer just for you!
               </p>
               {/* <ul className='list-disc ml-8 my-2 leading-8 text-gray-600'>
                 <li>Stripe integration</li>
