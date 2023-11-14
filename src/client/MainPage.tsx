@@ -2,12 +2,12 @@ import imgUrl from './static/rba-logo-large.png'
 
 export default function MainPage() {
   return (
-    <div>
+    <div >
       <div className='mx-auto max-w-7xl pt-10 pb-24 sm:pb-32 lg:grid lg:grid-cols-2 lg:gap-x-8 lg:py-32 lg:px-8'>
         <div className='px-6 lg:px-0 lg:pt-4'>
           <div className='mx-auto max-w-2xl'>
             <div className='max-w-lg'>
-              <h1 className=' text-4xl font-bold tracking-tight text-captn-dark-blue sm:text-6xl'>RBA Demo</h1>
+              <h1 className=' text-4xl font-bold tracking-tight text-black sm:text-6xl'>RBA Demo</h1>
 
               {/* <h2 className='ml-4 max-w-2xl text-2xl f tracking-tight text-gray-800 slg:col-span-2 xl:col-auto'>
                 Product home page
@@ -16,7 +16,7 @@ export default function MainPage() {
                 Postgres/Prisma, Express, React, Node
               </h2> */}
 
-              <p className='mt-4 text-lg leading-8 text-captn-dark-blue'>
+              <p className='mt-4 text-lg leading-8 text-black'>
               Hi there! 🧙‍♂️ Tell us what you need, and we'll create a loan offer just for you.
               </p>
               {/* <ul className='list-disc ml-8 my-2 leading-8 text-gray-600'>

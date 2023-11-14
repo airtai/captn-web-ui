@@ -4,15 +4,15 @@ import { Disclosure } from '@headlessui/react';
 import { AiOutlineBars, AiOutlineClose, AiOutlineUser } from 'react-icons/ai';
 import useAuth from '@wasp/auth/useAuth';
 
-const active = 'inline-flex items-center border-b-2 border-rba-yellow px-1 pt-1 text-sm font-medium text-white font-black';
-const inactive = 'inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-white font-thin hover:border-rba-yellow hover:text-white hover:font-black'
+const active = 'inline-flex items-center border-b-8 mt-1 border-rba-yellow px-1 pt-1 text-sm text-black font-black hover:text-black hover:font-black';
+const inactive = 'inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-black font-thin hover:border-rba-yellow hover:text-black hover:font-black'
 const current = window.location.pathname;
 
 export default function NavBar() {
   const { data: user } = useAuth();
 
   return (
-    <Disclosure as='nav' className='bg-rba-dark-gray shadow sticky top-0 z-50 '>
+    <Disclosure as='nav' className='bg-white shadow sticky top-0 z-50 '>
       {({ open }) => (
         <>
           <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-16'>
