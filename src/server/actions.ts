@@ -202,18 +202,19 @@ export const updateConversation: UpdateConversation<UpdateConversationPayload, C
 }
 
 type AgentPayload = {
-  conversation: any;
+  message: string;
+  conv_id: number;
 };
 
 export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
-  { conversation },
+  { message, conv_id },
   context
 ) => {
   if (!context.user) {
     throw new HttpError(401);
   }
 
-  const payload = { conversation: conversation };
+  const payload = { message: message, conv_id: conv_id, user_id: context.user.id };
   try {
     const response = await fetch(`${ADS_SERVER_URL}/chat`, {
       method: 'POST',

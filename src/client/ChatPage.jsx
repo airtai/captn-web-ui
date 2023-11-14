@@ -117,7 +117,10 @@ export default function ChatPage(props) {
           }
           await updateConversation(payload)
           // 2. call backend python server to get agent response
-          const response = await getAgentResponse({conversation: payload.conversations})
+          const response = await getAgentResponse({
+              message: userQuery,
+              conv_id: payload.conversation_id,
+            })
           // 3. add agent response as new conversation in the table
           const openAIPayload = {
               conversation_id: conversations.id,
