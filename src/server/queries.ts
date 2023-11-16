@@ -45,7 +45,7 @@ export const getConversations: GetConversations<GetConversationPayload, Conversa
     throw new HttpError(401);
   }
   return context.entities.Conversation.findFirstOrThrow({
-    where: { chatId: args.chatId },
+    where: { chatId: args.chatId, userId: context.user.id },
   })
 }
 

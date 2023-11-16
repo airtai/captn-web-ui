@@ -180,6 +180,7 @@ export const createChat: CreateChat<void, Conversation> = async (_args, context)
         },
     ],
       chat: { connect: { id: chat.id } },
+      user: { connect: { id: context.user.id } },
     },
   });
 }
