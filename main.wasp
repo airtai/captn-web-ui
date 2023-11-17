@@ -66,7 +66,7 @@ app chatApp {
     ("node-fetch", "3.3.0"),
     ("react-hook-form", "^7.45.4"),
     ("stripe", "11.15.0"),
-    ("react-markdown", "9.0.0"),
+    ("markdown-to-jsx", "7.3.2"),
   ],
 }
 
