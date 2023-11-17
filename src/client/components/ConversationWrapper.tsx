@@ -139,14 +139,6 @@ export default function ConversationWrapper() {
     );
   }
 
-  // // The below if condition should be called only once on the initial render and should not be called on re-render
-  // let loginMsgInQuery = getQueryParam("msg");
-  // if (loginMsgInQuery && conversations) {
-  //   console.log("=====");
-  //   console.log(`loginMsgInQuery: ${loginMsgInQuery}`);
-  //   callAgent(loginMsgInQuery);
-  // }
-
   const chatContainerClass = `flex h-full flex-col items-center justify-between pb-24 overflow-y-auto bg-captn-light-blue ${
     isLoading ? "opacity-40" : "opacity-100"
   }`;
