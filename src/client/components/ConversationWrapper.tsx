@@ -22,9 +22,63 @@ function getQueryParam(paramName: string) {
   );
 }
 
+export async function triggerSubmit(
+  loginMsgQuery: string,
+  // Todo: remove the below ignore comment
+  // @ts-ignore
+  submitBtnRef,
+  // Todo: remove the below ignore comment
+  // @ts-ignore
+  formInputRef
+) {
+  if (loginMsgQuery) {
+    setTimeout(() => {
+      formInputRef.current.value = decodeURIComponent(loginMsgQuery);
+      submitBtnRef.current.click();
+    }, 500);
+
+    // set it in
+  }
+}
+
 export default function ConversationWrapper() {
+  // Todo: remove the below ignore comment
+  // @ts-ignore
+  const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
+  const loginMsgQuery = getQueryParam("msg");
   const chatContainerRef = useRef(null);
+  const submitBtnRef = useRef(null);
+  const formInputRef = useRef(null);
+  const {
+    data: conversations,
+    isLoading: isConversationLoading,
+    error: isConversationError,
+  } = useQuery(
+    getConversations,
+    {
+      chatId: Number(id),
+    },
+    { enabled: !!id }
+  );
+
+  // componentDidMount
+  useEffect(() => {
+    // Todo: remove the below ignore comment
+    // @ts-ignore
+    triggerSubmit(loginMsgQuery, submitBtnRef, formInputRef);
+  }, [loginMsgQuery]);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      // Todo: remove the below ignore comment
+      // @ts-ignore
+      chatContainerRef.current.scrollTop =
+        // Todo: remove the below ignore comment
+        // @ts-ignore
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [conversations]);
 
   async function callAgent(userQuery: string) {
     try {
@@ -46,7 +100,6 @@ export default function ConversationWrapper() {
         message: userQuery,
         conv_id: payload.conversation_id,
       });
-      setIsLoading(false);
       // 3. add agent response as new conversation in the table
       const openAIPayload = {
         conversation_id: conversations.id,
@@ -58,26 +111,12 @@ export default function ConversationWrapper() {
         ],
       };
       await updateConversation(openAIPayload);
+      setIsLoading(false);
     } catch (err: any) {
       setIsLoading(false);
       window.alert("Error: " + err.message);
     }
   }
-
-  // Todo: remove the below ignore comment
-  // @ts-ignore
-  const { id } = useParams();
-  const {
-    data: conversations,
-    isLoading: isConversationLoading,
-    error: isConversationError,
-  } = useQuery(
-    getConversations,
-    {
-      chatId: Number(id),
-    },
-    { enabled: !!id }
-  );
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -93,7 +132,6 @@ export default function ConversationWrapper() {
 
   if (isConversationLoading && !!id) return <Loader />;
   if (isConversationError) {
-    console.log("Unable to load conversation.");
     return (
       <>
         <Redirect to="/chat" />
@@ -147,8 +185,10 @@ export default function ConversationWrapper() {
                       className="block w-full p-4 pl-5 text-sm text-captn-light-cream border border-gray-300 rounded-lg bg-captn-dark-blue focus:ring-blue-500 focus:border-blue-500 dark:bg-captn-dark-blue dark:border-gray-600 dark:placeholder-gray-400 dark:text-captn-light-cream dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="Send a message"
                       required
+                      ref={formInputRef}
                     />
                     <button
+                      ref={submitBtnRef}
                       type="submit"
                       className="text-white absolute right-2.5 bottom-2.5 bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-captn-cta-green dark:hover:bg-captn-cta-green-hover dark:focus:ring-blue-800"
                     >
