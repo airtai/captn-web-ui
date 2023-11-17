@@ -35,9 +35,7 @@ export async function triggerSubmit(
     setTimeout(() => {
       formInputRef.current.value = decodeURIComponent(loginMsgQuery);
       submitBtnRef.current.click();
-    }, 500);
-
-    // set it in
+    }, 1500); // todo: remove timeout and implement a proper fix
   }
 }
 
