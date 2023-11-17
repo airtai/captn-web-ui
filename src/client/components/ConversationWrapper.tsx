@@ -1,29 +1,36 @@
 import { useState, useRef } from "react";
 import { useParams } from "react-router";
+import { Redirect } from "react-router-dom";
 
 import { useQuery } from "@wasp/queries";
 import updateConversation from "@wasp/actions/updateConversation";
 import getAgentResponse from "@wasp/actions/getAgentResponse";
 import getConversations from "@wasp/queries/getConversations";
 
-import type { Conversation } from "@wasp/entities";
+// import type { Conversation } from "@wasp/entities";
 
 import ConversationsList from "./ConversationList";
 import Loader from "./Loader";
 
 export default function ConversationWrapper() {
+  const [isLoading, setIsLoading] = useState(false);
+  const chatContainerRef = useRef(null);
+
   // Todo: remove the below ignore comment
   // @ts-ignore
   const { id } = useParams();
-  const [isLoading, setIsLoading] = useState(false);
-  const { data: conversations, isLoading: isLoadingConversations } = useQuery(
+
+  const {
+    data: conversations,
+    isLoading: isConversationLoading,
+    error: isConversationError,
+  } = useQuery(
     getConversations,
     {
       chatId: Number(id),
-    }
+    },
+    { enabled: !!id }
   );
-
-  const chatContainerRef = useRef(null);
 
   const chatContainerClass = `flex h-full flex-col items-center justify-between pb-24 overflow-y-auto bg-captn-light-blue ${
     isLoading ? "opacity-40" : "opacity-100"
@@ -75,6 +82,17 @@ export default function ConversationWrapper() {
       window.alert("Error: " + err.message);
     }
   };
+
+  if (isConversationLoading && !!id) return <Loader />;
+  if (isConversationError) {
+    console.log("Unable to load conversation.");
+
+    return (
+      <>
+        <Redirect to="/chat" />
+      </>
+    );
+  }
 
   return (
     <div className="relative flex h-full max-w-full flex-1 flex-col overflow-hidden bg-captn-light-blue">

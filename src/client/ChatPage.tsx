@@ -34,7 +34,7 @@ export default function ChatPage() {
           </div>
         </div>
       </div>
-      <div className="relative z-0 flex h-full w-full overflow-hidden h-screen">
+      <div className="relative z-0 flex h-full w-full overflow-hidden h-screen bg-captn-light-blue">
         <ConversationWrapper />
       </div>
     </div>
