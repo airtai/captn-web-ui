@@ -6,7 +6,7 @@ import logout from '@wasp/auth/logout';
 import { useState, useEffect, useRef } from 'react';
 // import { Chat, Conversation } from '@wasp/entities'
 import { Link } from '@wasp/router'
-import Markdown from 'react-markdown'
+import Markdown from "markdown-to-jsx";
 
 import logo from './static/captn-logo.png'
 import createChat from '@wasp/actions/createChat'
