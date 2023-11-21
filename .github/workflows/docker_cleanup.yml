@@ -16,7 +16,7 @@ jobs:
         with:
           # NOTE: at now only orgs is supported
           owner: airtai
-          name: test-chat-app
+          name: captn-web-ui
 
           token: ${{ secrets.GITHUB_TOKEN }}
           # Keep latest N untagged images
