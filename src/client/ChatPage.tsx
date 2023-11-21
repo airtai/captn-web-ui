@@ -1,8 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-
 import { useQuery } from "@wasp/queries";
 import getChats from "@wasp/queries/getChats";
-import type { Chat } from "@wasp/entities";
 
 import CreateNewChatBtn from "./components/CreateNewChat";
 import ChatsList from "./components/ChatList";

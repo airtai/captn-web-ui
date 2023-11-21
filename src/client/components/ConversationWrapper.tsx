@@ -1,6 +1,7 @@
-import { useState, useRef } from "react";
+import React from "react";
+import { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router";
-import { Redirect } from "react-router-dom";
+import { Redirect, useLocation } from "react-router-dom";
 
 import { useQuery } from "@wasp/queries";
 import updateConversation from "@wasp/actions/updateConversation";
@@ -12,14 +13,41 @@ import getConversations from "@wasp/queries/getConversations";
 import ConversationsList from "./ConversationList";
 import Loader from "./Loader";
 
-export default function ConversationWrapper() {
-  const [isLoading, setIsLoading] = useState(false);
-  const chatContainerRef = useRef(null);
+// A custom hook that builds on useLocation to parse
+// the query string for you.
+function getQueryParam(paramName: string) {
+  const { search } = useLocation();
+  return React.useMemo(() => new URLSearchParams(search), [search]).get(
+    paramName
+  );
+}
 
+export async function triggerSubmit(
+  loginMsgQuery: string,
+  // Todo: remove the below ignore comment
+  // @ts-ignore
+  submitBtnRef,
+  // Todo: remove the below ignore comment
+  // @ts-ignore
+  formInputRef
+) {
+  if (loginMsgQuery) {
+    setTimeout(() => {
+      formInputRef.current.value = decodeURIComponent(loginMsgQuery);
+      submitBtnRef.current.click();
+    }, 1500); // todo: remove timeout and implement a proper fix
+  }
+}
+
+export default function ConversationWrapper() {
   // Todo: remove the below ignore comment
   // @ts-ignore
   const { id } = useParams();
-
+  const [isLoading, setIsLoading] = useState(false);
+  const loginMsgQuery = getQueryParam("msg");
+  const chatContainerRef = useRef(null);
+  const submitBtnRef = useRef(null);
+  const formInputRef = useRef(null);
   const {
     data: conversations,
     isLoading: isConversationLoading,
@@ -32,21 +60,26 @@ export default function ConversationWrapper() {
     { enabled: !!id }
   );
 
-  const chatContainerClass = `flex h-full flex-col items-center justify-between pb-24 overflow-y-auto bg-captn-light-blue ${
-    isLoading ? "opacity-40" : "opacity-100"
-  }`;
+  // componentDidMount
+  useEffect(() => {
+    // Todo: remove the below ignore comment
+    // @ts-ignore
+    triggerSubmit(loginMsgQuery, submitBtnRef, formInputRef);
+  }, [loginMsgQuery]);
 
-  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      // Todo: remove the below ignore comment
+      // @ts-ignore
+      chatContainerRef.current.scrollTop =
+        // Todo: remove the below ignore comment
+        // @ts-ignore
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [conversations]);
+
+  async function callAgent(userQuery: string) {
     try {
-      const target = event.target;
-      // Todo: remove the below ignore comment
-      // @ts-ignore
-      const userQuery = target.userQuery.value;
-      // Todo: remove the below ignore comment
-      // @ts-ignore
-      target.reset();
-
       // 1. add new conversation to table
       const payload = {
         conversation_id: conversations.id,
@@ -65,7 +98,6 @@ export default function ConversationWrapper() {
         message: userQuery,
         conv_id: payload.conversation_id,
       });
-      setIsLoading(false);
       // 3. add agent response as new conversation in the table
       const openAIPayload = {
         conversation_id: conversations.id,
@@ -77,22 +109,37 @@ export default function ConversationWrapper() {
         ],
       };
       await updateConversation(openAIPayload);
+      setIsLoading(false);
     } catch (err: any) {
       setIsLoading(false);
       window.alert("Error: " + err.message);
     }
+  }
+
+  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const target = event.target;
+    // Todo: remove the below ignore comment
+    // @ts-ignore
+    const userQuery = target.userQuery.value;
+    // Todo: remove the below ignore comment
+    // @ts-ignore
+    target.reset();
+    callAgent(userQuery);
   };
 
   if (isConversationLoading && !!id) return <Loader />;
   if (isConversationError) {
-    console.log("Unable to load conversation.");
-
     return (
       <>
         <Redirect to="/chat" />
       </>
     );
   }
+
+  const chatContainerClass = `flex h-full flex-col items-center justify-between pb-24 overflow-y-auto bg-captn-light-blue ${
+    isLoading ? "opacity-40" : "opacity-100"
+  }`;
 
   return (
     <div className="relative flex h-full max-w-full flex-1 flex-col overflow-hidden bg-captn-light-blue">
@@ -128,8 +175,10 @@ export default function ConversationWrapper() {
                       className="block w-full p-4 pl-5 text-sm text-captn-light-cream border border-gray-300 rounded-lg bg-captn-dark-blue focus:ring-blue-500 focus:border-blue-500 dark:bg-captn-dark-blue dark:border-gray-600 dark:placeholder-gray-400 dark:text-captn-light-cream dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="Send a message"
                       required
+                      ref={formInputRef}
                     />
                     <button
+                      ref={submitBtnRef}
                       type="submit"
                       className="text-white absolute right-2.5 bottom-2.5 bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-captn-cta-green dark:hover:bg-captn-cta-green-hover dark:focus:ring-blue-800"
                     >
