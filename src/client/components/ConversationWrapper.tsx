@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useParams } from "react-router";
 import { Redirect, useLocation } from "react-router-dom";
 
@@ -7,8 +7,6 @@ import { useQuery } from "@wasp/queries";
 import updateConversation from "@wasp/actions/updateConversation";
 import getAgentResponse from "@wasp/actions/getAgentResponse";
 import getConversations from "@wasp/queries/getConversations";
-
-// import type { Conversation } from "@wasp/entities";
 
 import ConversationsList from "./ConversationList";
 import Loader from "./Loader";
@@ -22,20 +20,19 @@ function getQueryParam(paramName: string) {
   );
 }
 
-export async function triggerSubmit(
-  loginMsgQuery: string,
-  // Todo: remove the below ignore comment
-  // @ts-ignore
-  submitBtnRef,
-  // Todo: remove the below ignore comment
-  // @ts-ignore
-  formInputRef
-) {
+export function setRedirectMsg(formInputRef: any, loginMsgQuery: string) {
   if (loginMsgQuery) {
-    setTimeout(() => {
-      formInputRef.current.value = decodeURIComponent(loginMsgQuery);
-      submitBtnRef.current.click();
-    }, 1500); // todo: remove timeout and implement a proper fix
+    formInputRef.value = decodeURIComponent(loginMsgQuery);
+  }
+}
+
+export function triggerSubmit(
+  node: any,
+  loginMsgQuery: string,
+  formInputRef: any
+) {
+  if (loginMsgQuery && formInputRef && formInputRef.value !== "") {
+    node.click();
   }
 }
 
@@ -44,10 +41,27 @@ export default function ConversationWrapper() {
   // @ts-ignore
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
-  const loginMsgQuery = getQueryParam("msg");
   const chatContainerRef = useRef(null);
-  const submitBtnRef = useRef(null);
-  const formInputRef = useRef(null);
+
+  const loginMsgQuery: any = getQueryParam("msg");
+  const formInputRef = useCallback(
+    (node: any) => {
+      if (node !== null) {
+        setRedirectMsg(node, loginMsgQuery);
+      }
+    },
+    [loginMsgQuery]
+  );
+
+  const submitBtnRef = useCallback(
+    (node: any) => {
+      if (node !== null) {
+        triggerSubmit(node, loginMsgQuery, formInputRef);
+      }
+    },
+    [loginMsgQuery, formInputRef]
+  );
+
   const {
     data: conversations,
     isLoading: isConversationLoading,
@@ -59,13 +73,6 @@ export default function ConversationWrapper() {
     },
     { enabled: !!id }
   );
-
-  // componentDidMount
-  useEffect(() => {
-    // Todo: remove the below ignore comment
-    // @ts-ignore
-    triggerSubmit(loginMsgQuery, submitBtnRef, formInputRef);
-  }, [loginMsgQuery]);
 
   useEffect(() => {
     if (chatContainerRef.current) {
