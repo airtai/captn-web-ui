@@ -102,7 +102,7 @@ export default function ConversationWrapper() {
       // 2. call backend python server to get agent response
       setIsLoading(true);
       const response = await getAgentResponse({
-        message: userQuery,
+        message: payload.conversations,
         conv_id: payload.conversation_id,
       });
       // 3. add agent response as new conversation in the table
