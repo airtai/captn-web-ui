@@ -114,6 +114,7 @@ export default function ConversationWrapper() {
           // @ts-ignore
           ...[{ role: "assistant", content: response.content }],
         ],
+        status: response.team_status,
       };
       await updateConversation(openAIPayload);
       setIsLoading(false);

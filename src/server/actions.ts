@@ -202,6 +202,7 @@ export const createChat: CreateChat<void, Conversation> = async (
 type UpdateConversationPayload = {
   conversation_id: number;
   conversations: any;
+  status: string;
 };
 
 export const updateConversation: UpdateConversation<
@@ -215,6 +216,7 @@ export const updateConversation: UpdateConversation<
     where: { id: args.conversation_id },
     data: {
       conversation: args.conversations,
+      status: args.status,
     },
   });
 };
@@ -248,7 +250,7 @@ export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
       body: JSON.stringify(payload),
     });
 
-    const json = (await response.json()) as { detail?: string }; // Parse JSON once
+    const json: any = (await response.json()) as { detail?: string }; // Parse JSON once
 
     if (!response.ok) {
       const errorMsg =
@@ -257,7 +259,7 @@ export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
       throw new Error(errorMsg);
     }
 
-    return { content: json };
+    return { content: json["content"], team_status: json["team_status"] };
   } catch (error: any) {
     throw new HttpError(500, "Something went wrong. Please try again later");
   }
