@@ -114,6 +114,7 @@ export default function ConversationWrapper() {
           // @ts-ignore
           ...[{ role: "assistant", content: response.content }],
         ],
+        // @ts-ignore
         ...(response.team_status && { status: response.team_status }),
       };
       await updateConversation(openAIResponse);
