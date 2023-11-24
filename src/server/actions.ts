@@ -215,7 +215,7 @@ export const updateConversation: UpdateConversation<
     where: { id: args.conversation_id },
     data: {
       conversation: args.conversations,
-      status: args.status,
+      ...(args.status && { status: args.status }),
     },
   });
 };

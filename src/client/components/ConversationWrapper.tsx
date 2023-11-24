@@ -75,14 +75,14 @@ export default function ConversationWrapper() {
   );
 
   useEffect(() => {
-    if (chatContainerRef.current) {
-      // Todo: remove the below ignore comment
-      // @ts-ignore
-      chatContainerRef.current.scrollTop =
-        // Todo: remove the below ignore comment
-        // @ts-ignore
-        chatContainerRef.current.scrollHeight;
-    }
+    // if (chatContainerRef.current) {
+    //   // Todo: remove the below ignore comment
+    //   // @ts-ignore
+    //   chatContainerRef.current.scrollTop =
+    //     // Todo: remove the below ignore comment
+    //     // @ts-ignore
+    //     chatContainerRef.current.scrollHeight;
+    // }
   }, [conversations]);
 
   async function callAgent(userQuery: string) {
@@ -106,7 +106,7 @@ export default function ConversationWrapper() {
         conv_id: payload.conversation_id,
       });
       // 3. add agent response as new conversation in the table
-      const openAIPayload = {
+      const openAIResponse = {
         conversation_id: conversations.id,
         conversations: [
           ...payload.conversations,
@@ -114,9 +114,9 @@ export default function ConversationWrapper() {
           // @ts-ignore
           ...[{ role: "assistant", content: response.content }],
         ],
-        status: response.team_status,
+        ...(response.team_status && { status: response.team_status }),
       };
-      await updateConversation(openAIPayload);
+      await updateConversation(openAIResponse);
       setIsLoading(false);
     } catch (err: any) {
       setIsLoading(false);
