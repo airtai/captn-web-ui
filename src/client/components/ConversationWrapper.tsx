@@ -7,7 +7,6 @@ import { useQuery } from "@wasp/queries";
 import updateConversation from "@wasp/actions/updateConversation";
 import getAgentResponse from "@wasp/actions/getAgentResponse";
 import getConversations from "@wasp/queries/getConversations";
-import { useSocket, useSocketListener } from "@wasp/webSocket";
 
 import ConversationsList from "./ConversationList";
 import Loader from "./Loader";
@@ -42,15 +41,7 @@ export default function ConversationWrapper() {
   // @ts-ignore
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
-  // const { socket, isConnected } = useSocket();
-  // const { refreshChatUI, setRefreshChatUI } = useState(false);
   const chatContainerRef = useRef(null);
-
-  // useSocketListener("updateChatUI", updateChatUI);
-
-  // function updateChatUI() {
-  //   setRefreshChatUI(true);
-  // }
 
   const loginMsgQuery: any = getQueryParam("msg");
   const formInputRef = useCallback(
@@ -80,7 +71,7 @@ export default function ConversationWrapper() {
     {
       chatId: Number(id),
     },
-    { enabled: !!id }
+    { enabled: !!id, refetchInterval: 1000 }
   );
 
   useEffect(() => {

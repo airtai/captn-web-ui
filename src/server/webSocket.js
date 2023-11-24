@@ -1,6 +1,6 @@
 import HttpError from "@wasp/core/HttpError.js";
 
-const ADS_SERVER_URL = process.env.ADS_SERVER_URL || "http://127.0.0.1:9000";
+import { ADS_SERVER_URL } from "./config.js";
 
 export const webSocketFn = (io, context) => {
   io.on("connection", async (socket) => {
@@ -9,9 +9,9 @@ export const webSocketFn = (io, context) => {
       console.log("========");
       console.log("a user connected: ", userEmail);
 
-      // Check for updates every 5 seconds
+      // Check for updates every 3 seconds
       const updateInterval = setInterval(async () => {
-        console.log("Check for inprogress tasks update");
+        console.log("Checking database for inprogress tasks");
         const conversations = await context.entities.Conversation.findMany({
           where: { userId: socket.data.user.id, status: "inprogress" },
         });
@@ -57,14 +57,12 @@ export const webSocketFn = (io, context) => {
                     status: conversation_status,
                   },
                 });
-
-                // io.emit("updateChatUI");
               }
             } catch (error) {
               throw new HttpError(500, error);
             }
           });
-      }, 5000);
+      }, 3000);
     }
   });
 };

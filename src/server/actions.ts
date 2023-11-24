@@ -13,15 +13,14 @@ import type {
 import type { StripePaymentResult, OpenAIResponse } from "./types";
 import Stripe from "stripe";
 
+import { ADS_SERVER_URL } from "./config.js";
+
 const stripe = new Stripe(process.env.STRIPE_KEY!, {
   apiVersion: "2022-11-15",
 });
 
 // WASP_WEB_CLIENT_URL will be set up by Wasp when deploying to production: https://wasp-lang.dev/docs/deploying
 const DOMAIN = process.env.WASP_WEB_CLIENT_URL || "http://localhost:3000";
-
-// Python ADS_SERVER_URL
-const ADS_SERVER_URL = process.env.ADS_SERVER_URL || "http://127.0.0.1:9000";
 
 export const stripePayment: StripePayment<void, StripePaymentResult> = async (
   _args,
