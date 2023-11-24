@@ -43,7 +43,10 @@ export const webSocketFn = (io, context) => {
               }
 
               const conversation_status = json["status"];
-              if (conversation_status === "ready") {
+              if (
+                conversation_status === "completed" ||
+                conversation_status === "pause"
+              ) {
                 const updated_conversation = conversation.conversation.concat([
                   { role: "assistant", content: json["msg"] },
                 ]);

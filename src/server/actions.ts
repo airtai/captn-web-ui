@@ -223,10 +223,11 @@ export const updateConversation: UpdateConversation<
 type AgentPayload = {
   message: any;
   conv_id: number;
+  is_answer_to_agent_question?: boolean;
 };
 
 export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
-  { message, conv_id },
+  { message, conv_id, is_answer_to_agent_question },
   context
 ) => {
   if (!context.user) {
@@ -237,6 +238,7 @@ export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
     message: message,
     conv_id: conv_id,
     user_id: context.user.id,
+    is_answer_to_agent_question: is_answer_to_agent_question,
   };
   console.log("===========");
   console.log("Payload to Python server");

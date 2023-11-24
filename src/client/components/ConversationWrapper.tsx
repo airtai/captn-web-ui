@@ -104,6 +104,7 @@ export default function ConversationWrapper() {
       const response = await getAgentResponse({
         message: payload.conversations,
         conv_id: payload.conversation_id,
+        is_answer_to_agent_question: conversations.status === "pause",
       });
       // 3. add agent response as new conversation in the table
       const openAIResponse = {
