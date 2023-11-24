@@ -68,6 +68,9 @@ app chatApp {
     ("stripe", "11.15.0"),
     ("markdown-to-jsx", "7.3.2"),
   ],
+  webSocket: {
+    fn: import { webSocketFn } from "@server/webSocket.js"
+  },
 }
 
 /* 💽 Wasp defines DB entities via Prisma Database Models: 
@@ -129,6 +132,7 @@ entity Conversation {=psl
     conversation  Json
     createdAt                 DateTime        @default(now())
     updatedAt                 DateTime        @updatedAt
+    status String?
     chat        Chat?    @relation(fields: [chatId], references: [id])
     chatId      Int?
     user        User?    @relation(fields: [userId], references: [id])
