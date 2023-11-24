@@ -201,7 +201,7 @@ export const createChat: CreateChat<void, Conversation> = async (
 type UpdateConversationPayload = {
   conversation_id: number;
   conversations: any;
-  status: string;
+  status?: string;
 };
 
 export const updateConversation: UpdateConversation<
