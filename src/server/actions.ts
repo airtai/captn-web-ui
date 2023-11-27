@@ -204,6 +204,21 @@ type UpdateConversationPayload = {
   status?: string;
 };
 
+type ConversationItem = {
+  role: string;
+  content: string;
+};
+
+function convertConversationList(
+  currentConversation: Conversation
+): Array<ConversationItem> {
+  const conversationList: Array<any> = Object.entries(
+    // @ts-ignore
+    currentConversation.conversation
+  );
+  return conversationList.map((item) => item[1]);
+}
+
 export const updateConversation: UpdateConversation<
   UpdateConversationPayload,
   Conversation
@@ -211,10 +226,27 @@ export const updateConversation: UpdateConversation<
   if (!context.user) {
     throw new HttpError(401);
   }
+  const currentConversation =
+    await context.entities.Conversation.findFirstOrThrow({
+      where: { id: args.conversation_id },
+    });
+
+  let currentConversationList = convertConversationList(currentConversation);
+  const existingRole =
+    currentConversationList[currentConversationList.length - 1]["role"];
+  const openAIResponseRole = args.conversations[0]["role"];
+
+  if (!(existingRole === "assistant" && existingRole === openAIResponseRole)) {
+    currentConversationList = [
+      ...currentConversationList,
+      ...args.conversations,
+    ];
+  }
+
   return context.entities.Conversation.update({
     where: { id: args.conversation_id },
     data: {
-      conversation: args.conversations,
+      conversation: currentConversationList,
       ...(args.status && { status: args.status }),
     },
   });
@@ -223,10 +255,11 @@ export const updateConversation: UpdateConversation<
 type AgentPayload = {
   message: any;
   conv_id: number;
+  is_answer_to_agent_question?: boolean;
 };
 
 export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
-  { message, conv_id },
+  { message, conv_id, is_answer_to_agent_question },
   context
 ) => {
   if (!context.user) {
@@ -237,6 +270,7 @@ export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
     message: message,
     conv_id: conv_id,
     user_id: context.user.id,
+    is_answer_to_agent_question: is_answer_to_agent_question,
   };
   console.log("===========");
   console.log("Payload to Python server");
