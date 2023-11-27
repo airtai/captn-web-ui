@@ -89,31 +89,27 @@ export default function ConversationWrapper() {
     try {
       // 1. add new conversation to table
       const payload = {
+        // @ts-ignore
         conversation_id: conversations.id,
-        conversations: [
-          // Todo: remove the below ignore comment
-          // @ts-ignore
-          ...conversations.conversation,
-          ...[{ role: "user", content: userQuery }],
-        ],
+        conversations: [{ role: "user", content: userQuery }],
       };
 
-      await updateConversation(payload);
+      const updatedConversation = await updateConversation(payload);
       // 2. call backend python server to get agent response
       setIsLoading(true);
       const response = await getAgentResponse({
-        message: payload.conversations,
+        message: updatedConversation["conversation"],
         conv_id: payload.conversation_id,
+        // @ts-ignore
         is_answer_to_agent_question: conversations.status === "pause",
       });
       // 3. add agent response as new conversation in the table
       const openAIResponse = {
+        // @ts-ignore
         conversation_id: conversations.id,
         conversations: [
-          ...payload.conversations,
-          // Todo: remove the below ignore comment
           // @ts-ignore
-          ...[{ role: "assistant", content: response.content }],
+          { role: "assistant", content: response.content },
         ],
         // @ts-ignore
         ...(response.team_status && { status: response.team_status }),

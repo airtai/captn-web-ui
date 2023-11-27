@@ -11,7 +11,6 @@ export const webSocketFn = (io, context) => {
 
       // Check for updates every 3 seconds
       const updateInterval = setInterval(async () => {
-        console.log("Checking database for inprogress tasks");
         const conversations = await context.entities.Conversation.findMany({
           where: { userId: socket.data.user.id, status: "inprogress" },
         });
