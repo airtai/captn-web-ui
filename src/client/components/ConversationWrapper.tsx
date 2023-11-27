@@ -91,7 +91,7 @@ export default function ConversationWrapper() {
       const payload = {
         // @ts-ignore
         conversation_id: conversations.id,
-        conversations: [{ role: "user", content: userQuery }],
+        conversations: [...[{ role: "user", content: userQuery }]],
       };
 
       const updatedConversation = await updateConversation(payload);
@@ -99,9 +99,9 @@ export default function ConversationWrapper() {
       setIsLoading(true);
       const response = await getAgentResponse({
         message: updatedConversation["conversation"],
-        conv_id: payload.conversation_id,
+        conv_id: updatedConversation.id,
         // @ts-ignore
-        is_answer_to_agent_question: conversations.status === "pause",
+        is_answer_to_agent_question: updatedConversation.status === "pause",
       });
       // 3. add agent response as new conversation in the table
       const openAIResponse = {
@@ -109,7 +109,7 @@ export default function ConversationWrapper() {
         conversation_id: conversations.id,
         conversations: [
           // @ts-ignore
-          { role: "assistant", content: response.content },
+          ...[{ role: "assistant", content: response.content }],
         ],
         // @ts-ignore
         ...(response.team_status && { status: response.team_status }),
@@ -131,7 +131,7 @@ export default function ConversationWrapper() {
     // Todo: remove the below ignore comment
     // @ts-ignore
     target.reset();
-    callAgent(userQuery);
+    await callAgent(userQuery);
   };
 
   if (isConversationLoading && !!id) return <Loader />;
