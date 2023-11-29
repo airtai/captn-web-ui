@@ -24,8 +24,8 @@ export default function ConversationWrapper() {
     {
       chatId: Number(id),
     },
-    { enabled: !!id }
-    // { enabled: !!id, refetchInterval: 1000 }
+    // { enabled: !!id }
+    { enabled: !!id, refetchInterval: 1000 }
   );
 
   const loginMsgQuery: any = getQueryParam("msg");
@@ -49,14 +49,21 @@ export default function ConversationWrapper() {
 
   async function addMessagesToConversation(userQuery: string) {
     try {
-      const [message, conv_id, is_answer_to_agent_question] =
-        await addUserMessageToConversation(Number(id), userQuery);
+      const [
+        message,
+        conv_id,
+        previousConversationIdToClearStatus,
+        isAnswerToAgentQuestion,
+        userResponseToTeamId,
+      ] = await addUserMessageToConversation(Number(id), userQuery);
       setIsLoading(true);
       await addAgentMessageToConversation(
         Number(id),
         message,
         conv_id,
-        is_answer_to_agent_question
+        previousConversationIdToClearStatus,
+        isAnswerToAgentQuestion,
+        userResponseToTeamId
       );
       setIsLoading(false);
     } catch (err: any) {

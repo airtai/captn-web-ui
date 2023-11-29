@@ -51,13 +51,24 @@ test("prepareOpenAIRequest_1", () => {
   ];
   const expected_conv_id = 9;
   const expected_is_answer_to_agent_question = false;
+  const expected_team_id = null;
+  const expected_previous_conversation_id_to_clear_status = 8;
 
-  const [actual_message, actual_conv_id, actual_is_answer_to_agent_question] =
-    prepareOpenAIRequest(input);
+  const [
+    actual_message,
+    actual_conv_id,
+    actual_previous_conversation_id_to_clear_status,
+    actual_is_answer_to_agent_question,
+    actual_team_id,
+  ] = prepareOpenAIRequest(input);
   expect(actual_message).toStrictEqual(expected_message);
   expect(actual_conv_id).toStrictEqual(expected_conv_id);
   expect(actual_is_answer_to_agent_question).toStrictEqual(
     expected_is_answer_to_agent_question
+  );
+  expect(actual_team_id).toStrictEqual(expected_team_id);
+  expect(actual_previous_conversation_id_to_clear_status).toStrictEqual(
+    expected_previous_conversation_id_to_clear_status
   );
 });
 
@@ -87,17 +98,28 @@ test("prepareOpenAIRequest_2", () => {
   ];
   const expected_conv_id = 8;
   const expected_is_answer_to_agent_question = false;
+  const expected_team_id = undefined;
+  const expected_previous_conversation_id_to_clear_status = undefined;
 
-  const [actual_message, actual_conv_id, actual_is_answer_to_agent_question] =
-    prepareOpenAIRequest(input);
+  const [
+    actual_message,
+    actual_conv_id,
+    actual_previous_conversation_id_to_clear_status,
+    actual_is_answer_to_agent_question,
+    actual_team_id,
+  ] = prepareOpenAIRequest(input);
   expect(actual_message).toStrictEqual(expected_message);
   expect(actual_conv_id).toStrictEqual(expected_conv_id);
   expect(actual_is_answer_to_agent_question).toStrictEqual(
     expected_is_answer_to_agent_question
   );
+  expect(actual_team_id).toStrictEqual(expected_team_id);
+  expect(actual_previous_conversation_id_to_clear_status).toStrictEqual(
+    expected_previous_conversation_id_to_clear_status
+  );
 });
 
-test("prepareOpenAIRequest_1", () => {
+test("prepareOpenAIRequest_3", () => {
   const input = [
     {
       chatId: 4,
@@ -180,12 +202,23 @@ test("prepareOpenAIRequest_1", () => {
   ];
   const expected_conv_id = 22;
   const expected_is_answer_to_agent_question = true;
+  const expected_team_id = 123;
+  const expected_previous_conversation_id_to_clear_status = 10;
 
-  const [actual_message, actual_conv_id, actual_is_answer_to_agent_question] =
-    prepareOpenAIRequest(input);
+  const [
+    actual_message,
+    actual_conv_id,
+    actual_previous_conversation_id_to_clear_status,
+    actual_is_answer_to_agent_question,
+    actual_team_id,
+  ] = prepareOpenAIRequest(input);
   expect(actual_message).toStrictEqual(expected_message);
   expect(actual_conv_id).toStrictEqual(expected_conv_id);
   expect(actual_is_answer_to_agent_question).toStrictEqual(
     expected_is_answer_to_agent_question
+  );
+  expect(actual_team_id).toStrictEqual(expected_team_id);
+  expect(actual_previous_conversation_id_to_clear_status).toStrictEqual(
+    expected_previous_conversation_id_to_clear_status
   );
 });

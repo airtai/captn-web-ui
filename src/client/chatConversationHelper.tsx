@@ -13,24 +13,42 @@ export async function addUserMessageToConversation(
   };
 
   const updatedConversation: any = await addNewConversationToChat(payload);
-  const [message, conv_id, is_answer_to_agent_question]: [
+  const [
+    message,
+    conv_id,
+    previousConversationIdToClearStatus,
+    isAnswerToAgentQuestion,
+    userResponseToTeamId,
+  ]: [
     message: any,
     conv_id: number,
-    is_answer_to_agent_question: boolean
+    previousConversationIdToClearStatus: number,
+    isAnswerToAgentQuestion: boolean,
+    userResponseToTeamId: number | null | undefined
   ] = prepareOpenAIRequest(updatedConversation);
-  return [message, conv_id, is_answer_to_agent_question];
+  return [
+    message,
+    conv_id,
+    previousConversationIdToClearStatus,
+    isAnswerToAgentQuestion,
+    userResponseToTeamId,
+  ];
 }
 
 export async function addAgentMessageToConversation(
   chat_id: number,
   message: any,
   conv_id: number,
-  is_answer_to_agent_question: boolean
+  previousConversationIdToClearStatus: number,
+  isAnswerToAgentQuestion: boolean,
+  userResponseToTeamId: number | null | undefined
 ) {
   const response: any = await getAgentResponse({
     message: message,
     conv_id: conv_id,
-    is_answer_to_agent_question: is_answer_to_agent_question,
+    previousConversationIdToClearStatus: previousConversationIdToClearStatus,
+    isAnswerToAgentQuestion: isAnswerToAgentQuestion,
+    userResponseToTeamId: userResponseToTeamId,
   });
   const openAIResponse = {
     chat_id: Number(chat_id),

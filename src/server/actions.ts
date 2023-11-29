@@ -140,15 +140,25 @@ export const addNewConversationToChat: AddNewConversationToChat<
 type AgentPayload = {
   message: any;
   conv_id: number;
-  is_answer_to_agent_question?: boolean;
+  previousConversationIdToClearStatus: number;
+  isAnswerToAgentQuestion?: boolean;
+  userResponseToTeamId?: number;
 };
 
 export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
   {
     message,
     conv_id,
-    is_answer_to_agent_question,
-  }: { message: any; conv_id: number; is_answer_to_agent_question: boolean },
+    previousConversationIdToClearStatus,
+    isAnswerToAgentQuestion,
+    userResponseToTeamId,
+  }: {
+    message: any;
+    conv_id: number;
+    previousConversationIdToClearStatus: number;
+    isAnswerToAgentQuestion: boolean;
+    userResponseToTeamId: number | null | undefined;
+  },
   context: any
 ) => {
   if (!context.user) {
@@ -159,7 +169,8 @@ export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
     message: message,
     conv_id: conv_id,
     user_id: context.user.id,
-    is_answer_to_agent_question: is_answer_to_agent_question,
+    is_answer_to_agent_question: isAnswerToAgentQuestion,
+    user_answer_to_team_id: userResponseToTeamId,
   };
   console.log("===========");
   console.log("Payload to Python server");
@@ -179,6 +190,17 @@ export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
         json.detail || `HTTP error with status code ${response.status}`;
       console.error("Server Error:", errorMsg);
       throw new Error(errorMsg);
+    }
+
+    if (payload.is_answer_to_agent_question) {
+      await context.entities.Conversation.update({
+        where: {
+          id: previousConversationIdToClearStatus,
+        },
+        data: {
+          team_status: null,
+        },
+      });
     }
 
     return {

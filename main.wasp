@@ -68,9 +68,9 @@ app chatApp {
     ("stripe", "11.15.0"),
     ("markdown-to-jsx", "7.3.2"),
   ],
-  // webSocket: {
-  //   fn: import { webSocketFn } from "@server/webSocket.js"
-  // },
+  webSocket: {
+    fn: import { checkTeamStatusAndUpdateInDB } from "@server/webSocket.js"
+  },
 }
 
 /* 💽 Wasp defines DB entities via Prisma Database Models: 
