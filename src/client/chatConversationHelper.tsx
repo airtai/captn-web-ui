@@ -36,7 +36,9 @@ export async function addAgentMessageToConversation(
     chat_id: Number(chat_id),
     message: response.content,
     role: "assistant",
-    ...(response.team_status && { status: response.team_status }),
+    ...(response.team_name && { team_name: response.team_name }),
+    ...(response.team_id && { team_id: response.team_id }),
+    ...(response.team_status && { team_status: response.team_status }),
   };
   await addNewConversationToChat(openAIResponse);
 }

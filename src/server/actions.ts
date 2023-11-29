@@ -106,6 +106,9 @@ type AddNewConversationToChatPayload = {
   message: string;
   role: string;
   chat_id: number;
+  team_name?: string;
+  team_id?: number;
+  team_status?: string;
 };
 
 export const addNewConversationToChat: AddNewConversationToChat<
@@ -122,6 +125,9 @@ export const addNewConversationToChat: AddNewConversationToChat<
       role: args.role,
       chat: { connect: { id: args.chat_id } },
       user: { connect: { id: context.user.id } },
+      ...(args.team_name && { team_name: args.team_name }),
+      ...(args.team_id && { team_id: args.team_id }),
+      ...(args.team_status && { team_status: args.team_status }),
     },
   });
 
@@ -175,7 +181,12 @@ export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
       throw new Error(errorMsg);
     }
 
-    return { content: json["content"], team_status: json["team_status"] };
+    return {
+      content: json["content"],
+      team_status: json["team_status"],
+      team_name: json["team_name"],
+      team_id: json["team_id"],
+    };
   } catch (error: any) {
     throw new HttpError(500, "Something went wrong. Please try again later");
   }
