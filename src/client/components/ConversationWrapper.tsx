@@ -1,35 +1,25 @@
 import React from "react";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useParams } from "react-router";
-import { Redirect, useLocation } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 import { useQuery } from "@wasp/queries";
 import getConversations from "@wasp/queries/getConversations";
-import getAgentResponse from "@wasp/actions/getAgentResponse";
-import addNewConversationToChat from "@wasp/actions/addNewConversationToChat";
-import type { Conversation } from "@wasp/entities";
 
 import ConversationsList from "./ConversationList";
 import Loader from "./Loader";
-import { prepareOpenAIRequest } from "../helpers";
 
-// A custom hook that builds on useLocation to parse
-// the query string for you.
-function getQueryParam(paramName: string) {
-  const { search } = useLocation();
-  return React.useMemo(() => new URLSearchParams(search), [search]).get(
-    paramName
-  );
-}
+import {
+  addUserMessageToConversation,
+  addAgentMessageToConversation,
+} from "../chatConversationHelper";
+
+import { setRedirectMsg, getQueryParam, triggerSubmit } from "../helpers";
 
 export default function ConversationWrapper() {
   const { id }: { id: string } = useParams();
   const [isLoading, setIsLoading] = useState(false);
-  const {
-    data: conversations,
-    isLoading: isConversationLoading,
-    error: isConversationError,
-  } = useQuery(
+  const { data: conversations } = useQuery(
     getConversations,
     {
       chatId: Number(id),
@@ -38,43 +28,41 @@ export default function ConversationWrapper() {
     // { enabled: !!id, refetchInterval: 1000 }
   );
 
-  async function callAgent(userQuery: string) {
-    try {
-      // 1. add new conversation to table
-      const payload = {
-        // @ts-ignore
-        chat_id: Number(id),
-        message: userQuery,
-        role: "user",
-      };
+  const loginMsgQuery: any = getQueryParam("msg");
+  const formInputRef = useCallback(
+    (node: any) => {
+      if (node !== null) {
+        setRedirectMsg(node, loginMsgQuery);
+      }
+    },
+    [loginMsgQuery]
+  );
 
-      const updatedConversation: Conversation[] =
-        await addNewConversationToChat(payload);
-      const [message, conv_id, is_answer_to_agent_question]: [
-        message: any,
-        conv_id: number,
-        is_answer_to_agent_question: boolean
-      ] = prepareOpenAIRequest(updatedConversation);
-      // 2. call backend python server to get agent response
+  const submitBtnRef = useCallback(
+    (node: any) => {
+      if (node !== null) {
+        triggerSubmit(node, loginMsgQuery, formInputRef);
+      }
+    },
+    [loginMsgQuery, formInputRef]
+  );
+
+  async function addMessagesToConversation(userQuery: string) {
+    try {
+      const [message, conv_id, is_answer_to_agent_question] =
+        await addUserMessageToConversation(Number(id), userQuery);
       setIsLoading(true);
-      const response: any = await getAgentResponse({
-        message: message,
-        conv_id: conv_id,
-        is_answer_to_agent_question: is_answer_to_agent_question,
-      });
-      // 3. add agent response as new conversation in the table
-      const openAIResponse = {
-        chat_id: Number(id),
-        message: response.content,
-        role: "assistant",
-        // @ts-ignore
-        ...(response.team_status && { status: response.team_status }),
-      };
-      await addNewConversationToChat(openAIResponse);
+      await addAgentMessageToConversation(
+        Number(id),
+        message,
+        conv_id,
+        is_answer_to_agent_question
+      );
       setIsLoading(false);
     } catch (err: any) {
       setIsLoading(false);
-      window.alert("Error: " + err.message);
+      console.log("Error: " + err.message);
+      window.alert("Error: Something went wrong. Please try again later.");
     }
   }
 
@@ -83,12 +71,21 @@ export default function ConversationWrapper() {
     const target = event.target as HTMLFormElement;
     const userQuery = target.userQuery.value;
     target.reset();
-    await callAgent(userQuery);
+    await addMessagesToConversation(userQuery);
   };
 
   const chatContainerClass = `flex h-full flex-col items-center justify-between pb-24 overflow-y-auto bg-captn-light-blue ${
     isLoading ? "opacity-40" : "opacity-100"
   }`;
+
+  // check if user has access to chat
+  if (conversations && conversations.length === 0) {
+    return (
+      <>
+        <Redirect to="/chat" />
+      </>
+    );
+  }
 
   return (
     <div className="relative flex h-full max-w-full flex-1 flex-col overflow-hidden bg-captn-light-blue">
@@ -118,10 +115,10 @@ export default function ConversationWrapper() {
                       className="block w-full p-4 pl-5 text-sm text-captn-light-cream border border-gray-300 rounded-lg bg-captn-dark-blue focus:ring-blue-500 focus:border-blue-500 dark:bg-captn-dark-blue dark:border-gray-600 dark:placeholder-gray-400 dark:text-captn-light-cream dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="Send a message"
                       required
-                      //   ref={formInputRef}
+                      ref={formInputRef}
                     />
                     <button
-                      //   ref={submitBtnRef}
+                      ref={submitBtnRef}
                       type="submit"
                       className="text-white absolute right-2.5 bottom-2.5 bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-captn-cta-green dark:hover:bg-captn-cta-green-hover dark:focus:ring-blue-800"
                     >

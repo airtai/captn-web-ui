@@ -1,3 +1,6 @@
+import React from "react";
+import { useLocation } from "react-router-dom";
+
 export function areThereAnyTasks(): boolean {
   return true;
 }
@@ -47,4 +50,29 @@ export function prepareOpenAIRequest(
   const [latestConversationID, is_answer_to_agent_question] =
     getConvIDAndTeamStatus(input);
   return [message, latestConversationID, is_answer_to_agent_question];
+}
+
+// A custom hook that builds on useLocation to parse
+// the query string for you.
+export function getQueryParam(paramName: string) {
+  const { search } = useLocation();
+  return React.useMemo(() => new URLSearchParams(search), [search]).get(
+    paramName
+  );
+}
+
+export function setRedirectMsg(formInputRef: any, loginMsgQuery: string) {
+  if (loginMsgQuery) {
+    formInputRef.value = decodeURIComponent(loginMsgQuery);
+  }
+}
+
+export function triggerSubmit(
+  node: any,
+  loginMsgQuery: string,
+  formInputRef: any
+) {
+  if (loginMsgQuery && formInputRef && formInputRef.value !== "") {
+    node.click();
+  }
 }
