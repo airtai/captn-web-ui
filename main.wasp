@@ -68,9 +68,9 @@ app chatApp {
     ("stripe", "11.15.0"),
     ("markdown-to-jsx", "7.3.2"),
   ],
-  webSocket: {
-    fn: import { webSocketFn } from "@server/webSocket.js"
-  },
+  // webSocket: {
+  //   fn: import { webSocketFn } from "@server/webSocket.js"
+  // },
 }
 
 /* 💽 Wasp defines DB entities via Prisma Database Models: 
@@ -128,15 +128,25 @@ entity Chat {=psl
 psl=}
 
 entity Conversation {=psl
-    id          Int     @id @default(autoincrement())
-    conversation  Json
-    createdAt                 DateTime        @default(now())
-    updatedAt                 DateTime        @updatedAt
-    status String?
-    chat        Chat?    @relation(fields: [chatId], references: [id])
-    chatId      Int?
-    user        User?    @relation(fields: [userId], references: [id])
-    userId      Int?
+    id                          Int     @id @default(autoincrement())
+    createdAt                   DateTime        @default(now())
+    updatedAt                   DateTime        @updatedAt
+    message                     String
+    role                        String
+    type                        String?
+    team_id                     Int?
+    team_name                   String?
+    team_status                 String?
+    replyToConversationId       Int?
+    replyToConversation         Conversation? @relation("replyToConversation", fields: [replyToConversationId], references: [id])
+    replyToConversationRecord   Conversation[] @relation("replyToConversation")
+    previousConversationId      Int?
+    previousConversation        Conversation? @relation("previousConversation", fields: [previousConversationId], references: [id])
+    previousConversationRecord  Conversation[] @relation("previousConversation")
+    chat                        Chat?    @relation(fields: [chatId], references: [id])
+    chatId                      Int?
+    user                        User?    @relation(fields: [userId], references: [id])
+    userId                      Int?
 psl=}
 
 
@@ -208,12 +218,6 @@ page ChatPage {
 
 // 📝 Actions aka Mutations
 
-action generateGptResponse {
-  fn: import { generateGptResponse } from "@server/actions.js",
-  // entities: [User, RelatedObject]
-  entities: [User]
-}
-
 action stripePayment {
   fn: import { stripePayment } from "@server/actions.js",
   entities: [User]
@@ -224,8 +228,8 @@ action createChat {
   entities: [Chat, Conversation]
 }
 
-action updateConversation {
-  fn: import { updateConversation } from "@server/actions.js",
+action addNewConversationToChat {
+  fn: import { addNewConversationToChat } from "@server/actions.js",
   entities: [Chat, Conversation]
 }
 
