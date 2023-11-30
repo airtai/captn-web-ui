@@ -7,6 +7,7 @@ import type {
   StripePayment,
   CreateChat,
   AddNewConversationToChat,
+  UpdateExistingConversation,
   GetAgentResponse,
 } from "@wasp/actions/types";
 import type { StripePaymentResult, OpenAIResponse } from "./types";
@@ -137,25 +138,46 @@ export const addNewConversationToChat: AddNewConversationToChat<
   });
 };
 
+type UpdateExistingConversationPayload = {
+  chat_id: number;
+  conv_id: number;
+  type: null;
+  team_status: null;
+};
+
+export const updateExistingConversation: UpdateExistingConversation<
+  UpdateExistingConversationPayload,
+  void
+> = async (args, context) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+  await context.entities.Conversation.update({
+    where: {
+      id: args.conv_id,
+    },
+    data: {
+      team_status: args.team_status,
+      type: args.type,
+    },
+  });
+};
+
 type AgentPayload = {
   message: any;
   conv_id: number;
-  previousConversationIdToClearStatus: number;
-  isAnswerToAgentQuestion?: boolean;
-  userResponseToTeamId?: number;
+  isAnswerToAgentQuestion: boolean;
 };
 
 export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
   {
     message,
     conv_id,
-    previousConversationIdToClearStatus,
     isAnswerToAgentQuestion,
     userResponseToTeamId,
   }: {
     message: any;
     conv_id: number;
-    previousConversationIdToClearStatus: number;
     isAnswerToAgentQuestion: boolean;
     userResponseToTeamId: number | null | undefined;
   },
@@ -190,17 +212,6 @@ export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
         json.detail || `HTTP error with status code ${response.status}`;
       console.error("Server Error:", errorMsg);
       throw new Error(errorMsg);
-    }
-
-    if (payload.is_answer_to_agent_question) {
-      await context.entities.Conversation.update({
-        where: {
-          id: previousConversationIdToClearStatus,
-        },
-        data: {
-          team_status: null,
-        },
-      });
     }
 
     return {

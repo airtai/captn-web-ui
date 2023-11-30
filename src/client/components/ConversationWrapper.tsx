@@ -24,7 +24,6 @@ export default function ConversationWrapper() {
     {
       chatId: Number(id),
     },
-    // { enabled: !!id }
     { enabled: !!id, refetchInterval: 1000 }
   );
 
@@ -47,23 +46,32 @@ export default function ConversationWrapper() {
     [loginMsgQuery, formInputRef]
   );
 
-  async function addMessagesToConversation(userQuery: string) {
+  async function addMessagesToConversation(
+    userQuery: string,
+    conv_id?: number,
+    team_name?: string,
+    team_id?: number
+  ) {
     try {
       const [
-        message,
-        conv_id,
-        previousConversationIdToClearStatus,
+        messages,
+        conversation_id,
         isAnswerToAgentQuestion,
-        userResponseToTeamId,
-      ] = await addUserMessageToConversation(Number(id), userQuery);
+        user_answer_to_team_id,
+      ] = await addUserMessageToConversation(
+        Number(id),
+        userQuery,
+        conv_id,
+        team_name,
+        team_id
+      );
       setIsLoading(true);
       await addAgentMessageToConversation(
         Number(id),
-        message,
-        conv_id,
-        previousConversationIdToClearStatus,
+        messages,
+        conversation_id,
         isAnswerToAgentQuestion,
-        userResponseToTeamId
+        user_answer_to_team_id
       );
       setIsLoading(false);
     } catch (err: any) {
@@ -79,6 +87,15 @@ export default function ConversationWrapper() {
     const userQuery = target.userQuery.value;
     target.reset();
     await addMessagesToConversation(userQuery);
+  };
+
+  const handleInlineFormSubmit = async (
+    userQuery: string,
+    conv_id: number,
+    team_name: string,
+    team_id: number
+  ) => {
+    await addMessagesToConversation(userQuery, conv_id, team_name, team_id);
   };
 
   const chatContainerClass = `flex h-full flex-col items-center justify-between pb-24 overflow-y-auto bg-captn-light-blue ${
@@ -101,7 +118,10 @@ export default function ConversationWrapper() {
           <div className="flex-1 overflow-hidden">
             <div className={`${chatContainerClass}`} style={{ height: "85%" }}>
               {conversations && (
-                <ConversationsList conversations={conversations} />
+                <ConversationsList
+                  conversations={conversations}
+                  onInlineFormSubmit={handleInlineFormSubmit}
+                />
               )}
             </div>
             {isLoading && <Loader />}

@@ -26,50 +26,24 @@ type OutputMessage = {
   content: string;
 };
 
-function getConvIDAndTeamDetails(
-  input: InputMessage[]
-): [number, number, boolean, number | null | undefined] {
+function getLatestConversationID(input: InputMessage[]): number {
   const allMessageIDS: number[] = input.map((message) => message.id);
   const sortedAllMessageIDS = allMessageIDS.sort((a, b) => b - a);
   const latestConversationID = sortedAllMessageIDS[0];
-  const previousConversationID = sortedAllMessageIDS[1];
-  const previousConversation = input.find(
-    (message) => message.id === previousConversationID
-  );
-  const previousConversationTeamStatus = previousConversation?.team_status;
-  const isAnswerToAgentQuestion = previousConversationTeamStatus == "pause";
-  const userResponseToTeamId = previousConversation?.team_id;
-  const previousConversationIdToClearStatus = previousConversationID;
-  return [
-    latestConversationID,
-    previousConversationIdToClearStatus,
-    isAnswerToAgentQuestion,
-    userResponseToTeamId,
-  ];
+  return latestConversationID;
 }
 
 export function prepareOpenAIRequest(
   input: InputMessage[]
-): [OutputMessage[], number, number, boolean, number | null | undefined] {
-  const message: OutputMessage[] = input.map((message) => {
+): [OutputMessage[], number] {
+  const messages: OutputMessage[] = input.map((message) => {
     return {
       role: message.role,
       content: message.message,
     };
   });
-  const [
-    latestConversationID,
-    previousConversationIdToClearStatus,
-    isAnswerToAgentQuestion,
-    userResponseToTeamId,
-  ] = getConvIDAndTeamDetails(input);
-  return [
-    message,
-    latestConversationID,
-    previousConversationIdToClearStatus,
-    isAnswerToAgentQuestion,
-    userResponseToTeamId,
-  ];
+  const latestConversationID = getLatestConversationID(input);
+  return [messages, latestConversationID];
 }
 
 // A custom hook that builds on useLocation to parse

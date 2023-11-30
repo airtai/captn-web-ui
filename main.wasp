@@ -233,6 +233,11 @@ action addNewConversationToChat {
   entities: [Chat, Conversation]
 }
 
+action updateExistingConversation {
+  fn: import { updateExistingConversation } from "@server/actions.js",
+  entities: [Chat, Conversation]
+}
+
 action getAgentResponse {
   fn: import { getAgentResponse } from "@server/actions.js",
   entities: [Chat, Conversation]

@@ -30,5 +30,6 @@ export const getConversations: GetConversations<
   }
   return context.entities.Conversation.findMany({
     where: { chatId: args.chatId, userId: context.user.id },
+    orderBy: { id: "asc" },
   });
 };

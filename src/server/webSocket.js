@@ -55,7 +55,7 @@ export const checkTeamStatusAndUpdateInDB = (io, context) => {
                     team_status: null,
                   },
                 });
-                // create a new entry in conversation table with assistant role and json["msg"], status
+
                 await context.entities.Conversation.create({
                   data: {
                     message: json["msg"],
@@ -63,6 +63,7 @@ export const checkTeamStatusAndUpdateInDB = (io, context) => {
                     team_name: json["team_name"],
                     team_id: Number(json["team_id"]),
                     team_status: team_status,
+                    type: team_status === "pause" ? "agent_question" : null,
                     chat: { connect: { id: conversation.chatId } },
                     user: { connect: { id: socket.data.user.id } },
                   },
