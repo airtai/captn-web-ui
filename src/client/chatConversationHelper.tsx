@@ -17,7 +17,7 @@ export async function addUserMessageToConversation(
     const payload = {
       chat_id: chat_id,
       conv_id: conv_id,
-      type: null,
+      is_question_from_agent: false,
       team_status: null,
     };
     await updateExistingConversation(payload);

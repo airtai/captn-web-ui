@@ -16,7 +16,7 @@ type InputMessage = {
   team_id: number | null;
   team_name: string | null;
   team_status: string | null;
-  type: string | null;
+  is_question_from_agent: boolean;
   updatedAt: string;
   userId: number;
 };

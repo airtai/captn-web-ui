@@ -9,7 +9,12 @@ import logo from "../static/captn-logo.png";
 
 type ConversationsListProps = {
   conversations: Conversation[];
-  onInlineFormSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  onInlineFormSubmit: (
+    userQuery: string,
+    conv_id: number,
+    team_name: string,
+    team_id: number
+  ) => void;
 };
 
 export default function ConversationsList({
@@ -69,7 +74,6 @@ export default function ConversationsList({
           target.reset();
           onInlineFormSubmit(userQuery, conv_id, team_name, team_id);
         };
-        const displayInlineForm = conversation.type === "agent_question";
         return (
           <div key={idx}>
             <div
@@ -94,7 +98,7 @@ export default function ConversationsList({
                 <div className="chat-conversations text-base flex flex-col gap-2">
                   <Markdown>{conversation.message}</Markdown>
                 </div>
-                {displayInlineForm && (
+                {conversation.is_question_from_agent && (
                   <form
                     key={conversation.id}
                     // onSubmit={handleFormSubmit}

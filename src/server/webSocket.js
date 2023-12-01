@@ -17,6 +17,7 @@ export const checkTeamStatusAndUpdateInDB = (io, context) => {
 
         conversations.length > 0 &&
           conversations.forEach(async function (conversation) {
+            console.log(conversation.id);
             try {
               const payload = {
                 team_id: conversation.team_id,
@@ -63,7 +64,7 @@ export const checkTeamStatusAndUpdateInDB = (io, context) => {
                     team_name: json["team_name"],
                     team_id: Number(json["team_id"]),
                     team_status: team_status,
-                    type: team_status === "pause" ? "agent_question" : null,
+                    is_question_from_agent: team_status === "pause",
                     chat: { connect: { id: conversation.chatId } },
                     user: { connect: { id: socket.data.user.id } },
                   },

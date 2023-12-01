@@ -128,24 +128,18 @@ entity Chat {=psl
 psl=}
 
 entity Conversation {=psl
-    id                          Int     @id @default(autoincrement())
+    id                          Int             @id @default(autoincrement())
     createdAt                   DateTime        @default(now())
     updatedAt                   DateTime        @updatedAt
     message                     String
     role                        String
-    type                        String?
     team_id                     Int?
     team_name                   String?
     team_status                 String?
-    replyToConversationId       Int?
-    replyToConversation         Conversation? @relation("replyToConversation", fields: [replyToConversationId], references: [id])
-    replyToConversationRecord   Conversation[] @relation("replyToConversation")
-    previousConversationId      Int?
-    previousConversation        Conversation? @relation("previousConversation", fields: [previousConversationId], references: [id])
-    previousConversationRecord  Conversation[] @relation("previousConversation")
-    chat                        Chat?    @relation(fields: [chatId], references: [id])
+    is_question_from_agent      Boolean         @default(false)
+    chat                        Chat?           @relation(fields: [chatId], references: [id])
     chatId                      Int?
-    user                        User?    @relation(fields: [userId], references: [id])
+    user                        User?           @relation(fields: [userId], references: [id])
     userId                      Int?
 psl=}
 

@@ -141,7 +141,7 @@ export const addNewConversationToChat: AddNewConversationToChat<
 type UpdateExistingConversationPayload = {
   chat_id: number;
   conv_id: number;
-  type: null;
+  is_question_from_agent: boolean;
   team_status: null;
 };
 
@@ -158,7 +158,7 @@ export const updateExistingConversation: UpdateExistingConversation<
     },
     data: {
       team_status: args.team_status,
-      type: args.type,
+      is_question_from_agent: args.is_question_from_agent,
     },
   });
 };
