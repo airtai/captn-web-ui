@@ -17,7 +17,6 @@ export const checkTeamStatusAndUpdateInDB = (io, context) => {
 
         conversations.length > 0 &&
           conversations.forEach(async function (conversation) {
-            console.log(conversation.id);
             try {
               const payload = {
                 team_id: conversation.team_id,

@@ -167,6 +167,7 @@ type AgentPayload = {
   message: any;
   conv_id: number;
   isAnswerToAgentQuestion: boolean;
+  userResponseToTeamId: number | null | undefined;
 };
 
 export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
