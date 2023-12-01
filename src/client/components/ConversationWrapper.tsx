@@ -1,47 +1,31 @@
 import React from "react";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useParams } from "react-router";
-import { Redirect, useLocation } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 import { useQuery } from "@wasp/queries";
-import updateConversation from "@wasp/actions/updateConversation";
-import getAgentResponse from "@wasp/actions/getAgentResponse";
 import getConversations from "@wasp/queries/getConversations";
 
 import ConversationsList from "./ConversationList";
 import Loader from "./Loader";
 
-// A custom hook that builds on useLocation to parse
-// the query string for you.
-function getQueryParam(paramName: string) {
-  const { search } = useLocation();
-  return React.useMemo(() => new URLSearchParams(search), [search]).get(
-    paramName
-  );
-}
+import {
+  addUserMessageToConversation,
+  addAgentMessageToConversation,
+} from "../chatConversationHelper";
 
-export function setRedirectMsg(formInputRef: any, loginMsgQuery: string) {
-  if (loginMsgQuery) {
-    formInputRef.value = decodeURIComponent(loginMsgQuery);
-  }
-}
-
-export function triggerSubmit(
-  node: any,
-  loginMsgQuery: string,
-  formInputRef: any
-) {
-  if (loginMsgQuery && formInputRef && formInputRef.value !== "") {
-    node.click();
-  }
-}
+import { setRedirectMsg, getQueryParam, triggerSubmit } from "../helpers";
 
 export default function ConversationWrapper() {
-  // Todo: remove the below ignore comment
-  // @ts-ignore
-  const { id } = useParams();
+  const { id }: { id: string } = useParams();
   const [isLoading, setIsLoading] = useState(false);
-  const chatContainerRef = useRef(null);
+  const { data: conversations } = useQuery(
+    getConversations,
+    {
+      chatId: Number(id),
+    },
+    { enabled: !!id, refetchInterval: 1000 }
+  );
 
   const loginMsgQuery: any = getQueryParam("msg");
   const formInputRef = useCallback(
@@ -62,80 +46,64 @@ export default function ConversationWrapper() {
     [loginMsgQuery, formInputRef]
   );
 
-  const {
-    data: conversations,
-    isLoading: isConversationLoading,
-    error: isConversationError,
-  } = useQuery(
-    getConversations,
-    {
-      chatId: Number(id),
-    },
-    { enabled: !!id, refetchInterval: 1000 }
-  );
-
-  useEffect(() => {
-    // if (chatContainerRef.current) {
-    //   // Todo: remove the below ignore comment
-    //   // @ts-ignore
-    //   chatContainerRef.current.scrollTop =
-    //     // Todo: remove the below ignore comment
-    //     // @ts-ignore
-    //     chatContainerRef.current.scrollHeight;
-    // }
-  }, [conversations]);
-
-  async function callAgent(userQuery: string) {
+  async function addMessagesToConversation(
+    userQuery: string,
+    conv_id?: number,
+    team_name?: string,
+    team_id?: number
+  ) {
     try {
-      // 1. add new conversation to table
-      const payload = {
-        // @ts-ignore
-        conversation_id: conversations.id,
-        conversations: [...[{ role: "user", content: userQuery }]],
-      };
-
-      const updatedConversation = await updateConversation(payload);
-      // 2. call backend python server to get agent response
+      const [
+        messages,
+        conversation_id,
+        isAnswerToAgentQuestion,
+        user_answer_to_team_id,
+      ] = await addUserMessageToConversation(
+        Number(id),
+        userQuery,
+        conv_id,
+        team_name,
+        team_id
+      );
       setIsLoading(true);
-      const response = await getAgentResponse({
-        message: updatedConversation["conversation"],
-        conv_id: updatedConversation.id,
-        // @ts-ignore
-        is_answer_to_agent_question: updatedConversation.status === "pause",
-      });
-      // 3. add agent response as new conversation in the table
-      const openAIResponse = {
-        // @ts-ignore
-        conversation_id: conversations.id,
-        conversations: [
-          // @ts-ignore
-          ...[{ role: "assistant", content: response.content }],
-        ],
-        // @ts-ignore
-        ...(response.team_status && { status: response.team_status }),
-      };
-      await updateConversation(openAIResponse);
+      await addAgentMessageToConversation(
+        Number(id),
+        messages,
+        conversation_id,
+        isAnswerToAgentQuestion,
+        user_answer_to_team_id
+      );
       setIsLoading(false);
     } catch (err: any) {
       setIsLoading(false);
-      window.alert("Error: " + err.message);
+      console.log("Error: " + err.message);
+      window.alert("Error: Something went wrong. Please try again later.");
     }
   }
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const target = event.target;
-    // Todo: remove the below ignore comment
-    // @ts-ignore
+    const target = event.target as HTMLFormElement;
     const userQuery = target.userQuery.value;
-    // Todo: remove the below ignore comment
-    // @ts-ignore
     target.reset();
-    await callAgent(userQuery);
+    await addMessagesToConversation(userQuery);
   };
 
-  if (isConversationLoading && !!id) return <Loader />;
-  if (isConversationError) {
+  const handleInlineFormSubmit = async (
+    userQuery: string,
+    conv_id: number,
+    team_name: string,
+    team_id: number
+  ) => {
+    await addMessagesToConversation(userQuery, conv_id, team_name, team_id);
+  };
+
+  const chatContainerClass = `flex h-full flex-col items-center justify-between pb-24 overflow-y-auto bg-captn-light-blue ${
+    isLoading ? "opacity-40" : "opacity-100"
+  }`;
+
+  // check if user has access to chat
+  if (conversations && conversations.length === 0) {
     return (
       <>
         <Redirect to="/chat" />
@@ -143,24 +111,17 @@ export default function ConversationWrapper() {
     );
   }
 
-  const chatContainerClass = `flex h-full flex-col items-center justify-between pb-24 overflow-y-auto bg-captn-light-blue ${
-    isLoading ? "opacity-40" : "opacity-100"
-  }`;
-
   return (
     <div className="relative flex h-full max-w-full flex-1 flex-col overflow-hidden bg-captn-light-blue">
       <div className="relative h-full w-full flex-1 overflow-auto transition-width">
         <div className="flex h-full flex-col">
           <div className="flex-1 overflow-hidden">
-            <div
-              ref={chatContainerRef}
-              className={`${chatContainerClass}`}
-              style={{ height: "85%" }}
-            >
+            <div className={`${chatContainerClass}`} style={{ height: "85%" }}>
               {conversations && (
-                // Todo: remove the below ignore comment
-                // @ts-ignore
-                <ConversationsList conversations={conversations.conversation} />
+                <ConversationsList
+                  conversations={conversations}
+                  onInlineFormSubmit={handleInlineFormSubmit}
+                />
               )}
             </div>
             {isLoading && <Loader />}

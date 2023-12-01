@@ -69,7 +69,7 @@ app chatApp {
     ("markdown-to-jsx", "7.3.2"),
   ],
   webSocket: {
-    fn: import { webSocketFn } from "@server/webSocket.js"
+    fn: import { checkTeamStatusAndUpdateInDB } from "@server/webSocket.js"
   },
 }
 
@@ -128,15 +128,19 @@ entity Chat {=psl
 psl=}
 
 entity Conversation {=psl
-    id          Int     @id @default(autoincrement())
-    conversation  Json
-    createdAt                 DateTime        @default(now())
-    updatedAt                 DateTime        @updatedAt
-    status String?
-    chat        Chat?    @relation(fields: [chatId], references: [id])
-    chatId      Int?
-    user        User?    @relation(fields: [userId], references: [id])
-    userId      Int?
+    id                          Int             @id @default(autoincrement())
+    createdAt                   DateTime        @default(now())
+    updatedAt                   DateTime        @updatedAt
+    message                     String
+    role                        String
+    team_id                     Int?
+    team_name                   String?
+    team_status                 String?
+    is_question_from_agent      Boolean         @default(false)
+    chat                        Chat?           @relation(fields: [chatId], references: [id])
+    chatId                      Int?
+    user                        User?           @relation(fields: [userId], references: [id])
+    userId                      Int?
 psl=}
 
 
@@ -208,12 +212,6 @@ page ChatPage {
 
 // 📝 Actions aka Mutations
 
-action generateGptResponse {
-  fn: import { generateGptResponse } from "@server/actions.js",
-  // entities: [User, RelatedObject]
-  entities: [User]
-}
-
 action stripePayment {
   fn: import { stripePayment } from "@server/actions.js",
   entities: [User]
@@ -224,8 +222,13 @@ action createChat {
   entities: [Chat, Conversation]
 }
 
-action updateConversation {
-  fn: import { updateConversation } from "@server/actions.js",
+action addNewConversationToChat {
+  fn: import { addNewConversationToChat } from "@server/actions.js",
+  entities: [Chat, Conversation]
+}
+
+action updateExistingConversation {
+  fn: import { updateExistingConversation } from "@server/actions.js",
   entities: [Chat, Conversation]
 }
 

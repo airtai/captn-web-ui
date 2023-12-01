@@ -4,23 +4,20 @@ import HttpError from "@wasp/core/HttpError.js";
 import type { Chat } from "@wasp/entities";
 import type { Conversation } from "@wasp/entities";
 import type {
-  GenerateGptResponse,
   StripePayment,
   CreateChat,
-  UpdateConversation,
+  AddNewConversationToChat,
+  UpdateExistingConversation,
   GetAgentResponse,
 } from "@wasp/actions/types";
 import type { StripePaymentResult, OpenAIResponse } from "./types";
 import Stripe from "stripe";
 
-import { ADS_SERVER_URL } from "./config.js";
+import { ADS_SERVER_URL, DOMAIN } from "./config.js";
 
 const stripe = new Stripe(process.env.STRIPE_KEY!, {
   apiVersion: "2022-11-15",
 });
-
-// WASP_WEB_CLIENT_URL will be set up by Wasp when deploying to production: https://wasp-lang.dev/docs/deploying
-const DOMAIN = process.env.WASP_WEB_CLIENT_URL || "http://localhost:3000";
 
 export const stripePayment: StripePayment<void, StripePaymentResult> = async (
   _args,
@@ -82,95 +79,6 @@ export const stripePayment: StripePayment<void, StripePaymentResult> = async (
   }
 };
 
-type GptPayload = {
-  instructions: string;
-  command: string;
-  temperature: number;
-};
-
-// export const generateGptResponse: GenerateGptResponse<GptPayload, RelatedObject> = async (
-export const generateGptResponse: GenerateGptResponse<GptPayload> = async (
-  { instructions, command, temperature },
-  context
-) => {
-  if (!context.user) {
-    throw new HttpError(401);
-  }
-
-  const payload = {
-    // model: 'gpt-3.5-turbo',
-    // engine:"airt-canada-gpt35-turbo-16k",
-    messages: [
-      {
-        role: "system",
-        content: instructions,
-      },
-      {
-        role: "user",
-        content: command,
-      },
-    ],
-    temperature: Number(temperature),
-  };
-
-  try {
-    // if (!context.user.hasPaid && !context.user.credits) {
-    //   throw new HttpError(402, 'User has not paid or is out of credits');
-    // } else if (context.user.credits && !context.user.hasPaid) {
-    //   console.log('decrementing credits');
-    //   await context.entities.User.update({
-    //     where: { id: context.user.id },
-    //     data: {
-    //       credits: {
-    //         decrement: 1,
-    //       },
-    //     },
-    //   });
-    // }
-
-    console.log("fetching", payload);
-    // https://api.openai.com/v1/chat/completions
-    const response = await fetch(
-      "https://airt-openai-canada.openai.azure.com/openai/deployments/airt-canada-gpt35-turbo-16k/chat/completions?api-version=2023-07-01-preview",
-      {
-        headers: {
-          "Content-Type": "application/json",
-          // Authorization: `Bearer ${process.env.AZURE_OPENAI_API_KEY!}`,
-          "api-key": `${process.env.AZURE_OPENAI_API_KEY!}`,
-        },
-        method: "POST",
-        body: JSON.stringify(payload),
-      }
-    );
-
-    const json = (await response.json()) as OpenAIResponse;
-    console.log("response json", json);
-    // return context.entities.RelatedObject.create({
-    //   data: {
-    //     content: json?.choices[0].message.content,
-    //     user: { connect: { id: context.user.id } },
-    //   },
-    // });
-    return {
-      content: json?.choices[0].message.content,
-    };
-  } catch (error: any) {
-    if (!context.user.hasPaid && error?.statusCode != 402) {
-      await context.entities.User.update({
-        where: { id: context.user.id },
-        data: {
-          credits: {
-            increment: 1,
-          },
-        },
-      });
-    }
-    console.error(error);
-  }
-
-  throw new HttpError(500, "Something went wrong");
-};
-
 export const createChat: CreateChat<void, Conversation> = async (
   _args,
   context
@@ -186,68 +94,71 @@ export const createChat: CreateChat<void, Conversation> = async (
 
   return await context.entities.Conversation.create({
     data: {
-      conversation: [
-        {
-          role: "assistant",
-          content: `Hi! I am Captn and I am here to help you with digital marketing. I can create and optimise marketing campaigns for you.  But before I propose any activities, please let me know a little bit about your business and what your marketing goals are.`,
-        },
-      ],
+      message:
+        "Hi! I am Captn and I am here to help you with digital marketing. I can create and optimise marketing campaigns for you.  But before I propose any activities, please let me know a little bit about your business and what your marketing goals are.",
+      role: "assistant",
       chat: { connect: { id: chat.id } },
       user: { connect: { id: context.user.id } },
     },
   });
 };
 
-type UpdateConversationPayload = {
-  conversation_id: number;
-  conversations: any;
-  status?: string;
-};
-
-type ConversationItem = {
+type AddNewConversationToChatPayload = {
+  message: string;
   role: string;
-  content: string;
+  chat_id: number;
+  team_name?: string;
+  team_id?: number;
+  team_status?: string;
 };
 
-function convertConversationList(
-  currentConversation: Conversation
-): Array<ConversationItem> {
-  const conversationList: Array<any> = Object.entries(
-    // @ts-ignore
-    currentConversation.conversation
-  );
-  return conversationList.map((item) => item[1]);
-}
-
-export const updateConversation: UpdateConversation<
-  UpdateConversationPayload,
-  Conversation
+export const addNewConversationToChat: AddNewConversationToChat<
+  AddNewConversationToChatPayload,
+  Conversation[]
 > = async (args, context) => {
   if (!context.user) {
     throw new HttpError(401);
   }
-  const currentConversation =
-    await context.entities.Conversation.findFirstOrThrow({
-      where: { id: args.conversation_id },
-    });
 
-  let currentConversationList = convertConversationList(currentConversation);
-  const existingRole =
-    currentConversationList[currentConversationList.length - 1]["role"];
-  const openAIResponseRole = args.conversations[0]["role"];
-
-  if (!(existingRole === "assistant" && existingRole === openAIResponseRole)) {
-    currentConversationList = [
-      ...currentConversationList,
-      ...args.conversations,
-    ];
-  }
-
-  return context.entities.Conversation.update({
-    where: { id: args.conversation_id },
+  await context.entities.Conversation.create({
     data: {
-      conversation: currentConversationList,
-      ...(args.status && { status: args.status }),
+      message: args.message,
+      role: args.role,
+      chat: { connect: { id: args.chat_id } },
+      user: { connect: { id: context.user.id } },
+      ...(args.team_name && { team_name: args.team_name }),
+      ...(args.team_id && { team_id: args.team_id }),
+      ...(args.team_status && { team_status: args.team_status }),
+    },
+  });
+
+  return context.entities.Conversation.findMany({
+    where: { chatId: args.chat_id, userId: context.user.id },
+    orderBy: { id: "asc" },
+  });
+};
+
+type UpdateExistingConversationPayload = {
+  chat_id: number;
+  conv_id: number;
+  is_question_from_agent: boolean;
+  team_status: null;
+};
+
+export const updateExistingConversation: UpdateExistingConversation<
+  UpdateExistingConversationPayload,
+  void
+> = async (args, context) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+  await context.entities.Conversation.update({
+    where: {
+      id: args.conv_id,
+    },
+    data: {
+      team_status: args.team_status,
+      is_question_from_agent: args.is_question_from_agent,
     },
   });
 };
@@ -255,12 +166,23 @@ export const updateConversation: UpdateConversation<
 type AgentPayload = {
   message: any;
   conv_id: number;
-  is_answer_to_agent_question?: boolean;
+  isAnswerToAgentQuestion: boolean;
+  userResponseToTeamId: number | null | undefined;
 };
 
 export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
-  { message, conv_id, is_answer_to_agent_question },
-  context
+  {
+    message,
+    conv_id,
+    isAnswerToAgentQuestion,
+    userResponseToTeamId,
+  }: {
+    message: any;
+    conv_id: number;
+    isAnswerToAgentQuestion: boolean;
+    userResponseToTeamId: number | null | undefined;
+  },
+  context: any
 ) => {
   if (!context.user) {
     throw new HttpError(401);
@@ -270,7 +192,8 @@ export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
     message: message,
     conv_id: conv_id,
     user_id: context.user.id,
-    is_answer_to_agent_question: is_answer_to_agent_question,
+    is_answer_to_agent_question: isAnswerToAgentQuestion,
+    user_answer_to_team_id: userResponseToTeamId,
   };
   console.log("===========");
   console.log("Payload to Python server");
@@ -292,7 +215,12 @@ export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
       throw new Error(errorMsg);
     }
 
-    return { content: json["content"], team_status: json["team_status"] };
+    return {
+      content: json["content"],
+      team_status: json["team_status"],
+      team_name: json["team_name"],
+      team_id: json["team_id"],
+    };
   } catch (error: any) {
     throw new HttpError(500, "Something went wrong. Please try again later");
   }
