@@ -28,8 +28,14 @@ export const getConversations: GetConversations<
   if (!context.user) {
     throw new HttpError(401);
   }
-  return context.entities.Conversation.findMany({
-    where: { chatId: args.chatId, userId: context.user.id },
-    orderBy: { id: "asc" },
-  });
+  try {
+    const conversation = context.entities.Conversation.findMany({
+      where: { chatId: args.chatId, userId: context.user.id },
+      orderBy: { id: "asc" },
+    });
+    return conversation;
+  } catch (error) {
+    console.error("Error while fetching conversations:", error);
+    return [];
+  }
 };
