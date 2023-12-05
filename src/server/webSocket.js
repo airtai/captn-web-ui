@@ -42,6 +42,7 @@ export const checkTeamStatusAndUpdateInDB = (io, context) => {
               }
 
               const team_status = json["team_status"];
+              const is_question_from_agent = json["is_question"];
               if (team_status === "completed" || team_status === "pause") {
                 // const updated_conversation = conversation.conversation.concat([
                 //   { role: "assistant", content: json["msg"] },
@@ -63,7 +64,7 @@ export const checkTeamStatusAndUpdateInDB = (io, context) => {
                     team_name: json["team_name"],
                     team_id: Number(json["team_id"]),
                     team_status: team_status,
-                    is_question_from_agent: team_status === "pause",
+                    is_question_from_agent: is_question_from_agent,
                     chat: { connect: { id: conversation.chatId } },
                     user: { connect: { id: socket.data.user.id } },
                   },

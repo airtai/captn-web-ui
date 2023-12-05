@@ -56,6 +56,7 @@ export async function addAgentMessageToConversation(
   userResponseToTeamId: number | null | undefined
 ) {
   const response: any = await getAgentResponse({
+    chat_id: chat_id,
     message: message,
     conv_id: conv_id,
     isAnswerToAgentQuestion: isAnswerToAgentQuestion,

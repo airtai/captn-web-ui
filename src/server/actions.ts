@@ -164,6 +164,7 @@ export const updateExistingConversation: UpdateExistingConversation<
 };
 
 type AgentPayload = {
+  chat_id: number;
   message: any;
   conv_id: number;
   isAnswerToAgentQuestion: boolean;
@@ -172,11 +173,13 @@ type AgentPayload = {
 
 export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
   {
+    chat_id,
     message,
     conv_id,
     isAnswerToAgentQuestion,
     userResponseToTeamId,
   }: {
+    chat_id: number;
     message: any;
     conv_id: number;
     isAnswerToAgentQuestion: boolean;
@@ -189,6 +192,7 @@ export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
   }
 
   const payload = {
+    chat_id: chat_id,
     message: message,
     conv_id: conv_id,
     user_id: context.user.id,
