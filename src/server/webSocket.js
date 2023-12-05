@@ -15,9 +15,6 @@ export const checkTeamStatusAndUpdateInDB = (io, context) => {
           where: { userId: socket.data.user.id, team_status: "inprogress" },
         });
 
-        console.log("Current user pending conversations:");
-        console.log(conversations.length);
-
         conversations.length > 0 &&
           conversations.forEach(async function (conversation) {
             try {
