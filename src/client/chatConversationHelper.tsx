@@ -14,13 +14,15 @@ export async function addUserMessageToConversation(
   let isAnswerToAgentQuestion = false;
   let user_answer_to_team_id = null;
   if (team_id) {
-    const payload = {
-      chat_id: chat_id,
-      conv_id: conv_id,
-      is_question_from_agent: false,
-      team_status: null,
-    };
-    await updateExistingConversation(payload);
+    if (conv_id) {
+      const payload = {
+        chat_id: chat_id,
+        conv_id: conv_id,
+        is_question_from_agent: false,
+        team_status: null,
+      };
+      await updateExistingConversation(payload);
+    }
     userMessage = `<p>Replying to ${team_name}:</p><br/><br/>` + userQuery;
     isAnswerToAgentQuestion = true;
     user_answer_to_team_id = team_id;
@@ -54,6 +56,7 @@ export async function addAgentMessageToConversation(
   userResponseToTeamId: number | null | undefined
 ) {
   const response: any = await getAgentResponse({
+    chat_id: chat_id,
     message: message,
     conv_id: conv_id,
     isAnswerToAgentQuestion: isAnswerToAgentQuestion,

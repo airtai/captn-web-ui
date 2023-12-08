@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import { useParams } from "react-router";
 import { Redirect } from "react-router-dom";
 
@@ -14,7 +14,7 @@ import {
   addAgentMessageToConversation,
 } from "../chatConversationHelper";
 
-import { setRedirectMsg, getQueryParam, triggerSubmit } from "../helpers";
+import { getQueryParam } from "../helpers";
 
 export default function ConversationWrapper() {
   const { id }: { id: string } = useParams();
@@ -27,23 +27,30 @@ export default function ConversationWrapper() {
     { enabled: !!id, refetchInterval: 1000 }
   );
 
-  const loginMsgQuery: any = getQueryParam("msg");
+  const googleRedirectLoginMsg: any = getQueryParam("msg");
+  const googleRedirectLoginTeamName: any = getQueryParam("team_name");
+  const googleRedirectLoginTeadId: any = getQueryParam("team_id");
   const formInputRef = useCallback(
-    (node: any) => {
-      if (node !== null) {
-        setRedirectMsg(node, loginMsgQuery);
+    async (node: any) => {
+      if (
+        node !== null &&
+        googleRedirectLoginMsg &&
+        googleRedirectLoginTeamName &&
+        googleRedirectLoginTeadId
+      ) {
+        await addMessagesToConversation(
+          googleRedirectLoginMsg,
+          undefined,
+          googleRedirectLoginTeamName,
+          googleRedirectLoginTeadId
+        );
       }
     },
-    [loginMsgQuery]
-  );
-
-  const submitBtnRef = useCallback(
-    (node: any) => {
-      if (node !== null) {
-        triggerSubmit(node, loginMsgQuery, formInputRef);
-      }
-    },
-    [loginMsgQuery, formInputRef]
+    [
+      googleRedirectLoginMsg,
+      googleRedirectLoginTeamName,
+      googleRedirectLoginTeadId,
+    ]
   );
 
   async function addMessagesToConversation(
@@ -145,7 +152,6 @@ export default function ConversationWrapper() {
                       ref={formInputRef}
                     />
                     <button
-                      ref={submitBtnRef}
                       type="submit"
                       className="text-white absolute right-2.5 bottom-2.5 bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-captn-cta-green dark:hover:bg-captn-cta-green-hover dark:focus:ring-blue-800"
                     >

@@ -54,19 +54,3 @@ export function getQueryParam(paramName: string) {
     paramName
   );
 }
-
-export function setRedirectMsg(formInputRef: any, loginMsgQuery: string) {
-  if (loginMsgQuery) {
-    formInputRef.value = decodeURIComponent(loginMsgQuery);
-  }
-}
-
-export function triggerSubmit(
-  node: any,
-  loginMsgQuery: string,
-  formInputRef: any
-) {
-  if (loginMsgQuery && formInputRef && formInputRef.value !== "") {
-    node.click();
-  }
-}
