@@ -71,7 +71,9 @@ export const checkTeamStatusAndUpdateInDB = (io, context) => {
                 });
               }
             } catch (error) {
-              throw new HttpError(500, error);
+              console.log(`Error while ferching record`);
+              console.log(error);
+              // throw new HttpError(500, error);
             }
           });
       }, 3000);
