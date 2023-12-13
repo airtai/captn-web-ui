@@ -5,6 +5,7 @@ import { Redirect } from "react-router-dom";
 
 import { useQuery } from "@wasp/queries";
 import getConversations from "@wasp/queries/getConversations";
+import { useSocket, useSocketListener } from "@wasp/webSocket";
 
 import ConversationsList from "./ConversationList";
 import Loader from "./Loader";
@@ -18,6 +19,7 @@ import { getQueryParam } from "../helpers";
 
 export default function ConversationWrapper() {
   const { id }: { id: string } = useParams();
+  const { socket, isConnected } = useSocket();
   const [isLoading, setIsLoading] = useState(false);
   const { data: conversations } = useQuery(
     getConversations,
@@ -73,13 +75,25 @@ export default function ConversationWrapper() {
         team_id
       );
       setIsLoading(true);
-      await addAgentMessageToConversation(
+      const updatedConversations: any = await addAgentMessageToConversation(
         Number(id),
         messages,
         conversation_id,
         isAnswerToAgentQuestion,
         user_answer_to_team_id
       );
+
+      const lastConversation =
+        updatedConversations[updatedConversations.length - 1];
+      if (lastConversation.team_status === "inprogress") {
+        socket.emit(
+          "newConversationAdded",
+          lastConversation.team_id,
+          lastConversation.id,
+          lastConversation.chatId
+        );
+      }
+
       setIsLoading(false);
     } catch (err: any) {
       setIsLoading(false);
