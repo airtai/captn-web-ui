@@ -29,6 +29,8 @@ async function checkTeamStatus(context, socket, team_id, conv_id, chat_id) {
           break;
         }
       }
+      // Add a 1-second delay before the next iteration
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     }
     // Call another function after breaking the loop
     await updateConversationsInDb(context, socket, json, conv_id, chat_id);
