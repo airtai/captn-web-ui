@@ -71,5 +71,5 @@ export async function addAgentMessageToConversation(
     ...(response.team_id && { team_id: response.team_id }),
     ...(response.team_status && { team_status: response.team_status }),
   };
-  await addNewConversationToChat(openAIResponse);
+  return await addNewConversationToChat(openAIResponse);
 }
