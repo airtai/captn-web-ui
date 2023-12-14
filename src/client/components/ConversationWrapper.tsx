@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { useParams } from "react-router";
 import { Redirect } from "react-router-dom";
 
@@ -21,12 +21,13 @@ export default function ConversationWrapper() {
   const { id }: { id: string } = useParams();
   const { socket, isConnected } = useSocket();
   const [isLoading, setIsLoading] = useState(false);
-  const { data: conversations } = useQuery(
+  const chatWindowRef = useRef(null);
+  const { data: conversations, refetch } = useQuery(
     getConversations,
     {
       chatId: Number(id),
     },
-    { enabled: !!id, refetchInterval: 1000 }
+    { enabled: !!id }
   );
 
   const googleRedirectLoginMsg: any = getQueryParam("msg");
@@ -54,6 +55,27 @@ export default function ConversationWrapper() {
       googleRedirectLoginTeadId,
     ]
   );
+
+  useSocketListener("newConversationAddedToDB", reFetchConversations);
+
+  function reFetchConversations() {
+    refetch();
+  }
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [conversations]);
+
+  const scrollToBottom = () => {
+    if (chatWindowRef.current) {
+      // @ts-ignore
+      chatWindowRef.current.scrollTo({
+        // @ts-ignore
+        top: chatWindowRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  };
 
   async function addMessagesToConversation(
     userQuery: string,
@@ -137,7 +159,11 @@ export default function ConversationWrapper() {
       <div className="relative h-full w-full flex-1 overflow-auto transition-width">
         <div className="flex h-full flex-col">
           <div className="flex-1 overflow-hidden">
-            <div className={`${chatContainerClass}`} style={{ height: "85%" }}>
+            <div
+              ref={chatWindowRef}
+              className={`${chatContainerClass}`}
+              style={{ height: "85%" }}
+            >
               {conversations && (
                 <ConversationsList
                   conversations={conversations}
