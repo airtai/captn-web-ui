@@ -69,6 +69,8 @@ async function updateConversationsInDb(
       user: { connect: { id: socket.data.user.id } },
     },
   });
+
+  socket.emit("newConversationAddedToDB");
 }
 
 export const checkTeamStatusAndUpdateInDB = (io, context) => {
