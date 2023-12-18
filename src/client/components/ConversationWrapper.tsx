@@ -5,6 +5,7 @@ import { Redirect } from "react-router-dom";
 
 import { useQuery } from "@wasp/queries";
 import getConversations from "@wasp/queries/getConversations";
+import getChat from "@wasp/queries/getChat";
 import { useSocket, useSocketListener } from "@wasp/webSocket";
 
 import ConversationsList from "./ConversationList";
@@ -22,6 +23,9 @@ export default function ConversationWrapper() {
   const { socket, isConnected } = useSocket();
   const [isLoading, setIsLoading] = useState(false);
   const chatWindowRef = useRef(null);
+  const { data: currentChatDetails } = useQuery(getChat, {
+    chatId: Number(id),
+  });
   const { data: conversations, refetch } = useQuery(
     getConversations,
     {
@@ -41,12 +45,7 @@ export default function ConversationWrapper() {
         googleRedirectLoginTeamName &&
         googleRedirectLoginTeadId
       ) {
-        await addMessagesToConversation(
-          googleRedirectLoginMsg,
-          undefined,
-          googleRedirectLoginTeamName,
-          googleRedirectLoginTeadId
-        );
+        await addMessagesToConversation(googleRedirectLoginMsg);
       }
     },
     [
@@ -77,43 +76,21 @@ export default function ConversationWrapper() {
     }
   };
 
-  async function addMessagesToConversation(
-    userQuery: string,
-    conv_id?: number,
-    team_name?: string,
-    team_id?: number
-  ) {
+  async function addMessagesToConversation(userQuery: string) {
     try {
-      const [
-        messages,
-        conversation_id,
-        isAnswerToAgentQuestion,
-        user_answer_to_team_id,
-      ] = await addUserMessageToConversation(
+      const messages = await addUserMessageToConversation(
         Number(id),
-        userQuery,
-        conv_id,
-        team_name,
-        team_id
+        userQuery
       );
       setIsLoading(true);
-      const updatedConversations: any = await addAgentMessageToConversation(
+      const response: any = await addAgentMessageToConversation(
         Number(id),
         messages,
-        conversation_id,
-        isAnswerToAgentQuestion,
-        user_answer_to_team_id
+        // @ts-ignore
+        currentChatDetails.team_id
       );
-
-      const lastConversation =
-        updatedConversations[updatedConversations.length - 1];
-      if (lastConversation.team_status === "inprogress") {
-        socket.emit(
-          "newConversationAdded",
-          lastConversation.team_id,
-          lastConversation.id,
-          lastConversation.chatId
-        );
+      if (response.team_status === "inprogress") {
+        socket.emit("newConversationAdded", response.chat_id);
       }
 
       setIsLoading(false);
@@ -130,15 +107,6 @@ export default function ConversationWrapper() {
     const userQuery = target.userQuery.value;
     target.reset();
     await addMessagesToConversation(userQuery);
-  };
-
-  const handleInlineFormSubmit = async (
-    userQuery: string,
-    conv_id: number,
-    team_name: string,
-    team_id: number
-  ) => {
-    await addMessagesToConversation(userQuery, conv_id, team_name, team_id);
   };
 
   const chatContainerClass = `flex h-full flex-col items-center justify-between pb-24 overflow-y-auto bg-captn-light-blue ${
@@ -165,10 +133,7 @@ export default function ConversationWrapper() {
               style={{ height: "85%" }}
             >
               {conversations && (
-                <ConversationsList
-                  conversations={conversations}
-                  onInlineFormSubmit={handleInlineFormSubmit}
-                />
+                <ConversationsList conversations={conversations} />
               )}
             </div>
             {isLoading && <Loader />}

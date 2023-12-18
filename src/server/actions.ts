@@ -7,7 +7,7 @@ import type {
   StripePayment,
   CreateChat,
   AddNewConversationToChat,
-  UpdateExistingConversation,
+  UpdateExistingChat,
   GetAgentResponse,
 } from "@wasp/actions/types";
 import type { StripePaymentResult, OpenAIResponse } from "./types";
@@ -107,9 +107,6 @@ type AddNewConversationToChatPayload = {
   message: string;
   role: string;
   chat_id: number;
-  team_name?: string;
-  team_id?: number;
-  team_status?: string;
 };
 
 export const addNewConversationToChat: AddNewConversationToChat<
@@ -126,9 +123,9 @@ export const addNewConversationToChat: AddNewConversationToChat<
       role: args.role,
       chat: { connect: { id: args.chat_id } },
       user: { connect: { id: context.user.id } },
-      ...(args.team_name && { team_name: args.team_name }),
-      ...(args.team_id && { team_id: args.team_id }),
-      ...(args.team_status && { team_status: args.team_status }),
+      // ...(args.team_name && { team_name: args.team_name }),
+      // ...(args.team_id && { team_id: args.team_id }),
+      // ...(args.team_status && { team_status: args.team_status }),
     },
   });
 
@@ -138,27 +135,28 @@ export const addNewConversationToChat: AddNewConversationToChat<
   });
 };
 
-type UpdateExistingConversationPayload = {
+type UpdateExistingChatPayload = {
   chat_id: number;
-  conv_id: number;
-  is_question_from_agent: boolean;
-  team_status: null;
+  team_name: string;
+  team_id: number;
+  team_status: boolean;
 };
 
-export const updateExistingConversation: UpdateExistingConversation<
-  UpdateExistingConversationPayload,
+export const updateExistingChat: UpdateExistingChat<
+  UpdateExistingChatPayload,
   void
-> = async (args, context) => {
+> = async (args: any, context: any) => {
   if (!context.user) {
     throw new HttpError(401);
   }
-  await context.entities.Conversation.update({
+  await context.entities.Chat.update({
     where: {
-      id: args.conv_id,
+      id: args.chat_id,
     },
     data: {
+      team_id: args.team_id,
+      team_name: args.team_name,
       team_status: args.team_status,
-      is_question_from_agent: args.is_question_from_agent,
     },
   });
 };
@@ -166,24 +164,18 @@ export const updateExistingConversation: UpdateExistingConversation<
 type AgentPayload = {
   chat_id: number;
   message: any;
-  conv_id: number;
-  isAnswerToAgentQuestion: boolean;
-  userResponseToTeamId: number | null | undefined;
+  team_id: number | null | undefined;
 };
 
 export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
   {
     chat_id,
     message,
-    conv_id,
-    isAnswerToAgentQuestion,
-    userResponseToTeamId,
+    team_id,
   }: {
     chat_id: number;
     message: any;
-    conv_id: number;
-    isAnswerToAgentQuestion: boolean;
-    userResponseToTeamId: number | null | undefined;
+    team_id: number | null | undefined;
   },
   context: any
 ) => {
@@ -194,10 +186,8 @@ export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
   const payload = {
     chat_id: chat_id,
     message: message,
-    conv_id: conv_id,
     user_id: context.user.id,
-    is_answer_to_agent_question: isAnswerToAgentQuestion,
-    user_answer_to_team_id: userResponseToTeamId,
+    team_id: team_id,
   };
   console.log("===========");
   console.log("Payload to Python server");

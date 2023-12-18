@@ -1,7 +1,7 @@
 import HttpError from "@wasp/core/HttpError.js";
 
 import type { Chat, Conversation } from "@wasp/entities";
-import type { GetChats, GetConversations } from "@wasp/queries/types";
+import type { GetChats, GetChat, GetConversations } from "@wasp/queries/types";
 
 export const getChats: GetChats<void, Chat[]> = async (args, context) => {
   if (!context.user) {
@@ -14,6 +14,24 @@ export const getChats: GetChats<void, Chat[]> = async (args, context) => {
       },
     },
     orderBy: { id: "desc" },
+  });
+};
+
+type GetChatPayload = {
+  chatId: number;
+};
+
+export const getChat: GetChat<GetChatPayload, Chat> = async (
+  args: any,
+  context: any
+) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+  return context.entities.Chat.findUnique({
+    where: {
+      id: args.chatId,
+    },
   });
 };
 
