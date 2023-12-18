@@ -7,6 +7,7 @@ import { useQuery } from "@wasp/queries";
 import getConversations from "@wasp/queries/getConversations";
 import getChat from "@wasp/queries/getChat";
 import { useSocket, useSocketListener } from "@wasp/webSocket";
+import updateExistingChat from "@wasp/actions/updateExistingChat";
 
 import ConversationsList from "./ConversationList";
 import Loader from "./Loader";
@@ -26,9 +27,13 @@ export default function ConversationWrapper() {
   const {
     data: currentChatDetails,
     refetch: refetchChat,
-  }: { data: any; refetch: any } = useQuery(getChat, {
-    chatId: Number(id),
-  });
+  }: { data: any; refetch: any } = useQuery(
+    getChat,
+    {
+      chatId: Number(id),
+    },
+    { enabled: !!id }
+  );
   const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
   const { data: conversations, refetch } = useQuery(
     getConversations,
@@ -53,6 +58,7 @@ export default function ConversationWrapper() {
       setIsSubmitButtonDisabled(
         currentChatDetails?.team_status === "inprogress"
       );
+      setIsLoading(currentChatDetails.showLoader);
     }
   }, [currentChatDetails]);
 
@@ -85,7 +91,8 @@ export default function ConversationWrapper() {
         Number(id),
         userQuery
       );
-      setIsLoading(true);
+      // setIsLoading(true);
+      await updateExistingChat({ chat_id: Number(id), showLoader: true });
       const teamId = googleRedirectLoginMsg
         ? Number(id)
         : // @ts-ignore
@@ -100,9 +107,11 @@ export default function ConversationWrapper() {
         socket.emit("newConversationAdded", response.chat_id);
       }
 
-      setIsLoading(false);
+      // setIsLoading(false);
+      await updateExistingChat({ chat_id: Number(id), showLoader: false });
     } catch (err: any) {
-      setIsLoading(false);
+      // setIsLoading(false);
+      await updateExistingChat({ chat_id: Number(id), showLoader: false });
       console.log("Error: " + err.message);
       window.alert("Error: Something went wrong. Please try again later.");
     }

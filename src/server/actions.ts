@@ -137,9 +137,10 @@ export const addNewConversationToChat: AddNewConversationToChat<
 
 type UpdateExistingChatPayload = {
   chat_id: number;
-  team_name: string;
-  team_id: number;
-  team_status: boolean;
+  team_name?: string;
+  team_id?: number;
+  team_status?: boolean;
+  showLoader?: boolean;
 };
 
 export const updateExistingChat: UpdateExistingChat<
@@ -149,16 +150,27 @@ export const updateExistingChat: UpdateExistingChat<
   if (!context.user) {
     throw new HttpError(401);
   }
-  await context.entities.Chat.update({
-    where: {
-      id: args.chat_id,
-    },
-    data: {
-      team_id: args.team_id,
-      team_name: args.team_name,
-      team_status: args.team_status,
-    },
-  });
+  if (args.showLoader === true || args.showLoader === false) {
+    await context.entities.Chat.update({
+      where: {
+        id: args.chat_id,
+      },
+      data: {
+        showLoader: args.showLoader,
+      },
+    });
+  } else {
+    await context.entities.Chat.update({
+      where: {
+        id: args.chat_id,
+      },
+      data: {
+        team_id: args.team_id,
+        team_name: args.team_name,
+        team_status: args.team_status,
+      },
+    });
+  }
 };
 
 type AgentPayload = {
