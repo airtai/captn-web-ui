@@ -23,9 +23,13 @@ export default function ConversationWrapper() {
   const { socket, isConnected } = useSocket();
   const [isLoading, setIsLoading] = useState(false);
   const chatWindowRef = useRef(null);
-  const { data: currentChatDetails } = useQuery(getChat, {
+  const {
+    data: currentChatDetails,
+    refetch: refetchChat,
+  }: { data: any; refetch: any } = useQuery(getChat, {
     chatId: Number(id),
   });
+  const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
   const { data: conversations, refetch } = useQuery(
     getConversations,
     {
@@ -35,34 +39,33 @@ export default function ConversationWrapper() {
   );
 
   const googleRedirectLoginMsg: any = getQueryParam("msg");
-  const googleRedirectLoginTeamName: any = getQueryParam("team_name");
-  const googleRedirectLoginTeadId: any = getQueryParam("team_id");
   const formInputRef = useCallback(
     async (node: any) => {
-      if (
-        node !== null &&
-        googleRedirectLoginMsg &&
-        googleRedirectLoginTeamName &&
-        googleRedirectLoginTeadId
-      ) {
+      if (node !== null && googleRedirectLoginMsg) {
         await addMessagesToConversation(googleRedirectLoginMsg);
       }
     },
-    [
-      googleRedirectLoginMsg,
-      googleRedirectLoginTeamName,
-      googleRedirectLoginTeadId,
-    ]
+    [googleRedirectLoginMsg]
   );
+
+  useEffect(() => {
+    if (currentChatDetails) {
+      setIsSubmitButtonDisabled(
+        currentChatDetails?.team_status === "inprogress"
+      );
+    }
+  }, [currentChatDetails]);
 
   useSocketListener("newConversationAddedToDB", reFetchConversations);
 
   function reFetchConversations() {
     refetch();
+    refetchChat();
   }
 
   useEffect(() => {
     scrollToBottom();
+    refetchChat();
   }, [conversations]);
 
   const scrollToBottom = () => {
@@ -83,13 +86,17 @@ export default function ConversationWrapper() {
         userQuery
       );
       setIsLoading(true);
+      const teamId = googleRedirectLoginMsg
+        ? Number(id)
+        : // @ts-ignore
+          currentChatDetails?.team_id;
       const response: any = await addAgentMessageToConversation(
         Number(id),
         messages,
-        // @ts-ignore
-        currentChatDetails.team_id
+        teamId
       );
       if (response.team_status === "inprogress") {
+        // setIsSubmitButtonDisabled(true);
         socket.emit("newConversationAdded", response.chat_id);
       }
 
@@ -158,7 +165,12 @@ export default function ConversationWrapper() {
                     />
                     <button
                       type="submit"
-                      className="text-white absolute right-2.5 bottom-2.5 bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-captn-cta-green dark:hover:bg-captn-cta-green-hover dark:focus:ring-blue-800"
+                      className={`text-white absolute right-2.5 bottom-2.5 ${
+                        isSubmitButtonDisabled
+                          ? "bg-gray-400 cursor-not-allowed"
+                          : "bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300"
+                      } font-medium rounded-lg text-sm px-4 py-2 dark:bg-captn-cta-green dark:hover:bg-captn-cta-green-hover dark:focus:ring-blue-800`}
+                      disabled={isSubmitButtonDisabled}
                     >
                       Send
                     </button>

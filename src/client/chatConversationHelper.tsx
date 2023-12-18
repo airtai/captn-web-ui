@@ -43,13 +43,15 @@ export async function addAgentMessageToConversation(
     await updateExistingChat(payload);
   }
 
-  const openAIResponse = {
-    chat_id: Number(chat_id),
-    message: response.content,
-    role: "assistant",
-  };
+  if (response.content) {
+    const openAIResponse = {
+      chat_id: Number(chat_id),
+      message: response.content,
+      role: "assistant",
+    };
 
-  await addNewConversationToChat(openAIResponse);
+    await addNewConversationToChat(openAIResponse);
+  }
 
   return {
     chat_id: Number(chat_id),
