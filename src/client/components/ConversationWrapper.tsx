@@ -24,6 +24,8 @@ export default function ConversationWrapper() {
   const { socket, isConnected } = useSocket();
   const [isLoading, setIsLoading] = useState(false);
   const [formInputValue, setFormInputValue] = useState("");
+  let previousConversationsLength = useRef(0);
+  let previousChatDetailsRef = useRef<{ team_status: string } | null>(null);
   const chatWindowRef = useRef(null);
   const {
     data: currentChatDetails,
@@ -61,7 +63,14 @@ export default function ConversationWrapper() {
           currentChatDetails.showLoader
       );
       setIsLoading(currentChatDetails.showLoader);
-      scrollToBottom();
+      if (
+        currentChatDetails.team_status === "inprogress" &&
+        previousChatDetailsRef.current &&
+        previousChatDetailsRef.current.team_status !== "inprogress"
+      ) {
+        scrollToBottom();
+      }
+      previousChatDetailsRef.current = currentChatDetails;
     }
   }, [currentChatDetails]);
 
@@ -77,8 +86,13 @@ export default function ConversationWrapper() {
   }, [id]);
 
   useEffect(() => {
-    scrollToBottom();
-    refetchChat();
+    if (conversations) {
+      if (conversations.length !== previousConversationsLength.current) {
+        scrollToBottom();
+        refetchChat();
+      }
+      previousConversationsLength.current = conversations.length;
+    }
   }, [conversations]);
 
   const scrollToBottom = () => {
