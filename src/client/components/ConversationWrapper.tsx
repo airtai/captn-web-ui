@@ -61,6 +61,7 @@ export default function ConversationWrapper() {
           currentChatDetails.showLoader
       );
       setIsLoading(currentChatDetails.showLoader);
+      scrollToBottom();
     }
   }, [currentChatDetails]);
 
@@ -82,16 +83,12 @@ export default function ConversationWrapper() {
 
   const scrollToBottom = () => {
     if (chatWindowRef.current) {
-      // Delay the scrolling animation by 500ms
-      setTimeout(() => {
-        // Scroll to the bottom with a smooth behavior
+      // @ts-ignore
+      chatWindowRef.current.scrollTo({
         // @ts-ignore
-        chatWindowRef.current.scrollTo({
-          // @ts-ignore
-          top: chatWindowRef.current.scrollHeight,
-          behavior: "smooth",
-        });
-      }, 200);
+        top: chatWindowRef.current.scrollHeight,
+        behavior: "smooth",
+      });
     }
   };
 
