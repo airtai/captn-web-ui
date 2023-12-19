@@ -121,6 +121,10 @@ entity Chat {=psl
     id          Int     @id @default(autoincrement())
     createdAt                 DateTime        @default(now())
     updatedAt                 DateTime        @updatedAt
+    team_id                   Int?
+    team_name                 String?
+    team_status               String?
+    showLoader  Boolean         @default(false)
     user        User?    @relation(fields: [userId], references: [id])
     userId      Int?
     name        String?
@@ -133,10 +137,6 @@ entity Conversation {=psl
     updatedAt                   DateTime        @updatedAt
     message                     String
     role                        String
-    team_id                     Int?
-    team_name                   String?
-    team_status                 String?
-    is_question_from_agent      Boolean         @default(false)
     chat                        Chat?           @relation(fields: [chatId], references: [id])
     chatId                      Int?
     user                        User?           @relation(fields: [userId], references: [id])
@@ -227,9 +227,9 @@ action addNewConversationToChat {
   entities: [Chat, Conversation]
 }
 
-action updateExistingConversation {
-  fn: import { updateExistingConversation } from "@server/actions.js",
-  entities: [Chat, Conversation]
+action updateExistingChat {
+  fn: import { updateExistingChat } from "@server/actions.js",
+  entities: [Chat]
 }
 
 action getAgentResponse {
@@ -256,6 +256,11 @@ action getAgentResponse {
 
 query getChats {
   fn: import { getChats } from "@server/queries.js",
+  entities: [Chat]
+}
+
+query getChat {
+  fn: import { getChat } from "@server/queries.js",
   entities: [Chat]
 }
 

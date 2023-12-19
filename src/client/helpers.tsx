@@ -33,17 +33,14 @@ function getLatestConversationID(input: InputMessage[]): number {
   return latestConversationID;
 }
 
-export function prepareOpenAIRequest(
-  input: InputMessage[]
-): [OutputMessage[], number] {
+export function prepareOpenAIRequest(input: InputMessage[]): OutputMessage[] {
   const messages: OutputMessage[] = input.map((message) => {
     return {
       role: message.role,
       content: message.message,
     };
   });
-  const latestConversationID = getLatestConversationID(input);
-  return [messages, latestConversationID];
+  return messages;
 }
 
 // A custom hook that builds on useLocation to parse

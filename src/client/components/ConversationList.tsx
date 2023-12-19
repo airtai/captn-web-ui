@@ -4,22 +4,16 @@ import { useState } from "react";
 import Markdown from "markdown-to-jsx";
 
 import type { Conversation } from "@wasp/entities";
-
 import logo from "../static/captn-logo.png";
 
 type ConversationsListProps = {
   conversations: Conversation[];
-  onInlineFormSubmit: (
-    userQuery: string,
-    conv_id: number,
-    team_name: string,
-    team_id: number
-  ) => void;
+  isLoading: boolean;
 };
 
 export default function ConversationsList({
   conversations,
-  onInlineFormSubmit,
+  isLoading,
 }: ConversationsListProps) {
   return (
     <div className="w-full">
@@ -62,18 +56,6 @@ export default function ConversationsList({
             />
           );
 
-        const handleFormSubmit = (
-          event: React.FormEvent<HTMLFormElement>,
-          conv_id: number,
-          team_name: string,
-          team_id: number
-        ) => {
-          event.preventDefault();
-          const target = event.target as HTMLFormElement;
-          const userQuery = target.userQuery.value;
-          target.reset();
-          onInlineFormSubmit(userQuery, conv_id, team_name, team_id);
-        };
         return (
           <div key={idx}>
             <div
@@ -98,49 +80,47 @@ export default function ConversationsList({
                 <div className="chat-conversations text-base flex flex-col gap-2">
                   <Markdown>{conversation.message}</Markdown>
                 </div>
-                {conversation.is_question_from_agent && (
-                  <form
-                    key={conversation.id}
-                    // onSubmit={handleFormSubmit}
-                    onSubmit={(event) =>
-                      handleFormSubmit(
-                        event,
-                        conversation.id,
-                        conversation.team_name,
-                        conversation.team_id
-                      )
-                    }
-                    className="relative block w-full mt-[15px]"
-                  >
-                    <label
-                      htmlFor="search"
-                      className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-                    >
-                      Search
-                    </label>
-                    <div className="relative">
-                      <input
-                        type="search"
-                        id="userQuery"
-                        name="search"
-                        className="block w-full p-4 pl-5 text-sm text-captn-dark-blue border border-gray-300 rounded-lg bg-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-captn-dark-blue"
-                        placeholder="Reply"
-                        required
-                      />
-                      <button
-                        type="submit"
-                        className="text-white absolute right-2.5 bottom-2.5 bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
-                      >
-                        Send
-                      </button>
-                    </div>
-                  </form>
-                )}
               </div>
             </div>
           </div>
         );
       })}
+      <div
+        className={`flex items-center px-5 py-2 group bg-captn-light-cream flex-col ${
+          isLoading ? "" : "hidden"
+        }`}
+        style={{ minHeight: "85px" }}
+      >
+        <div
+          className="relative ml-3 block w-full p-4 pl-10 text-sm text-captn-dark-blue  border-captn-light-cream rounded-lg bg-captn-light-cream "
+          style={{ maxWidth: "840px", margin: "auto" }}
+        >
+          <span
+            className="absolute inline-block"
+            style={{
+              left: "-15px",
+              top: "6px",
+              height: " 45px",
+              width: "45px",
+            }}
+          >
+            <img
+              alt="captn logo"
+              src={logo}
+              className="w-full h-full"
+              style={{ borderRadius: "50%" }}
+            />
+          </span>
+          <div className="chat-conversations text-base flex flex-col gap-2">
+            <span>
+              I am presently navigating the waters of your request.
+              <br />
+              Kindly stay anchored, and I will promptly return to you once I
+              have information to share.
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
