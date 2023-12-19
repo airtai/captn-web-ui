@@ -82,12 +82,16 @@ export default function ConversationWrapper() {
 
   const scrollToBottom = () => {
     if (chatWindowRef.current) {
-      // @ts-ignore
-      chatWindowRef.current.scrollTo({
+      // Delay the scrolling animation by 500ms
+      setTimeout(() => {
+        // Scroll to the bottom with a smooth behavior
         // @ts-ignore
-        top: chatWindowRef.current.scrollHeight,
-        behavior: "smooth",
-      });
+        chatWindowRef.current.scrollTo({
+          // @ts-ignore
+          top: chatWindowRef.current.scrollHeight,
+          behavior: "smooth",
+        });
+      }, 200);
     }
   };
 
@@ -152,7 +156,13 @@ export default function ConversationWrapper() {
           <div className="flex-1 overflow-hidden pb-36">
             <div ref={chatWindowRef} className={`${chatContainerClass}`}>
               {conversations && (
-                <ConversationsList conversations={conversations} />
+                <ConversationsList
+                  conversations={conversations}
+                  isLoading={
+                    currentChatDetails &&
+                    currentChatDetails.team_status === "inprogress"
+                  }
+                />
               )}
             </div>
             {isLoading && <Loader />}
