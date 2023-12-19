@@ -28,11 +28,15 @@ export const getChat: GetChat<GetChatPayload, Chat> = async (
   if (!context.user) {
     throw new HttpError(401);
   }
-  return context.entities.Chat.findUnique({
-    where: {
-      id: args.chatId,
-    },
-  });
+  if (!!args.chatId) {
+    return context.entities.Chat.findUnique({
+      where: {
+        id: args.chatId,
+      },
+    });
+  } else {
+    return null;
+  }
 };
 
 type GetConversationPayload = {
