@@ -86,7 +86,7 @@ export default function ConversationsList({
         );
       })}
       <div
-        className={`flex items-center px-5 py-2 group bg-captn-light-cream flex-col ${
+        className={`flex items-center px-5 py-2 group  flex-col animate-pulse bg-captn-light-cream ${
           isLoading ? "" : "hidden"
         }`}
         style={{ minHeight: "85px" }}
