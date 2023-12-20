@@ -95,7 +95,7 @@ export const createChat: CreateChat<void, Conversation> = async (
   return await context.entities.Conversation.create({
     data: {
       message:
-        "Hi! I am Captn and I am here to help you with digital marketing. I can create and optimise marketing campaigns for you.  But before I propose any activities, please let me know a little bit about your business and what your marketing goals are.",
+        "Welcome aboard! I'm Captn, your digital marketing companion. Think of me as your expert sailor, ready to ensure your Google Ads journey is smooth sailing. Before we set sail, could you please tell me about your business?",
       role: "assistant",
       chat: { connect: { id: chat.id } },
       user: { connect: { id: context.user.id } },
