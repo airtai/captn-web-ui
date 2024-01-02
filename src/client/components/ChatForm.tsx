@@ -1,0 +1,74 @@
+import React, { useRef, useState, useEffect, useCallback } from "react";
+
+export default function ChatFrom({
+  handleFormSubmit,
+  isSubmitButtonDisabled,
+  chatId,
+  googleRedirectLoginMsg,
+  addMessagesToConversation,
+}: {
+  handleFormSubmit: any;
+  isSubmitButtonDisabled: boolean;
+  chatId: number;
+  googleRedirectLoginMsg: string;
+  addMessagesToConversation: any;
+}) {
+  const [formInputValue, setFormInputValue] = useState("");
+  const formInputRef = useCallback(
+    async (node: any) => {
+      if (node !== null && googleRedirectLoginMsg) {
+        await addMessagesToConversation(googleRedirectLoginMsg);
+      }
+    },
+    [googleRedirectLoginMsg]
+  );
+
+  useEffect(() => {
+    setFormInputValue("");
+  }, [chatId]);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const target = event.target as HTMLFormElement;
+    const userQuery = target.userQuery.value;
+    setFormInputValue("");
+    handleFormSubmit(userQuery);
+  };
+
+  return (
+    <div className="w-full absolute left-0 right-0 bottom-20 w-full">
+      <form onSubmit={handleSubmit} className="">
+        <label
+          htmlFor="search"
+          className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+        >
+          Search
+        </label>
+        <div className="relative bottom-0 left-0 right-0 flex items-center justify-between m-1">
+          <input
+            type="search"
+            id="userQuery"
+            name="search"
+            className="block rounded-lg w-full h-12 text-sm text-captn-light-cream bg-captn-dark-blue focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Send a message"
+            required
+            ref={formInputRef}
+            value={formInputValue}
+            onChange={(e) => setFormInputValue(e.target.value)}
+          />
+          <button
+            type="submit"
+            className={`text-white ${
+              isSubmitButtonDisabled
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300"
+            } absolute right-2 font-medium rounded-lg text-sm px-3 py-1.5`}
+            disabled={isSubmitButtonDisabled}
+          >
+            Send
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}

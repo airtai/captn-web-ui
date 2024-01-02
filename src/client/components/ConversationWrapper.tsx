@@ -1,89 +1,67 @@
 import React from "react";
-import { useState, useCallback, useRef, useEffect } from "react";
-import { useParams } from "react-router";
+import { useState, useRef, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 
 import { useQuery } from "@wasp/queries";
 import getConversations from "@wasp/queries/getConversations";
-import getChat from "@wasp/queries/getChat";
 import { useSocket, useSocketListener } from "@wasp/webSocket";
 import updateExistingChat from "@wasp/actions/updateExistingChat";
 
 import ConversationsList from "./ConversationList";
 import Loader from "./Loader";
+import ChatForm from "./ChatForm";
 
 import {
   addUserMessageToConversation,
   addAgentMessageToConversation,
 } from "../chatConversationHelper";
 
-import { getQueryParam } from "../helpers";
-
-export default function ConversationWrapper() {
-  const { id }: { id: string } = useParams();
-  const { socket, isConnected } = useSocket();
+export default function ConversationWrapper({
+  chatId,
+  currentChatDetails,
+  refetchChat,
+  googleRedirectLoginMsg,
+}: {
+  chatId: number;
+  currentChatDetails: any;
+  refetchChat: any;
+  googleRedirectLoginMsg: string;
+}) {
+  const { socket } = useSocket();
   const [isLoading, setIsLoading] = useState(false);
-  const [formInputValue, setFormInputValue] = useState("");
   let previousConversationsLength = useRef(0);
   let previousChatDetailsRef = useRef<{ team_status: string } | null>(null);
-  const chatWindowRef = useRef(null);
-  const {
-    data: currentChatDetails,
-    refetch: refetchChat,
-  }: { data: any; refetch: any } = useQuery(
-    getChat,
-    {
-      chatId: Number(id),
-    },
-    { enabled: !!id }
-  );
+  const conversationWindowRef = useRef(null);
   const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
-  const { data: conversations, refetch } = useQuery(
+  const { data: conversations, refetch: refetchConversation } = useQuery(
     getConversations,
     {
-      chatId: Number(id),
-    },
-    { enabled: !!id }
-  );
-
-  const googleRedirectLoginMsg: any = getQueryParam("msg");
-  const formInputRef = useCallback(
-    async (node: any) => {
-      if (node !== null && googleRedirectLoginMsg) {
-        await addMessagesToConversation(googleRedirectLoginMsg);
-      }
-    },
-    [googleRedirectLoginMsg]
+      chatId: Number(chatId),
+    }
   );
 
   useEffect(() => {
-    if (currentChatDetails) {
-      setIsSubmitButtonDisabled(
-        currentChatDetails.team_status === "inprogress" ||
-          currentChatDetails.showLoader
-      );
-      setIsLoading(currentChatDetails.showLoader);
-      if (
-        currentChatDetails.team_status === "inprogress" &&
-        previousChatDetailsRef.current &&
-        previousChatDetailsRef.current.team_status !== "inprogress"
-      ) {
-        scrollToBottom();
-      }
-      previousChatDetailsRef.current = currentChatDetails;
+    setIsSubmitButtonDisabled(
+      currentChatDetails.team_status === "inprogress" ||
+        currentChatDetails.showLoader
+    );
+    setIsLoading(currentChatDetails.showLoader);
+    if (
+      currentChatDetails.team_status === "inprogress" &&
+      previousChatDetailsRef.current &&
+      previousChatDetailsRef.current.team_status !== "inprogress"
+    ) {
+      scrollToBottom();
     }
+    previousChatDetailsRef.current = currentChatDetails;
   }, [currentChatDetails]);
 
-  useSocketListener("newConversationAddedToDB", reFetchConversations);
+  useSocketListener("newConversationAddedToDB", updateState);
 
-  function reFetchConversations() {
-    refetch();
+  function updateState() {
+    refetchConversation();
     refetchChat();
   }
-
-  useEffect(() => {
-    setFormInputValue("");
-  }, [id]);
 
   useEffect(() => {
     if (conversations) {
@@ -96,11 +74,11 @@ export default function ConversationWrapper() {
   }, [conversations]);
 
   const scrollToBottom = () => {
-    if (chatWindowRef.current) {
+    if (conversationWindowRef.current) {
       // @ts-ignore
-      chatWindowRef.current.scrollTo({
+      conversationWindowRef.current.scrollTo({
         // @ts-ignore
-        top: chatWindowRef.current.scrollHeight,
+        top: conversationWindowRef.current.scrollHeight,
         behavior: "smooth",
       });
     }
@@ -109,17 +87,16 @@ export default function ConversationWrapper() {
   async function addMessagesToConversation(userQuery: string) {
     try {
       const messages = await addUserMessageToConversation(
-        Number(id),
+        Number(chatId),
         userQuery
       );
       // setIsLoading(true);
-      await updateExistingChat({ chat_id: Number(id), showLoader: true });
+      await updateExistingChat({ chat_id: Number(chatId), showLoader: true });
       const teamId = googleRedirectLoginMsg
-        ? Number(id)
-        : // @ts-ignore
-          currentChatDetails?.team_id;
+        ? Number(chatId)
+        : currentChatDetails.team_id;
       const response: any = await addAgentMessageToConversation(
-        Number(id),
+        Number(chatId),
         messages,
         teamId
       );
@@ -129,21 +106,16 @@ export default function ConversationWrapper() {
       }
 
       // setIsLoading(false);
-      await updateExistingChat({ chat_id: Number(id), showLoader: false });
+      await updateExistingChat({ chat_id: Number(chatId), showLoader: false });
     } catch (err: any) {
       // setIsLoading(false);
-      await updateExistingChat({ chat_id: Number(id), showLoader: false });
+      await updateExistingChat({ chat_id: Number(chatId), showLoader: false });
       console.log("Error: " + err.message);
       window.alert("Error: Something went wrong. Please try again later.");
     }
   }
 
-  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const target = event.target as HTMLFormElement;
-    const userQuery = target.userQuery.value;
-    // target.reset();
-    setFormInputValue("");
+  const handleFormSubmit = async (userQuery: string) => {
     await addMessagesToConversation(userQuery);
   };
 
@@ -165,62 +137,25 @@ export default function ConversationWrapper() {
       <div className="relative h-full w-full flex-1 overflow-auto transition-width">
         <div className="flex h-full flex-col">
           <div className="flex-1 overflow-hidden pb-36">
-            <div ref={chatWindowRef} className={`${chatContainerClass}`}>
+            <div
+              ref={conversationWindowRef}
+              className={`${chatContainerClass}`}
+            >
               {conversations && (
                 <ConversationsList
                   conversations={conversations}
-                  isLoading={
-                    currentChatDetails &&
-                    currentChatDetails.team_status === "inprogress"
-                  }
+                  isLoading={currentChatDetails.team_status === "inprogress"}
                 />
               )}
             </div>
             {isLoading && <Loader />}
-            {id ? (
-              <div className="w-full absolute left-0 right-0 bottom-20 w-full">
-                <form onSubmit={handleFormSubmit} className="">
-                  <label
-                    htmlFor="search"
-                    className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-                  >
-                    Search
-                  </label>
-                  <div className="relative bottom-0 left-0 right-0 flex items-center justify-between m-1">
-                    <input
-                      type="search"
-                      id="userQuery"
-                      name="search"
-                      className="block rounded-lg w-full h-12 text-sm text-captn-light-cream bg-captn-dark-blue focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Send a message"
-                      required
-                      ref={formInputRef}
-                      value={formInputValue}
-                      onChange={(e) => setFormInputValue(e.target.value)}
-                    />
-                    <button
-                      type="submit"
-                      className={`text-white ${
-                        isSubmitButtonDisabled
-                          ? "bg-gray-400 cursor-not-allowed"
-                          : "bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300"
-                      } absolute right-2 font-medium rounded-lg text-sm px-3 py-1.5`}
-                      disabled={isSubmitButtonDisabled}
-                    >
-                      Send
-                    </button>
-                  </div>
-                </form>
-              </div>
-            ) : (
-              <p
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xl md:text-6xl text-captn-light-cream opacity-70"
-                style={{ lineHeight: "normal" }}
-              >
-                Please initiate a new chat or select existing chats to resume
-                your conversation.
-              </p>
-            )}
+            <ChatForm
+              handleFormSubmit={handleFormSubmit}
+              isSubmitButtonDisabled={isSubmitButtonDisabled}
+              chatId={chatId}
+              googleRedirectLoginMsg={googleRedirectLoginMsg}
+              addMessagesToConversation={addMessagesToConversation}
+            />
           </div>
         </div>
       </div>
