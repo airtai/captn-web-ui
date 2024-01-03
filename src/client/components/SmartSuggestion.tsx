@@ -10,18 +10,20 @@ export default function SmartSuggestion({
   return (
     <div>
       <div
-        style={{ minHeight: "85px" }}
-        className={`flex items-center px-5 py-2 group bg-captn-light-blue flex-col`}
+        className={`flex items-center px-5 py-5 group bg-captn-light-blue flex-col`}
       >
         <div
           style={{ maxWidth: "840px", margin: "auto" }}
-          className={`relative ml-3 block w-full p-4 pl-10 text-sm text-captn-dark-blue border-captn-dark-blue rounded-lg bg-captn-dark-blue `}
+          className={`fade-in shadow-sm shadow-captn-dark-blue relative ml-3 block w-full p-4 text-sm text-captn-dark-blue border-captn-dark-blue rounded-lg bg-captn-light-cream `}
         >
-          <div className="chat-conversations text-base flex flex-col gap-2">
+          <p className="text-sm font-semibold text-captn-dark-blue">
+            Quick Reply:
+          </p>
+          <div className="my-2 chat-conversations text-base flex flex-col flex-wrap">
             {suggestions.map((suggestion, index) => (
               <button
                 key={index}
-                className={`text-white bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1.5`}
+                className=" shadow-sm shadow-captn-light-blue m-2 bg-transparent hover:bg-captn-dark-blue text-captn-dark-blue hover:text-captn-light-cream font-semibold mx-4 py-2 px-4 border border-captn-light-blue hover:border-transparent rounded-full"
                 onClick={() =>
                   handleSuggestionClick(suggestion, smartSuggestionOnClick)
                 }

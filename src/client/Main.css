@@ -39,3 +39,18 @@ a:hover {
   list-style: auto;
   margin:10px;
 }
+
+/* styles.css */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}

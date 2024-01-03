@@ -36,7 +36,10 @@ export default function ChatFrom({
   };
 
   return (
-    <div className="w-full absolute left-0 right-0 bottom-20 w-full">
+    <div
+      data-testid="chat-form"
+      className="w-full absolute left-0 right-0 bottom-20 w-full"
+    >
       <form onSubmit={handleSubmit} className="">
         <label
           htmlFor="search"
@@ -50,7 +53,7 @@ export default function ChatFrom({
             id="userQuery"
             name="search"
             className="block rounded-lg w-full h-12 text-sm text-captn-light-cream bg-captn-dark-blue focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Send a message"
+            placeholder="Message CaptnAI..."
             required
             ref={formInputRef}
             value={formInputValue}
@@ -62,10 +65,26 @@ export default function ChatFrom({
               isSubmitButtonDisabled
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300"
-            } absolute right-2 font-medium rounded-lg text-sm px-3 py-1.5`}
+            } absolute right-2 font-medium rounded-lg text-sm px-1.5 py-1.5`}
             disabled={isSubmitButtonDisabled}
           >
-            Send
+            <span className="">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                className="text-captn-light-cream"
+              >
+                <path
+                  d="M7 11L12 6L17 11M12 18V7"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </svg>
+            </span>
           </button>
         </div>
       </form>

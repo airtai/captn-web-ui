@@ -56,6 +56,10 @@ export default function ConversationWrapper({
     previousChatDetailsRef.current = currentChatDetails;
   }, [currentChatDetails]);
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [currentChatDetails?.smartSuggestions]);
+
   useSocketListener("newConversationAddedToDB", updateState);
 
   function updateState() {
