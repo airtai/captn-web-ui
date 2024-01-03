@@ -116,6 +116,7 @@ export default function ConversationWrapper({
   }
 
   const handleFormSubmit = async (userQuery: string) => {
+    await updateExistingChat({ chat_id: Number(chatId), smartSuggestions: [] });
     await addMessagesToConversation(userQuery);
   };
 
@@ -145,6 +146,8 @@ export default function ConversationWrapper({
                 <ConversationsList
                   conversations={conversations}
                   isLoading={currentChatDetails.team_status === "inprogress"}
+                  smartSuggestions={currentChatDetails.smartSuggestions}
+                  smartSuggestionOnClick={handleFormSubmit}
                 />
               )}
             </div>

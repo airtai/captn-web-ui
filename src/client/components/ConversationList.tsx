@@ -5,16 +5,21 @@ import Markdown from "markdown-to-jsx";
 
 import type { Conversation } from "@wasp/entities";
 import AgentLoader from "./AgentLoader";
+import SmartSuggestion from "./SmartSuggestion";
 import logo from "../static/captn-logo.png";
 
 type ConversationsListProps = {
   conversations: Conversation[];
   isLoading: boolean;
+  smartSuggestions: any;
+  smartSuggestionOnClick: any;
 };
 
 export default function ConversationsList({
   conversations,
   isLoading,
+  smartSuggestions,
+  smartSuggestionOnClick,
 }: ConversationsListProps) {
   return (
     <div className="w-full">
@@ -87,6 +92,12 @@ export default function ConversationsList({
         );
       })}
       {isLoading && <AgentLoader logo={logo} />}
+      {smartSuggestions?.length > 0 && (
+        <SmartSuggestion
+          suggestions={smartSuggestions}
+          smartSuggestionOnClick={smartSuggestionOnClick}
+        />
+      )}
     </div>
   );
 }
