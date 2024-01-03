@@ -35,6 +35,7 @@ jobs:
 
     docker_build_push:
         runs-on: ubuntu-22.04
+        needs: [unit_test]
         permissions:
             contents: read
             packages: write
