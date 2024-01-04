@@ -92,7 +92,7 @@ export default function ConversationsList({
         );
       })}
       {isLoading && <AgentLoader logo={logo} />}
-      {smartSuggestions?.length > 0 && (
+      {smartSuggestions?.length > 1 && (
         <SmartSuggestion
           suggestions={smartSuggestions}
           smartSuggestionOnClick={smartSuggestionOnClick}

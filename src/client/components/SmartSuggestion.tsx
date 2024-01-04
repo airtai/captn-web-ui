@@ -1,4 +1,5 @@
 import React from "react";
+import Markdown from "markdown-to-jsx";
 
 export default function SmartSuggestion({
   suggestions,
@@ -28,7 +29,7 @@ export default function SmartSuggestion({
                   handleSuggestionClick(suggestion, smartSuggestionOnClick)
                 }
               >
-                {suggestion}
+                <Markdown>{suggestion}</Markdown>
               </button>
             ))}
           </div>
