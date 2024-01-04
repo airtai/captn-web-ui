@@ -49,11 +49,8 @@ test("prepareOpenAIRequest_1", () => {
       content: "Second Message",
     },
   ];
-  const expected_conv_id = 9;
-
-  const [actual_message, actual_conv_id] = prepareOpenAIRequest(input);
+  const actual_message = prepareOpenAIRequest(input);
   expect(actual_message).toStrictEqual(expected_message);
-  expect(actual_conv_id).toStrictEqual(expected_conv_id);
 });
 
 test("prepareOpenAIRequest_2", () => {
@@ -80,11 +77,9 @@ test("prepareOpenAIRequest_2", () => {
       content: "First Message",
     },
   ];
-  const expected_conv_id = 8;
 
-  const [actual_message, actual_conv_id] = prepareOpenAIRequest(input);
+  const actual_message = prepareOpenAIRequest(input);
   expect(actual_message).toStrictEqual(expected_message);
-  expect(actual_conv_id).toStrictEqual(expected_conv_id);
 });
 
 test("prepareOpenAIRequest_3", () => {
@@ -168,8 +163,6 @@ test("prepareOpenAIRequest_3", () => {
       content: "Forth Message",
     },
   ];
-  const expected_conv_id = 22;
-  const [actual_message, actual_last_conv_id] = prepareOpenAIRequest(input);
+  const actual_message = prepareOpenAIRequest(input);
   expect(actual_message).toStrictEqual(expected_message);
-  expect(actual_last_conv_id).toStrictEqual(expected_conv_id);
 });

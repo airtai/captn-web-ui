@@ -40,6 +40,29 @@ async function checkTeamStatus(context, socket, chat_id) {
 }
 
 async function updateConversationsInDb(context, socket, json, chat_id) {
+  let smartSuggestions = [];
+  try {
+    const payload = {
+      content: json["msg"],
+    };
+    const response = await fetch(
+      `${ADS_SERVER_URL}/openai/get-smart-suggestions`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }
+    );
+    if (!response.ok) {
+      console.log(`Error while generating smart suggestion`);
+    }
+
+    smartSuggestions = await response.json();
+  } catch (error) {
+    console.log(`Error while generating smart suggestion`);
+    console.log(error);
+  }
+
   await context.entities.Chat.update({
     where: {
       // userId: socket.data.user.id,
@@ -47,6 +70,7 @@ async function updateConversationsInDb(context, socket, json, chat_id) {
     },
     data: {
       team_status: null,
+      smartSuggestions: smartSuggestions,
     },
   });
 

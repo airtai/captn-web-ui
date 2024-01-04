@@ -125,6 +125,7 @@ entity Chat {=psl
     team_name                 String?
     team_status               String?
     showLoader  Boolean         @default(false)
+    smartSuggestions  String[]         @default([])
     user        User?    @relation(fields: [userId], references: [id])
     userId      Int?
     name        String?
@@ -235,6 +236,11 @@ action updateExistingChat {
 action getAgentResponse {
   fn: import { getAgentResponse } from "@server/actions.js",
   entities: [Chat, Conversation]
+}
+
+action getSmartSuggestion {
+  fn: import { getSmartSuggestion } from "@server/actions.js",
+  entities: [Chat]
 }
 
 // action stripeCreditsPayment {

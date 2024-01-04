@@ -3,7 +3,7 @@ import type { Chat } from "@wasp/entities";
 
 export default function ChatsList(chats: Chat[]) {
   return (
-    <div>
+    <div data-testid="chat-list">
       {
         // Todo: remove the below ignore comment
         // @ts-ignore

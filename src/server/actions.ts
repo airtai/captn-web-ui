@@ -9,6 +9,7 @@ import type {
   AddNewConversationToChat,
   UpdateExistingChat,
   GetAgentResponse,
+  GetSmartSuggestion,
 } from "@wasp/actions/types";
 import type { StripePaymentResult, OpenAIResponse } from "./types";
 import Stripe from "stripe";
@@ -141,6 +142,7 @@ type UpdateExistingChatPayload = {
   team_id?: number;
   team_status?: boolean;
   showLoader?: boolean;
+  smartSuggestions?: string[];
 };
 
 export const updateExistingChat: UpdateExistingChat<
@@ -168,8 +170,46 @@ export const updateExistingChat: UpdateExistingChat<
         team_id: args.team_id,
         team_name: args.team_name,
         team_status: args.team_status,
+        ...(args.smartSuggestions && {
+          smartSuggestions: args.smartSuggestions,
+        }),
       },
     });
+  }
+};
+
+type SmartSuggestionPayload = {
+  content: string;
+};
+
+export const getSmartSuggestion: GetSmartSuggestion<
+  SmartSuggestionPayload,
+  any
+> = async ({ content }: { content: string }, context: any) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+  const payload = {
+    content: content,
+  };
+  try {
+    const response = await fetch(
+      `${ADS_SERVER_URL}/openai/get-smart-suggestions`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error();
+    }
+
+    const suggestionsList: any = await response.json();
+    return suggestionsList;
+  } catch (error: any) {
+    throw new HttpError(500, "Something went wrong. Please try again later");
   }
 };
 

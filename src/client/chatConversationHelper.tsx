@@ -1,6 +1,7 @@
 import getAgentResponse from "@wasp/actions/getAgentResponse";
 import addNewConversationToChat from "@wasp/actions/addNewConversationToChat";
 import updateExistingChat from "@wasp/actions/updateExistingChat";
+import getSmartSuggestion from "@wasp/actions/getSmartSuggestion";
 import { prepareOpenAIRequest } from "./helpers";
 
 export async function addUserMessageToConversation(
@@ -50,6 +51,16 @@ export async function addAgentMessageToConversation(
       role: "assistant",
     };
 
+    if (response && !response.team_name) {
+      const suggestions: any = await getSmartSuggestion({
+        content: response.content,
+      });
+      const payload = {
+        chat_id: Number(chat_id),
+        smartSuggestions: suggestions,
+      };
+      await updateExistingChat(payload);
+    }
     await addNewConversationToChat(openAIResponse);
   }
 

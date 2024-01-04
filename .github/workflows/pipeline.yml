@@ -13,8 +13,29 @@ env:
     ADS_SERVER_URL: ${{ vars.ADS_SERVER_URL }}
 
 jobs:
+    unit_test:
+        runs-on: ubuntu-22.04
+        permissions:
+            contents: read
+            packages: write
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+            - uses: actions/setup-node@v3
+              with:
+                node-version: 18
+
+            - name: Install wasp
+              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh
+
+            - name: Run client tests
+              run: wasp test client run --silent
+
+            
+
     docker_build_push:
         runs-on: ubuntu-22.04
+        needs: [unit_test]
         permissions:
             contents: read
             packages: write
