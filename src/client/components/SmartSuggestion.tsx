@@ -10,21 +10,19 @@ export default function SmartSuggestion({
 }) {
   return (
     <div>
-      <div
-        className={`flex items-center px-5 py-5 group bg-captn-light-blue flex-col`}
-      >
+      <div className={`-mt-5 pb-4 flex items-center group bg-captn-dark-blue`}>
         <div
           style={{ maxWidth: "840px", margin: "auto" }}
-          className={`fade-in shadow-sm shadow-captn-dark-blue relative ml-3 block w-full p-4 text-sm text-captn-dark-blue border-captn-dark-blue rounded-lg bg-captn-light-cream `}
+          className={`fade-in  relative ml-3 block w-full px-4 rounded-lg bg-captn-light-green `}
         >
-          <p className="text-sm font-semibold text-captn-dark-blue">
+          {/* <p className="text-sm ml-5 font-semibold text-captn-light-cream">
             Quick Reply:
-          </p>
-          <div className="my-2 chat-conversations text-base flex flex-col flex-wrap">
+          </p> */}
+          <div className="my-2 ml-5 chat-conversations text-base flex flex-wrap">
             {suggestions.map((suggestion, index) => (
               <button
                 key={index}
-                className=" shadow-sm shadow-captn-light-blue m-2 bg-transparent hover:bg-captn-dark-blue text-captn-dark-blue hover:text-captn-light-cream font-semibold mx-4 py-2 px-4 border border-captn-light-blue hover:border-transparent rounded-full"
+                className=" bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 m-1 text-white"
                 onClick={() =>
                   handleSuggestionClick(suggestion, smartSuggestionOnClick)
                 }
