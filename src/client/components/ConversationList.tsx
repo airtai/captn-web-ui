@@ -21,8 +21,11 @@ export default function ConversationsList({
   smartSuggestions,
   smartSuggestionOnClick,
 }: ConversationsListProps) {
+  const isSmartSuggestionsAvailable =
+    smartSuggestions?.length > 0 &&
+    !(smartSuggestions.length === 1 && smartSuggestions[0] === "");
   return (
-    <div className="w-full">
+    <div data-testid="conversations-wrapper" className="w-full">
       {conversations.map((conversation, idx) => {
         const conversationBgColor =
           conversation.role === "user" ? "captn-light-blue" : "captn-dark-blue";
@@ -92,11 +95,14 @@ export default function ConversationsList({
         );
       })}
       {isLoading && <AgentLoader logo={logo} />}
-      {smartSuggestions?.length > 1 && (
-        <SmartSuggestion
-          suggestions={smartSuggestions}
-          smartSuggestionOnClick={smartSuggestionOnClick}
-        />
+
+      {isSmartSuggestionsAvailable && (
+        <div data-testid="smart-suggestions">
+          <SmartSuggestion
+            suggestions={smartSuggestions}
+            smartSuggestionOnClick={smartSuggestionOnClick}
+          />
+        </div>
       )}
     </div>
   );
