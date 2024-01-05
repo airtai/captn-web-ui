@@ -18,14 +18,14 @@ export default function SmartSuggestion({
   }
   return (
     <div>
-      <div className={`-mt-5 pb-4 flex items-center group bg-captn-dark-blue`}>
+      <div className={` pb-4 flex items-center group bg-captn-dark-blue`}>
         <div
           style={{ maxWidth: "840px", margin: "auto" }}
           className={`fade-in  relative ml-3 block w-full px-4 rounded-lg bg-captn-light-green ${
             isShowSuggestions ? "opacity-100" : "opacity-0"
           }}`}
         >
-          <div className="my-2 ml-5 chat-conversations text-base flex flex-wrap">
+          <div className="ml-5 chat-conversations text-base flex flex-wrap">
             {suggestions.map((suggestion, index) => (
               <button
                 key={index}
@@ -38,7 +38,7 @@ export default function SmartSuggestion({
               </button>
             ))}
           </div>
-          <p className="my-2 ml-6 text-captn-light-cream">
+          <p className="my-2 ml-6 pt-2 text-captn-light-cream">
             You can choose from the listed options above or type your own
             answers in the input field below.
           </p>
