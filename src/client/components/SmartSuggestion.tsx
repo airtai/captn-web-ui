@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Markdown from "markdown-to-jsx";
 
 export default function SmartSuggestion({
@@ -8,12 +8,22 @@ export default function SmartSuggestion({
   suggestions: string[];
   smartSuggestionOnClick: any;
 }) {
+  const [isShowSuggestions, setIsShowSuggestions] = useState(true);
+  function handleSuggestionClick(
+    suggestion: string,
+    smartSuggestionOnClick: any
+  ) {
+    smartSuggestionOnClick(suggestion);
+    setIsShowSuggestions(false);
+  }
   return (
     <div>
       <div className={`-mt-5 pb-4 flex items-center group bg-captn-dark-blue`}>
         <div
           style={{ maxWidth: "840px", margin: "auto" }}
-          className={`fade-in  relative ml-3 block w-full px-4 rounded-lg bg-captn-light-green `}
+          className={`fade-in  relative ml-3 block w-full px-4 rounded-lg bg-captn-light-green ${
+            isShowSuggestions ? "opacity-100" : "opacity-0"
+          }}`}
         >
           <div className="my-2 ml-5 chat-conversations text-base flex flex-wrap">
             {suggestions.map((suggestion, index) => (
@@ -36,12 +46,4 @@ export default function SmartSuggestion({
       </div>
     </div>
   );
-}
-
-function handleSuggestionClick(
-  suggestion: string,
-  smartSuggestionOnClick: any
-) {
-  console.log(`Suggestion "${suggestion}" clicked.`);
-  smartSuggestionOnClick(suggestion);
 }
