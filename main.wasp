@@ -238,11 +238,6 @@ action getAgentResponse {
   entities: [Chat, Conversation]
 }
 
-action getSmartSuggestion {
-  fn: import { getSmartSuggestion } from "@server/actions.js",
-  entities: [Chat]
-}
-
 // action stripeCreditsPayment {
 //   fn: import { stripeCreditsPayment } from "@server/actions.js",
 //   entities: [User]
