@@ -69,7 +69,7 @@ export default function ConversationsList({
           <div key={idx}>
             <div
               style={{ minHeight: "85px" }}
-              className={`flex items-center px-5 py-2 group bg-${conversationBgColor} flex-col`}
+              className={`flex items-center px-5 group bg-${conversationBgColor} flex-col`}
             >
               <div
                 style={{ maxWidth: "840px", margin: "auto" }}
