@@ -50,6 +50,8 @@ export async function addAgentMessageToConversation(
       role: "assistant",
     };
 
+    await addNewConversationToChat(openAIResponse);
+
     if (response && response.smart_suggestions) {
       const payload = {
         chat_id: Number(chat_id),
@@ -57,7 +59,6 @@ export async function addAgentMessageToConversation(
       };
       await updateExistingChat(payload);
     }
-    await addNewConversationToChat(openAIResponse);
   }
 
   return {
