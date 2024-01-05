@@ -15,9 +15,6 @@ export default function SmartSuggestion({
           style={{ maxWidth: "840px", margin: "auto" }}
           className={`fade-in  relative ml-3 block w-full px-4 rounded-lg bg-captn-light-green `}
         >
-          {/* <p className="text-sm ml-5 font-semibold text-captn-light-cream">
-            Quick Reply:
-          </p> */}
           <div className="my-2 ml-5 chat-conversations text-base flex flex-wrap">
             {suggestions.map((suggestion, index) => (
               <button
@@ -31,6 +28,10 @@ export default function SmartSuggestion({
               </button>
             ))}
           </div>
+          <p className="my-2 ml-6 text-captn-light-cream">
+            You can choose from the listed options above or type your own
+            answers in the input field below.
+          </p>
         </div>
       </div>
     </div>
