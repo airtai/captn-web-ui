@@ -120,7 +120,10 @@ export default function ConversationWrapper({
   }
 
   const handleFormSubmit = async (userQuery: string) => {
-    await updateExistingChat({ chat_id: Number(chatId), smartSuggestions: [] });
+    await updateExistingChat({
+      chat_id: Number(chatId),
+      smartSuggestions: { suggestions: [""], type: "" },
+    });
     await addMessagesToConversation(userQuery);
   };
 

@@ -17,7 +17,7 @@ test("Test ConversationsList component rendering", async () => {
       // @ts-ignore
       conversations={conversations}
       isLoading={false}
-      smartSuggestions={[]}
+      smartSuggestions={{ suggestions: [""], type: "" }}
       smartSuggestionOnClick={() => {}}
     />
   );
@@ -37,7 +37,7 @@ test("Should not render SmartSuggestions component if the suggestions are empty"
       // @ts-ignore
       conversations={conversations}
       isLoading={false}
-      smartSuggestions={[]}
+      smartSuggestions={{ suggestions: [""], type: "" }}
       smartSuggestionOnClick={() => {}}
     />
   );
@@ -57,7 +57,7 @@ test("Should not render SmartSuggestions component if the suggestion is a empty 
       // @ts-ignore
       conversations={conversations}
       isLoading={false}
-      smartSuggestions={[""]}
+      smartSuggestions={{ suggestions: [""], type: "" }}
       smartSuggestionOnClick={() => {}}
     />
   );
@@ -77,7 +77,7 @@ test("Should render SmartSuggestions component", async () => {
       // @ts-ignore
       conversations={conversations}
       isLoading={false}
-      smartSuggestions={["Hi"]}
+      smartSuggestions={{ suggestions: ["Hi"], type: "" }}
       smartSuggestionOnClick={() => {}}
     />
   );

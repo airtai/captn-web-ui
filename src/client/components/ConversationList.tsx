@@ -5,13 +5,14 @@ import Markdown from "markdown-to-jsx";
 
 import type { Conversation } from "@wasp/entities";
 import AgentLoader from "./AgentLoader";
-import SmartSuggestion from "./SmartSuggestion";
+import SmartSuggestionButton from "./SmartSuggestionButton";
+import SmartSuggestionCheckbox from "./SmartSuggestionCheckbox";
 import logo from "../static/captn-logo.png";
 
 type ConversationsListProps = {
   conversations: Conversation[];
   isLoading: boolean;
-  smartSuggestions: any;
+  smartSuggestions: Record<string, any>;
   smartSuggestionOnClick: any;
 };
 
@@ -22,8 +23,11 @@ export default function ConversationsList({
   smartSuggestionOnClick,
 }: ConversationsListProps) {
   const isSmartSuggestionsAvailable =
-    smartSuggestions?.length > 0 &&
-    !(smartSuggestions.length === 1 && smartSuggestions[0] === "");
+    smartSuggestions?.suggestions?.length > 0 &&
+    !(
+      smartSuggestions.suggestions?.length === 1 &&
+      smartSuggestions.suggestions[0] === ""
+    );
   return (
     <div data-testid="conversations-wrapper" className="w-full">
       {conversations.map((conversation, idx) => {
@@ -98,10 +102,17 @@ export default function ConversationsList({
 
       {isSmartSuggestionsAvailable && (
         <div data-testid="smart-suggestions">
-          <SmartSuggestion
-            suggestions={smartSuggestions}
-            smartSuggestionOnClick={smartSuggestionOnClick}
-          />
+          {smartSuggestions?.type == "oneOf" ? (
+            <SmartSuggestionButton
+              suggestions={smartSuggestions.suggestions}
+              smartSuggestionOnClick={smartSuggestionOnClick}
+            />
+          ) : (
+            <SmartSuggestionCheckbox
+              suggestions={smartSuggestions.suggestions}
+              smartSuggestionOnClick={smartSuggestionOnClick}
+            />
+          )}
         </div>
       )}
     </div>
