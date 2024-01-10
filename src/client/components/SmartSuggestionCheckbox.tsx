@@ -43,7 +43,7 @@ export default function SmartSuggestionCheckbox({
         style={{ maxWidth: "840px", margin: "auto" }}
         className={`fade-in  relative ml-3 block w-full px-4 rounded-lg bg-captn-light-green `}
       >
-        <div className="ml-6 chat-conversations text-base flex flex-wrap">
+        <div className="ml-6 chat-conversations text-base flex flex-col">
           {suggestions.map((suggestion, index) => (
             <label key={index} className="flex items-center me-4">
               <input
@@ -59,19 +59,17 @@ export default function SmartSuggestionCheckbox({
               </span>
             </label>
           ))}
-
-          <button
-            onClick={handlePrintSelected}
-            className={`${
-              selectedItems.length > 0
-                ? ""
-                : "bg-gray-400 cursor-not-allowed hover:bg-gray-500"
-            }  bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 m-1 text-white`}
-          >
-            Send
-          </button>
         </div>
-
+        <button
+          onClick={handlePrintSelected}
+          className={`${
+            selectedItems.length > 0
+              ? ""
+              : "bg-gray-400 cursor-not-allowed hover:bg-gray-500"
+          }  ml-6 mt-3 bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 m-1 text-white`}
+        >
+          Send
+        </button>
         <p className="my-2 ml-6 pt-2 text-captn-light-cream">
           You can select an option from the list above and click the send
           button, or type your own responses in the input field below.
