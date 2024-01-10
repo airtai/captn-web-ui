@@ -141,7 +141,7 @@ type UpdateExistingChatPayload = {
   team_id?: number;
   team_status?: boolean;
   showLoader?: boolean;
-  smartSuggestions?: string[];
+  smartSuggestions?: Record<string, any>;
 };
 
 export const updateExistingChat: UpdateExistingChat<

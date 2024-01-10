@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Markdown from "markdown-to-jsx";
 
-export default function SmartSuggestion({
+export default function SmartSuggestionButton({
   suggestions,
   smartSuggestionOnClick,
 }: {

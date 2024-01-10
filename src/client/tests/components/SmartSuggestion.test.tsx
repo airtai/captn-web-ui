@@ -3,13 +3,13 @@ import { screen } from "@testing-library/react";
 
 import { renderInContext, mockServer } from "@wasp/test";
 
-import SmartSuggestion from "../../components/SmartSuggestion";
+import SmartSuggestionButton from "../../components/SmartSuggestionButton";
 
 test("Test SmartSuggestion component rendering", async () => {
   const suggestions = ["a", "b", "c"];
   // @ts-ignore
   renderInContext(
-    <SmartSuggestion
+    <SmartSuggestionButton
       suggestions={suggestions}
       smartSuggestionOnClick={() => {}}
     />
