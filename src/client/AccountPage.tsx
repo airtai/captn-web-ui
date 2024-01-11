@@ -4,10 +4,10 @@ import { useQuery } from "@wasp/queries";
 import logout from "@wasp/auth/logout";
 import stripePayment from "@wasp/actions/stripePayment";
 import { useState, Dispatch, SetStateAction } from "react";
+import { Link } from "@wasp/router";
 
 // get your own link from your stripe dashboard: https://dashboard.stripe.com/settings/billing/portal
-const CUSTOMER_PORTAL_LINK =
-  "https://billing.stripe.com/p/login/test_8wM8x17JN7DT4zC000";
+const CUSTOMER_PORTAL_LINK = "";
 
 export default function Example({ user }: { user: User }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -32,34 +32,81 @@ export default function Example({ user }: { user: User }) {
                 {user.email}
               </dd>
             </div>
-            {/* <div className='py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6'>
-              <dt className='text-sm font-medium text-gray-500'>Your Plan</dt>
+            <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+              {/* <dt className="text-sm font-medium text-gray-500">
+                Credits remaining
+              </dt>
+              <>
+                <dd className="mt-1 text-sm text-gray-900 sm:col-span-1 sm:mt-0">
+                  {user.credits}
+                </dd>
+                <BuyMoreButton
+                  isLoading={isLoading}
+                  setIsLoading={setIsLoading}
+                />
+              </> */}
+              {/* <dt className="text-sm font-medium text-gray-500">Your Plan</dt>
               {user.hasPaid ? (
                 <>
-                  <dd className='mt-1 text-sm text-gray-900 sm:col-span-1 sm:mt-0'>Premium Monthly Subscription</dd>
-                  <CustomerPortalButton isLoading={isLoading} setIsLoading={setIsLoading} />
+                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-1 sm:mt-0">
+                    Premium Subscription
+                  </dd>
+                  <CustomerPortalButton
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                  />
                 </>
               ) : (
                 <>
-                  <dd className='mt-1 text-sm text-gray-900 sm:col-span-1 sm:mt-0'>
+                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-1 sm:mt-0">
                     Credits remaining: {user.credits}
                   </dd>
-                  <BuyMoreButton isLoading={isLoading} setIsLoading={setIsLoading} />
+                  <BuyMoreButton
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                  />
                 </>
               )}
-            </div> */}
-            {/* <div className='py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6'>
-              <dt className='text-sm font-medium text-gray-500'>About</dt>
-              <dd className='mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0'>I'm a cool customer.</dd>
-            </div> */}
-            {/* <div className='py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6'> */}
-            {/* <dt className='text-sm font-medium text-gray-500'>Most Recent User RelatedObject</dt> */}
-            {/* <dd className='mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0'>
+               */}
+              <dt className="text-sm font-medium text-gray-500">Your Plan</dt>
+              {user.hasPaid ? (
+                <>
+                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-1 sm:mt-0">
+                    Premium Subscription
+                  </dd>
+                  <CustomerPortalButton
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                  />
+                </>
+              ) : (
+                <>
+                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-1 sm:mt-0">
+                    No Active Subscription
+                  </dd>
+                  <BuyMoreButton
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                  />
+                </>
+              )}
+            </div>
+            <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+              <dt className="text-sm font-medium text-gray-500">About</dt>
+              <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                I'm a cool customer.
+              </dd>
+            </div>
+            {/* <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+              <dt className="text-sm font-medium text-gray-500">
+                Most Recent User RelatedObject
+              </dt>
+              <dd className='mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0'>
                 {!!relatedObjects && relatedObjects.length > 0
                   ? relatedObjects[relatedObjects.length - 1].content
                   : "You don't have any at this time."}
-              </dd> */}
-            {/* </div> */}
+              </dd>
+            </div> */}
           </dl>
         </div>
       </div>
@@ -98,14 +145,17 @@ function BuyMoreButton({
 
   return (
     <div className="ml-4 flex-shrink-0 sm:col-span-1 sm:mt-0">
-      <button
+      <p className="font-medium text-sm text-indigo-600 hover:text-indigo-500">
+        {!isLoading ? <Link to="/pricing">Upgrade Plan</Link> : "Loading..."}
+      </p>
+      {/* <button
         onClick={handleClick}
         className={`font-medium text-sm text-indigo-600 hover:text-indigo-500 ${
           isLoading && "animate-pulse"
         }`}
       >
-        {!isLoading ? "Buy More/Upgrade" : "Loading..."}
-      </button>
+        {!isLoading ? <Link to="/pricing">Upgrade Plan</Link> : "Loading..."}
+      </button> */}
     </div>
   );
 }
