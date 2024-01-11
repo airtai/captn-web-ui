@@ -90,7 +90,7 @@ entity User {=psl
   sendEmail                 Boolean         @default(false)
   subscriptionStatus        String?
   datePaid                  DateTime?
-  credits                   Int             @default(3)
+  credits                   Int             @default(0)
   
   externalAuthAssociations  SocialLogin[]
   chats    Chat[]
