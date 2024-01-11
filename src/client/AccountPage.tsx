@@ -33,7 +33,7 @@ export default function Example({ user }: { user: User }) {
               </dd>
             </div>
             <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
-              {/* <dt className="text-sm font-medium text-gray-500">
+              <dt className="text-sm font-medium text-gray-500">
                 Credits remaining
               </dt>
               <>
@@ -44,7 +44,7 @@ export default function Example({ user }: { user: User }) {
                   isLoading={isLoading}
                   setIsLoading={setIsLoading}
                 />
-              </> */}
+              </>
               {/* <dt className="text-sm font-medium text-gray-500">Your Plan</dt>
               {user.hasPaid ? (
                 <>
@@ -68,7 +68,7 @@ export default function Example({ user }: { user: User }) {
                 </>
               )}
                */}
-              <dt className="text-sm font-medium text-gray-500">Your Plan</dt>
+              {/* <dt className="text-sm font-medium text-gray-500">Your Plan</dt>
               {user.hasPaid ? (
                 <>
                   <dd className="mt-1 text-sm text-gray-900 sm:col-span-1 sm:mt-0">
@@ -89,7 +89,7 @@ export default function Example({ user }: { user: User }) {
                     setIsLoading={setIsLoading}
                   />
                 </>
-              )}
+              )} */}
             </div>
             <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">About</dt>
@@ -146,7 +146,7 @@ function BuyMoreButton({
   return (
     <div className="ml-4 flex-shrink-0 sm:col-span-1 sm:mt-0">
       <p className="font-medium text-sm text-indigo-600 hover:text-indigo-500">
-        {!isLoading ? <Link to="/pricing">Upgrade Plan</Link> : "Loading..."}
+        {!isLoading ? <Link to="/pricing">Buy More</Link> : "Loading..."}
       </p>
       {/* <button
         onClick={handleClick}

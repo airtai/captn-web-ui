@@ -11,8 +11,6 @@ env:
     DATABASE_URL: ${{ secrets.DATABASE_URL }}
     JWT_SECRET: ${{ secrets.JWT_SECRET }}
     ADS_SERVER_URL: ${{ vars.ADS_SERVER_URL }}
-    STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
-    SUBSCRIPTION_PRICE_ID: ${{ secrets.SUBSCRIPTION_PRICE_ID }}
 
 jobs:
     unit_test:
@@ -85,6 +83,9 @@ jobs:
             GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
             GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
             AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+            STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
+            SUBSCRIPTION_PRICE_ID: ${{ secrets.SUBSCRIPTION_PRICE_ID }}
+            CREDITS_PRICE_ID: ${{ secrets.CREDITS_PRICE_ID }}
         steps:
             - uses: actions/checkout@v3
             # This is to fix GIT not liking owner of the checkout dir - https://github.com/actions/runner/issues/2033#issuecomment-1204205989
