@@ -79,12 +79,14 @@ export default function ConversationWrapper({
 
   const scrollToBottom = () => {
     if (conversationWindowRef.current) {
-      // @ts-ignore
-      conversationWindowRef.current.scrollTo({
+      setTimeout(() => {
         // @ts-ignore
-        top: conversationWindowRef.current.scrollHeight,
-        behavior: "smooth",
-      });
+        conversationWindowRef.current.scrollTo({
+          // @ts-ignore
+          top: conversationWindowRef.current.scrollHeight,
+          behavior: "smooth",
+        });
+      }, 100);
     }
   };
 
