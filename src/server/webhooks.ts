@@ -1,35 +1,39 @@
-import { StripeWebhook } from '@wasp/apis/types';
-import { emailSender } from '@wasp/email/index.js';
+import { StripeWebhook } from "@wasp/apis/types";
+import { emailSender } from "@wasp/email/index.js";
 
-import Stripe from 'stripe';
-import requestIp from 'request-ip';
+import Stripe from "stripe";
+import requestIp from "request-ip";
 
 export const STRIPE_WEBHOOK_IPS = [
-  '3.18.12.63',
-  '3.130.192.231',
-  '13.235.14.237',
-  '13.235.122.149',
-  '18.211.135.69',
-  '35.154.171.200',
-  '52.15.183.38',
-  '54.88.130.119',
-  '54.88.130.237',
-  '54.187.174.169',
-  '54.187.205.235',
-  '54.187.216.72',
+  "3.18.12.63",
+  "3.130.192.231",
+  "13.235.14.237",
+  "13.235.122.149",
+  "18.211.135.69",
+  "35.154.171.200",
+  "52.15.183.38",
+  "54.88.130.119",
+  "54.88.130.237",
+  "54.187.174.169",
+  "54.187.205.235",
+  "54.187.216.72",
 ];
 
 const stripe = new Stripe(process.env.STRIPE_KEY!, {
-  apiVersion: '2022-11-15',
+  apiVersion: "2022-11-15",
 });
 
-export const stripeWebhook: StripeWebhook = async (request, response, context) => {
-  if (process.env.NODE_ENV === 'production') {
+export const stripeWebhook: StripeWebhook = async (
+  request,
+  response,
+  context
+) => {
+  if (process.env.NODE_ENV === "production") {
     const detectedIp = requestIp.getClientIp(request) as string;
     const isStripeIP = STRIPE_WEBHOOK_IPS.includes(detectedIp);
 
     if (!isStripeIP) {
-      console.log('IP address not from Stripe: ', detectedIp);
+      console.log("IP address not from Stripe: ", detectedIp);
       return response.status(403).json({ received: false });
     }
   }
@@ -40,19 +44,24 @@ export const stripeWebhook: StripeWebhook = async (request, response, context) =
   try {
     event = request.body;
 
-    if (event.type === 'checkout.session.completed') {
-      console.log('Checkout session completed');
+    if (event.type === "checkout.session.completed") {
+      console.log("Checkout session completed");
       const session = event.data.object as Stripe.Checkout.Session;
       userStripeId = session.customer as string;
 
-      const { line_items } = await stripe.checkout.sessions.retrieve(session.id, {
-        expand: ['line_items'],
-      });
+      const { line_items } = await stripe.checkout.sessions.retrieve(
+        session.id,
+        {
+          expand: ["line_items"],
+        }
+      );
 
-      console.log('line_items: ', line_items);
+      console.log("line_items: ", line_items);
 
-      if (line_items?.data[0]?.price?.id === process.env.SUBSCRIPTION_PRICE_ID) {
-        console.log('Subscription purchased ');
+      if (
+        line_items?.data[0]?.price?.id === process.env.SUBSCRIPTION_PRICE_ID
+      ) {
+        console.log("Subscription purchased ");
         await context.entities.User.updateMany({
           where: {
             stripeId: userStripeId,
@@ -68,22 +77,21 @@ export const stripeWebhook: StripeWebhook = async (request, response, context) =
        * and here is an example of handling a different type of product
        * make sure to configure it in the Stripe dashboard first!
        */
-
-      // if (line_items?.data[0]?.price?.id === process.env.CREDITS_PRICE_ID) {
-      //   console.log('Credits purchased: ');
-      //   await context.entities.User.updateMany({
-      //     where: {
-      //       stripeId: userStripeId,
-      //     },
-      //     data: {
-      //       credits: {
-      //         increment: 10,
-      //       },
-      //     },
-      //   });
-      // }
-    } else if (event.type === 'invoice.paid') {
-      console.log('>>>> invoice.paid: ', userStripeId);
+      if (line_items?.data[0]?.price?.id === process.env.CREDITS_PRICE_ID) {
+        console.log("Credits purchased: ");
+        await context.entities.User.updateMany({
+          where: {
+            stripeId: userStripeId,
+          },
+          data: {
+            credits: {
+              increment: 10,
+            },
+          },
+        });
+      }
+    } else if (event.type === "invoice.paid") {
+      console.log(">>>> invoice.paid: ", userStripeId);
       const invoice = event.data.object as Stripe.Invoice;
       const periodStart = new Date(invoice.period_start * 1000);
       await context.entities.User.updateMany({
@@ -95,31 +103,31 @@ export const stripeWebhook: StripeWebhook = async (request, response, context) =
           datePaid: periodStart,
         },
       });
-    } else if (event.type === 'customer.subscription.updated') {
+    } else if (event.type === "customer.subscription.updated") {
       const subscription = event.data.object as Stripe.Subscription;
       userStripeId = subscription.customer as string;
-      if (subscription.status === 'active') {
-        console.log('Subscription active ', userStripeId);
+      if (subscription.status === "active") {
+        console.log("Subscription active ", userStripeId);
         await context.entities.User.updateMany({
           where: {
             stripeId: userStripeId,
           },
           data: {
-            subscriptionStatus: 'active',
+            subscriptionStatus: "active",
           },
         });
       }
       // you'll want to make a check on the front end to see if the subscription is past due
       // and then prompt the user to update their payment method
       // this is useful if the user's card expires or is canceled and automatic subscription renewal fails
-      if (subscription.status === 'past_due') {
-        console.log('Subscription past due: ', userStripeId);
+      if (subscription.status === "past_due") {
+        console.log("Subscription past due: ", userStripeId);
         await context.entities.User.updateMany({
           where: {
             stripeId: userStripeId,
           },
           data: {
-            subscriptionStatus: 'past_due',
+            subscriptionStatus: "past_due",
           },
         });
       }
@@ -130,7 +138,7 @@ export const stripeWebhook: StripeWebhook = async (request, response, context) =
        * https://stripe.com/docs/billing/subscriptions/cancel#events
        */
       if (subscription.cancel_at_period_end) {
-        console.log('Subscription canceled at period end');
+        console.log("Subscription canceled at period end");
 
         const customer = await context.entities.User.findFirst({
           where: {
@@ -144,13 +152,16 @@ export const stripeWebhook: StripeWebhook = async (request, response, context) =
         if (customer?.email) {
           await emailSender.send({
             to: customer.email,
-            subject: 'We hate to see you go :(',
-            text: 'We hate to see you go. Here is a sweet offer...',
-            html: 'We hate to see you go. Here is a sweet offer...',
+            subject: "We hate to see you go :(",
+            text: "We hate to see you go. Here is a sweet offer...",
+            html: "We hate to see you go. Here is a sweet offer...",
           });
         }
       }
-    } else if (event.type === 'customer.subscription.deleted' || event.type === 'customer.subscription.canceled') {
+    } else if (
+      event.type === "customer.subscription.deleted" ||
+      event.type === "customer.subscription.canceled"
+    ) {
       const subscription = event.data.object as Stripe.Subscription;
       userStripeId = subscription.customer as string;
 
@@ -158,7 +169,7 @@ export const stripeWebhook: StripeWebhook = async (request, response, context) =
        * Stripe will send then finally send a subscription.deleted event when subscription period ends
        * https://stripe.com/docs/billing/subscriptions/cancel#events
        */
-      console.log('Subscription deleted/ended');
+      console.log("Subscription deleted/ended");
       await context.entities.User.updateMany({
         where: {
           stripeId: userStripeId,

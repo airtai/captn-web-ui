@@ -1,23 +1,25 @@
 import { AiOutlineCheck } from "react-icons/ai";
 import stripePayment from "@wasp/actions/stripePayment";
 import { useState } from "react";
+import NumericStepper from "./components/NumericStepper";
 
 const prices = [
+  // {
+  //   name: "Credits",
+  //   id: "credits",
+  //   href: "",
+  //   price: "$",
+  //   description: "Buy credits to use for your projects.",
+  //   features: ["Use them any time", "No expiration date"],
+  //   disabled: false,
+  //   priceMonthly: "",
+  // },
   {
-    name: "Credits",
-    id: "credits",
-    href: "",
-    price: "$2.95",
-    description: "Buy credits to use for your projects.",
-    features: ["10 credits", "Use them any time", "No expiration date"],
-    disabled: true,
-  },
-  {
-    name: "Monthly Subscription",
-    id: "monthly",
+    name: "Lifetime Subscription",
+    id: "Lifetime",
     href: "#",
-    priceMonthly: "$9.99",
-    description: "Get unlimited usage for your projects.",
+    priceMonthly: "$1",
+    description: "Get access to all premium features.",
     features: [
       "Unlimited usage of all features",
       "Priority support",
@@ -47,11 +49,11 @@ export default function PricingPage() {
   return (
     <div className="mt-10 pb-24 sm:pb-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto grid max-w-md grid-cols-1 gap-8 lg:max-w-4xl lg:grid-cols-2">
+        <div className="mx-auto grid max-w-md grid-cols-1 gap-8">
           {prices.map((price) => (
             <div
               key={price.id}
-              className="flex flex-col justify-between rounded-3xl bg-white p-8 shadow-xl ring-1 ring-gray-900/10 sm:p-10"
+              className="relative flex flex-col justify-between rounded-3xl bg-white p-8 shadow-xl ring-1 ring-gray-900/10 sm:p-10"
             >
               <div>
                 <h3
@@ -64,11 +66,11 @@ export default function PricingPage() {
                   <span className="text-5xl font-bold tracking-tight text-gray-900">
                     {price.priceMonthly || price.price}
                   </span>
-                  {price.priceMonthly && (
+                  {/* {price.priceMonthly && (
                     <span className="text-base font-semibold leading-7 text-gray-600">
                       /month
                     </span>
-                  )}
+                  )} */}
                 </div>
                 <p className="mt-6 text-base leading-7 text-gray-600">
                   {price.description}

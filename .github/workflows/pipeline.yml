@@ -11,6 +11,8 @@ env:
     DATABASE_URL: ${{ secrets.DATABASE_URL }}
     JWT_SECRET: ${{ secrets.JWT_SECRET }}
     ADS_SERVER_URL: ${{ vars.ADS_SERVER_URL }}
+    STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
+    SUBSCRIPTION_PRICE_ID: ${{ secrets.SUBSCRIPTION_PRICE_ID }}
 
 jobs:
     unit_test:
