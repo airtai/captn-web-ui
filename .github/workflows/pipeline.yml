@@ -86,6 +86,7 @@ jobs:
             STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
             SUBSCRIPTION_PRICE_ID: ${{ secrets.SUBSCRIPTION_PRICE_ID }}
             CREDITS_PRICE_ID: ${{ secrets.CREDITS_PRICE_ID }}
+            STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
         steps:
             - uses: actions/checkout@v3
             # This is to fix GIT not liking owner of the checkout dir - https://github.com/actions/runner/issues/2033#issuecomment-1204205989
