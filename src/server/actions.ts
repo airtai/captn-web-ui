@@ -49,7 +49,7 @@ export const stripePayment: StripePayment<void, StripePaymentResult> = async (
           quantity: 1,
         },
       ],
-      mode: "payment",
+      mode: "subscription",
       success_url: `${DOMAIN}/checkout?success=true`,
       cancel_url: `${DOMAIN}/checkout?canceled=true`,
       automatic_tax: { enabled: true },

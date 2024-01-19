@@ -1,31 +1,41 @@
 import { AiOutlineCheck } from "react-icons/ai";
 import stripePayment from "@wasp/actions/stripePayment";
 import { useState } from "react";
-import NumericStepper from "./components/NumericStepper";
 
 const prices = [
   // {
   //   name: "Credits",
   //   id: "credits",
   //   href: "",
-  //   price: "$1",
+  //   price: "$2.95",
   //   description: "Buy credits to use for your projects.",
-  //   features: ["Use them any time", "No expiration date"],
-  //   disabled: false,
-  //   priceMonthly: "",
+  //   features: ["10 credits", "Use them any time", "No expiration date"],
+  //   disabled: true,
   // },
   {
-    name: "Credits",
-    id: "credits",
+    name: "Premium Monthly Subscription",
+    id: "monthly",
     href: "#",
     priceMonthly: "$1",
-    description: "Buy credits to use for your projects.",
+    description: "Get unlimited usage for your projects.",
     features: [
-      "Buy 10 credits for $1",
-      "Use them any time",
-      "No expiration date",
+      "Unlimited usage of all features",
+      "Priority support",
+      "Cancel any time",
     ],
   },
+  // {
+  //   name: "Premium Yearly Subscription",
+  //   id: "yearly",
+  //   href: "#",
+  //   priceYearly: "$10.00",
+  //   description: "Get unlimited usage for your projects.",
+  //   features: [
+  //     "Unlimited usage of all features",
+  //     "Priority support",
+  //     "Cancel any time",
+  //   ],
+  // },
 ];
 
 export default function PricingPage() {
@@ -58,18 +68,23 @@ export default function PricingPage() {
               <div>
                 <h3
                   id={price.id}
-                  className="text-base font-semibold leading-7 text-indigo-600"
+                  className="text-base font-semibold leading-7 text-captn-light-blue"
                 >
                   {price.name}
                 </h3>
                 <div className="mt-4 flex items-baseline gap-x-2">
                   <span className="text-5xl font-bold tracking-tight text-gray-900">
-                    {/* {price.priceMonthly || price.price} */}
+                    {/* {price.priceMonthly || price.priceYearly} */}
                     {price.priceMonthly}
                   </span>
-                  {/* {price.priceMonthly && (
+                  {price.priceMonthly && (
                     <span className="text-base font-semibold leading-7 text-gray-600">
                       /month
+                    </span>
+                  )}
+                  {/* {price.priceYearly && (
+                    <span className="text-base font-semibold leading-7 text-gray-600">
+                      /year
                     </span>
                   )} */}
                 </div>
@@ -95,11 +110,7 @@ export default function PricingPage() {
                 onClick={clickHandler}
                 aria-describedby={price.id}
                 // disabled={price.disabled}
-                // className={`${
-                //   price.disabled &&
-                //   "disabled:opacity-25 disabled:cursor-not-allowed"
-                // } mt-8 block rounded-md bg-yellow-400 px-3.5 py-2 text-center text-sm font-semibold leading-6 text-black shadow-sm hover:bg-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600`}
-                className={`mt-8 block rounded-md bg-yellow-400 px-3.5 py-2 text-center text-sm font-semibold leading-6 text-black shadow-sm hover:bg-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600`}
+                className="text-white mt-8 block rounded-md bg-captn-cta-green px-3.5 py-2 text-center text-sm font-semibold leading-6 text-black shadow-sm hover:bg-captn-cta-green-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
               >
                 {isLoading ? "Loading..." : "Buy Now"}
               </button>
