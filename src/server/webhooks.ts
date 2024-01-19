@@ -145,18 +145,30 @@ export const stripeWebhook: StripeWebhook = async (
             stripeId: userStripeId,
           },
           select: {
+            id: true,
             email: true,
           },
         });
 
-        if (customer?.email) {
-          await emailSender.send({
-            to: customer.email,
-            subject: "We hate to see you go :(",
-            text: "We hate to see you go. Here is a sweet offer...",
-            html: "We hate to see you go. Here is a sweet offer...",
+        if (customer) {
+          await context.entities.User.update({
+            where: {
+              id: customer.id,
+            },
+            data: {
+              subscriptionStatus: "canceled",
+            },
           });
         }
+
+        // if (customer?.email) {
+        //   await emailSender.send({
+        //     to: customer.email,
+        //     subject: "We hate to see you go :(",
+        //     text: "We hate to see you go. Here is a sweet offer...",
+        //     html: "We hate to see you go. Here is a sweet offer...",
+        //   });
+        // }
       }
     } else if (
       event.type === "customer.subscription.deleted" ||

@@ -7,7 +7,8 @@ import { useState, Dispatch, SetStateAction } from "react";
 import { Link } from "@wasp/router";
 
 // get your own link from your stripe dashboard: https://dashboard.stripe.com/settings/billing/portal
-const CUSTOMER_PORTAL_LINK = "";
+// @ts-ignore
+const CUSTOMER_PORTAL_LINK = import.meta.env.REACT_APP_CUSTOMER_PORTAL_LINK;
 
 export default function Example({ user }: { user: User }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -33,23 +34,16 @@ export default function Example({ user }: { user: User }) {
               </dd>
             </div>
             <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
-              <dt className="text-sm font-medium text-gray-500">
-                Credits remaining
-              </dt>
-              <>
-                <dd className="mt-1 text-sm text-gray-900 sm:col-span-1 sm:mt-0">
-                  {user.credits}
-                </dd>
-                <BuyMoreButton
-                  isLoading={isLoading}
-                  setIsLoading={setIsLoading}
-                />
-              </>
-              {/* <dt className="text-sm font-medium text-gray-500">Your Plan</dt>
+              <dt className="text-sm font-medium text-gray-500">Your Plan</dt>
               {user.hasPaid ? (
                 <>
                   <dd className="mt-1 text-sm text-gray-900 sm:col-span-1 sm:mt-0">
-                    Premium Subscription
+                    Premium Monthly Subscription
+                    <span className="text-xs leading-7 text-gray-600">
+                      {user.subscriptionStatus === "canceled"
+                        ? " (Cancelled, will be switched to the Basic plan at the end of the billing period.)"
+                        : ""}
+                    </span>
                   </dd>
                   <CustomerPortalButton
                     isLoading={isLoading}
@@ -59,7 +53,8 @@ export default function Example({ user }: { user: User }) {
               ) : (
                 <>
                   <dd className="mt-1 text-sm text-gray-900 sm:col-span-1 sm:mt-0">
-                    Credits remaining: {user.credits}
+                    {/* Credits remaining: {user.credits} */}
+                    Basic
                   </dd>
                   <BuyMoreButton
                     isLoading={isLoading}
@@ -67,46 +62,21 @@ export default function Example({ user }: { user: User }) {
                   />
                 </>
               )}
-               */}
-              {/* <dt className="text-sm font-medium text-gray-500">Your Plan</dt>
-              {user.hasPaid ? (
-                <>
-                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-1 sm:mt-0">
-                    Premium Subscription
-                  </dd>
-                  <CustomerPortalButton
-                    isLoading={isLoading}
-                    setIsLoading={setIsLoading}
-                  />
-                </>
-              ) : (
-                <>
-                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-1 sm:mt-0">
-                    No Active Subscription
-                  </dd>
-                  <BuyMoreButton
-                    isLoading={isLoading}
-                    setIsLoading={setIsLoading}
-                  />
-                </>
-              )} */}
             </div>
-            <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+            {/* <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">About</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                 I'm a cool customer.
               </dd>
-            </div>
-            {/* <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
-              <dt className="text-sm font-medium text-gray-500">
-                Most Recent User RelatedObject
-              </dt>
-              <dd className='mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0'>
+            </div> */}
+            {/* <div className='py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6'> */}
+            {/* <dt className='text-sm font-medium text-gray-500'>Most Recent User RelatedObject</dt> */}
+            {/* <dd className='mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0'>
                 {!!relatedObjects && relatedObjects.length > 0
                   ? relatedObjects[relatedObjects.length - 1].content
                   : "You don't have any at this time."}
-              </dd>
-            </div> */}
+              </dd> */}
+            {/* </div> */}
           </dl>
         </div>
       </div>
@@ -146,7 +116,7 @@ function BuyMoreButton({
   return (
     <div className="ml-4 flex-shrink-0 sm:col-span-1 sm:mt-0">
       <p className="font-medium text-sm text-indigo-600 hover:text-indigo-500">
-        {!isLoading ? <Link to="/pricing">Buy More</Link> : "Loading..."}
+        {!isLoading ? <Link to="/pricing">Upgrade</Link> : "Loading..."}
       </p>
       {/* <button
         onClick={handleClick}
@@ -154,7 +124,7 @@ function BuyMoreButton({
           isLoading && "animate-pulse"
         }`}
       >
-        {!isLoading ? <Link to="/pricing">Upgrade Plan</Link> : "Loading..."}
+        {!isLoading ? "Buy More/Upgrade" : "Loading..."}
       </button> */}
     </div>
   );
