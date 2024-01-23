@@ -91,9 +91,10 @@ export const stripeWebhook: StripeWebhook = async (
         });
       }
     } else if (event.type === "invoice.paid") {
-      console.log(">>>> invoice.paid: ", userStripeId);
       const invoice = event.data.object as Stripe.Invoice;
       const periodStart = new Date(invoice.period_start * 1000);
+      userStripeId = invoice.customer as string;
+      console.log(">>>> invoice.paid: ", userStripeId);
       await context.entities.User.updateMany({
         where: {
           stripeId: userStripeId,
