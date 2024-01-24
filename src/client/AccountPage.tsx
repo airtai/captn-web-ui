@@ -37,14 +37,22 @@ export default function Example({ user }: { user: User }) {
               <dt className="text-sm font-medium text-gray-500">Your Plan</dt>
               {user.hasPaid ? (
                 <>
-                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-1 sm:mt-0">
-                    Premium Monthly Subscription
-                    <span className="text-xs leading-7 text-gray-600">
-                      {user.subscriptionStatus === "canceled"
-                        ? " (Cancelled, will be switched to the Basic plan at the end of the billing period.)"
-                        : ""}
-                    </span>
-                  </dd>
+                  {user.subscriptionStatus !== "past_due" ? (
+                    <dd className="mt-1 text-sm text-gray-900 sm:col-span-1 sm:mt-0">
+                      Premium Monthly Subscription
+                      <span className="text-xs leading-7 text-gray-600">
+                        {user.subscriptionStatus === "canceled"
+                          ? " (Cancelled, will be switched to the Basic plan at the end of the billing period.)"
+                          : ""}
+                      </span>
+                    </dd>
+                  ) : (
+                    <dd className="mt-1 text-sm text-gray-900 sm:col-span-1 sm:mt-0">
+                      Your Account is Past Due! Please Update your Payment
+                      Information
+                    </dd>
+                  )}
+
                   <CustomerPortalButton
                     isLoading={isLoading}
                     setIsLoading={setIsLoading}
