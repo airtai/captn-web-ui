@@ -68,6 +68,7 @@ export const stripeWebhook: StripeWebhook = async (
           },
           data: {
             hasPaid: true,
+            subscriptionStatus: "active",
             datePaid: new Date(),
           },
         });
@@ -101,6 +102,7 @@ export const stripeWebhook: StripeWebhook = async (
         },
         data: {
           hasPaid: true,
+          subscriptionStatus: "active",
           datePaid: periodStart,
         },
       });
