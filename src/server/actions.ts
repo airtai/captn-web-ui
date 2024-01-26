@@ -61,7 +61,7 @@ export const stripePayment: StripePayment<void, StripePaymentResult> = async (
       subscription_data: {
         trial_settings: {
           end_behavior: {
-            missing_payment_method: "cancel",
+            missing_payment_method: "create_invoice",
           },
         },
         trial_period_days: 30,
