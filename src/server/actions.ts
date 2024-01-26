@@ -52,10 +52,10 @@ export const stripePayment: StripePayment<void, StripePaymentResult> = async (
       mode: "subscription",
       success_url: `${DOMAIN}/checkout?success=true`,
       cancel_url: `${DOMAIN}/checkout?canceled=true`,
-      automatic_tax: { enabled: true },
-      customer_update: {
-        address: "auto",
-      },
+      // automatic_tax: { enabled: true },
+      // customer_update: {
+      //   address: "auto",
+      // },
       customer: customer.id,
       // allow_promotion_codes: true,
       subscription_data: {
