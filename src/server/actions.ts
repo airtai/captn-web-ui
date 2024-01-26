@@ -57,6 +57,16 @@ export const stripePayment: StripePayment<void, StripePaymentResult> = async (
         address: "auto",
       },
       customer: customer.id,
+      // allow_promotion_codes: true,
+      subscription_data: {
+        trial_settings: {
+          end_behavior: {
+            missing_payment_method: "cancel",
+          },
+        },
+        trial_period_days: 30,
+      },
+      payment_method_collection: "if_required",
     });
 
   await context.entities.User.update({
