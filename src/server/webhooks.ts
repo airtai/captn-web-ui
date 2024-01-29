@@ -1,4 +1,4 @@
-import { StripeWebhook } from "@wasp/apis/types";
+import { StripeWebhook, CaptnWebhook } from "@wasp/apis/types";
 import { emailSender } from "@wasp/email/index.js";
 
 import Stripe from "stripe";
@@ -214,5 +214,47 @@ export const stripeWebhook: StripeWebhook = async (
     response.json({ received: true });
   } catch (err: any) {
     response.status(400).send(`Webhook Error: ${err?.message}`);
+  }
+};
+
+export const captnWebhook: CaptnWebhook = async (
+  request,
+  response,
+  context
+) => {
+  console.log("captnWebhook");
+  const detectedIp = requestIp.getClientIp(request) as string;
+  const userId = Number(request.body.userId);
+  const customer = await context.entities.User.findFirst({
+    where: {
+      id: userId,
+    },
+    select: {
+      id: true,
+      email: true,
+    },
+  });
+  if (customer) {
+    const chat = await context.entities.Chat.create({
+      data: {
+        user: { connect: { id: customer.id } },
+        team_id: Number(request.body.team_id),
+        team_name: request.body.team_name,
+      },
+    });
+    const conversation = await context.entities.Conversation.create({
+      data: {
+        message: request.body.message,
+        role: "assistant",
+        chat: { connect: { id: chat.id } },
+        user: { connect: { id: customer.id } },
+      },
+    });
+    response.json({
+      chatID: chat.id,
+    });
+  } else {
+    console.log("Invalid user id: ", userId);
+    response.status(400).send(`Webhook Error: Invalid user id ${userId}`);
   }
 };
