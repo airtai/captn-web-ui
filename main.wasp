@@ -186,6 +186,7 @@ page EmailVerificationPage {
 
 route PricingRoute { path: "/pricing", to: PricingPage }
 page PricingPage {
+  authRequired: true,
   component: import Pricing from "@client/PricingPage"
 }
 

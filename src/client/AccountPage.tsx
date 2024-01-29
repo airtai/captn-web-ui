@@ -123,17 +123,17 @@ function BuyMoreButton({
 
   return (
     <div className="ml-4 flex-shrink-0 sm:col-span-1 sm:mt-0">
-      <p className="font-medium text-sm text-indigo-600 hover:text-indigo-500">
+      {/* <p className="font-medium text-sm text-indigo-600 hover:text-indigo-500">
         {!isLoading ? <Link to="/pricing">Upgrade</Link> : "Loading..."}
-      </p>
-      {/* <button
+      </p> */}
+      <button
         onClick={handleClick}
         className={`font-medium text-sm text-indigo-600 hover:text-indigo-500 ${
           isLoading && "animate-pulse"
         }`}
       >
-        {!isLoading ? "Buy More/Upgrade" : "Loading..."}
-      </button> */}
+        {!isLoading ? "Free Trial" : "Loading..."}
+      </button>
     </div>
   );
 }

@@ -1,7 +1,10 @@
+import { useState } from "react";
+
 import logo from "./static/captn-logo.png";
 import { Disclosure } from "@headlessui/react";
 import { AiOutlineBars, AiOutlineClose, AiOutlineUser } from "react-icons/ai";
 import useAuth from "@wasp/auth/useAuth";
+import stripePayment from "@wasp/actions/stripePayment";
 
 const active =
   "inline-flex items-center border-b-2 border-indigo-300 px-1 pt-1 text-sm font-medium text-gray-900";
@@ -11,6 +14,23 @@ const current = window.location.pathname;
 
 export default function NavBar() {
   const { data: user } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const clickHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setIsLoading(true);
+    try {
+      const response = await stripePayment();
+      if (response?.sessionUrl) {
+        window.open(response.sessionUrl, "_self");
+      }
+    } catch (e) {
+      alert("Something went wrong. Please try again.");
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Disclosure
@@ -56,6 +76,18 @@ export default function NavBar() {
                   <AiOutlineUser className="h-6 w-6 mr-2" />
                   Account
                 </a>
+                {!!user && !user.hasPaid && (
+                  <div>
+                    <button
+                      onClick={clickHandler}
+                      className={`${
+                        isLoading && "animate-pulse"
+                      } text-white mt-3 block rounded-md bg-captn-cta-green px-3.5 py-2 text-center text-sm  leading-6 text-black shadow-sm hover:bg-captn-cta-green-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2`}
+                    >
+                      {isLoading ? "Loading..." : "Free Trial"}
+                    </button>
+                  </div>
+                )}
               </div>
               <div className="-mr-2 flex items-center sm:hidden">
                 {/* Mobile menu */}

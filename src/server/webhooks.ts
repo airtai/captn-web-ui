@@ -134,15 +134,14 @@ export const stripeWebhook: StripeWebhook = async (
           },
         });
       }
-      /**
-       * Stripe will send a subscription.updated event when a subscription is canceled
-       * but the subscription is still active until the end of the period.
-       * So we check if cancel_at_period_end is true and send an email to the customer.
-       * https://stripe.com/docs/billing/subscriptions/cancel#events
-       */
-      if (subscription.cancel_at_period_end) {
-        console.log("Subscription canceled at period end");
 
+      if (subscription.status === "trialing") {
+        /**
+         * Stripe will send a subscription.updated event when a subscription is canceled
+         * but the subscription is still active until the end of the period.
+         * So we check if cancel_at_period_end is true and send an email to the customer.
+         * https://stripe.com/docs/billing/subscriptions/cancel#events
+         */
         const customer = await context.entities.User.findFirst({
           where: {
             stripeId: userStripeId,
@@ -152,26 +151,41 @@ export const stripeWebhook: StripeWebhook = async (
             email: true,
           },
         });
+        if (subscription.cancel_at_period_end) {
+          console.log("Subscription canceled at period end");
+          if (customer) {
+            await context.entities.User.update({
+              where: {
+                id: customer.id,
+              },
+              data: {
+                subscriptionStatus: "canceled",
+              },
+            });
+          }
 
-        if (customer) {
-          await context.entities.User.update({
-            where: {
-              id: customer.id,
-            },
-            data: {
-              subscriptionStatus: "canceled",
-            },
-          });
+          // if (customer?.email) {
+          //   await emailSender.send({
+          //     to: customer.email,
+          //     subject: "We hate to see you go :(",
+          //     text: "We hate to see you go. Here is a sweet offer...",
+          //     html: "We hate to see you go. Here is a sweet offer...",
+          //   });
+          // }
         }
-
-        // if (customer?.email) {
-        //   await emailSender.send({
-        //     to: customer.email,
-        //     subject: "We hate to see you go :(",
-        //     text: "We hate to see you go. Here is a sweet offer...",
-        //     html: "We hate to see you go. Here is a sweet offer...",
-        //   });
-        // }
+        if (!subscription.cancel_at_period_end) {
+          console.log("Subscription resumed at period end");
+          if (customer) {
+            await context.entities.User.update({
+              where: {
+                id: customer.id,
+              },
+              data: {
+                subscriptionStatus: "active",
+              },
+            });
+          }
+        }
       }
     } else if (
       event.type === "customer.subscription.deleted" ||

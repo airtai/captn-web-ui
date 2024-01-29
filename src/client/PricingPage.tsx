@@ -19,8 +19,8 @@ const prices = [
     priceMonthly: "$1",
     description: "Get unlimited usage for your projects.",
     features: [
+      "Free trial for one month",
       "Unlimited usage of all features",
-      "Priority support",
       "Cancel any time",
     ],
   },
