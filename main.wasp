@@ -287,10 +287,10 @@ api stripeWebhook {
   httpRoute: (POST, "/stripe-webhook")
 }
 
-api captnWebhook {
-  fn: import { captnWebhook } from "@server/webhooks.js",
+api captnDailyAnalysisWebhook {
+  fn: import { captnDailyAnalysisWebhook } from "@server/webhooks.js",
   entities: [User, Chat, Conversation],
-  httpRoute: (POST, "/captn-webhook")
+  httpRoute: (POST, "/captn-daily-analysis-webhook")
 }
 
 // /* 🕵️‍♂️ These are the Wasp Cron Jobs. Use them to set up recurring tasks and/or queues:

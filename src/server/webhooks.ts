@@ -1,4 +1,4 @@
-import { StripeWebhook, CaptnWebhook } from "@wasp/apis/types";
+import { StripeWebhook, CaptnDailyAnalysisWebhook } from "@wasp/apis/types";
 import { emailSender } from "@wasp/email/index.js";
 
 import Stripe from "stripe";
@@ -217,12 +217,12 @@ export const stripeWebhook: StripeWebhook = async (
   }
 };
 
-export const captnWebhook: CaptnWebhook = async (
+export const captnDailyAnalysisWebhook: CaptnDailyAnalysisWebhook = async (
   request,
   response,
   context
 ) => {
-  console.log("captnWebhook");
+  console.log("captnDailyAnalysisWebhook");
   const detectedIp = requestIp.getClientIp(request) as string;
   const userId = Number(request.body.userId);
   const customer = await context.entities.User.findFirst({
