@@ -21,11 +21,13 @@ export default function ConversationWrapper({
   currentChatDetails,
   refetchChat,
   googleRedirectLoginMsg,
+  userSelectedActionMessage,
 }: {
   chatId: number;
   currentChatDetails: any;
   refetchChat: any;
   googleRedirectLoginMsg: string;
+  userSelectedActionMessage: string;
 }) {
   const { socket } = useSocket();
   const [isLoading, setIsLoading] = useState(false);
@@ -169,6 +171,7 @@ export default function ConversationWrapper({
               isSubmitButtonDisabled={isSubmitButtonDisabled}
               chatId={chatId}
               googleRedirectLoginMsg={googleRedirectLoginMsg}
+              userSelectedActionMessage={userSelectedActionMessage}
               addMessagesToConversation={addMessagesToConversation}
             />
           </div>

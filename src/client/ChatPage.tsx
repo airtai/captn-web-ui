@@ -24,7 +24,8 @@ function DefaultMessage() {
 export default function ChatPage() {
   const { data: chats, isLoading: isLoadingChats } = useQuery(getChats);
   const { id: chatId }: { id: string } = useParams();
-  const googleRedirectLoginMsg: any = getQueryParam("msg");
+  let googleRedirectLoginMsg: any = getQueryParam("msg");
+  const userSelectedAction: any = getQueryParam("selected_user_action");
   const {
     data: currentChatDetails,
     refetch: refetchChat,
@@ -33,6 +34,23 @@ export default function ChatPage() {
     { chatId: Number(chatId) },
     { enabled: !!chatId }
   );
+
+  let userSelectedActionMessage: string | null = null;
+
+  if (userSelectedAction) {
+    if (!currentChatDetails?.userRespondedWithNextAction) {
+      if (currentChatDetails?.proposedUserAction) {
+        userSelectedActionMessage =
+          currentChatDetails.proposedUserAction[Number(userSelectedAction) - 1];
+      }
+    }
+  }
+
+  if (googleRedirectLoginMsg) {
+    if (currentChatDetails?.userRespondedWithNextAction) {
+      googleRedirectLoginMsg = null;
+    }
+  }
 
   return (
     <div className="relative z-0 flex h-full w-full overflow-hidden h-screen">
@@ -64,6 +82,8 @@ export default function ChatPage() {
             currentChatDetails={currentChatDetails}
             refetchChat={refetchChat}
             googleRedirectLoginMsg={googleRedirectLoginMsg}
+            // @ts-ignore
+            userSelectedActionMessage={userSelectedActionMessage}
           />
         ) : (
           <DefaultMessage />

@@ -152,6 +152,7 @@ type UpdateExistingChatPayload = {
   team_status?: boolean;
   showLoader?: boolean;
   smartSuggestions?: Record<string, any>;
+  userRespondedWithNextAction?: boolean;
 };
 
 export const updateExistingChat: UpdateExistingChat<
@@ -161,6 +162,17 @@ export const updateExistingChat: UpdateExistingChat<
   if (!context.user) {
     throw new HttpError(401);
   }
+  if (args.userRespondedWithNextAction === true) {
+    await context.entities.Chat.update({
+      where: {
+        id: args.chat_id,
+      },
+      data: {
+        userRespondedWithNextAction: args.userRespondedWithNextAction,
+      },
+    });
+  }
+
   if (args.showLoader === true || args.showLoader === false) {
     await context.entities.Chat.update({
       where: {
