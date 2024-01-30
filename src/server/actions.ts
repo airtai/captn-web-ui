@@ -191,6 +191,9 @@ type AgentPayload = {
   chat_id: number;
   message: any;
   team_id: number | null | undefined;
+  chatType: string | null | undefined;
+  agentChatHistory: string | null | undefined;
+  proposedUserAction: string[] | null | undefined;
 };
 
 export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
@@ -198,10 +201,16 @@ export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
     chat_id,
     message,
     team_id,
+    chatType,
+    agentChatHistory,
+    proposedUserAction,
   }: {
     chat_id: number;
     message: any;
     team_id: number | null | undefined;
+    chatType: string | null | undefined;
+    agentChatHistory: string | null | undefined;
+    proposedUserAction: string[] | null | undefined;
   },
   context: any
 ) => {
@@ -214,6 +223,9 @@ export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
     message: message,
     user_id: context.user.id,
     team_id: team_id,
+    chat_type: chatType,
+    agent_chat_history: agentChatHistory,
+    proposed_user_action: proposedUserAction,
   };
   console.log("===========");
   console.log("Payload to Python server");

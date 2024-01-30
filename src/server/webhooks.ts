@@ -217,6 +217,22 @@ export const stripeWebhook: StripeWebhook = async (
   }
 };
 
+async function createConversation(
+  message: string,
+  context: any,
+  chatId: number,
+  customer_id: number
+) {
+  await context.entities.Conversation.create({
+    data: {
+      message: message,
+      role: "assistant",
+      chat: { connect: { id: chatId } },
+      user: { connect: { id: customer_id } },
+    },
+  });
+}
+
 export const captnDailyAnalysisWebhook: CaptnDailyAnalysisWebhook = async (
   request,
   response,
@@ -238,18 +254,20 @@ export const captnDailyAnalysisWebhook: CaptnDailyAnalysisWebhook = async (
     const chat = await context.entities.Chat.create({
       data: {
         user: { connect: { id: customer.id } },
-        team_id: Number(request.body.team_id),
-        team_name: request.body.team_name,
+        chatType: "daily_analysis",
+        agentChatHistory: request.body.messages,
+        proposedUserAction: request.body.proposed_user_action,
+        emailContent: request.body.email_content,
       },
     });
-    const conversation = await context.entities.Conversation.create({
-      data: {
-        message: request.body.message,
-        role: "assistant",
-        chat: { connect: { id: chat.id } },
-        user: { connect: { id: customer.id } },
-      },
-    });
+
+    await createConversation(
+      request.body.initial_message_in_chat,
+      context,
+      chat.id,
+      customer.id
+    );
+
     response.json({
       chatID: chat.id,
     });

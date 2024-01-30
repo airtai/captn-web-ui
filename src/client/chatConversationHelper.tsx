@@ -21,12 +21,18 @@ export async function addUserMessageToConversation(
 export async function addAgentMessageToConversation(
   chat_id: number,
   message: any,
-  team_id: number | null | undefined
+  team_id: number | null | undefined,
+  chatType: string | null | undefined,
+  agentChatHistory: string | null | undefined,
+  proposedUserAction: string[] | null | undefined
 ) {
   const response: any = await getAgentResponse({
     chat_id: chat_id,
     message: message,
     team_id: team_id,
+    chatType: chatType,
+    agentChatHistory: agentChatHistory,
+    proposedUserAction: proposedUserAction,
   });
 
   // ...(response.team_name && { team_name: response.team_name }),

@@ -124,6 +124,10 @@ entity Chat {=psl
     team_id                   Int?
     team_name                 String?
     team_status               String?
+    chatType                 String?
+    proposedUserAction       String[]          @default([])
+    emailContent             String?
+    agentChatHistory         String?
     showLoader  Boolean         @default(false)
     smartSuggestions  Json         @default("{ \"suggestions\": [\"\"], \"type\": \"\"}")
     user        User?    @relation(fields: [userId], references: [id])

@@ -104,7 +104,10 @@ export default function ConversationWrapper({
       const response: any = await addAgentMessageToConversation(
         Number(chatId),
         messages,
-        teamId
+        teamId,
+        currentChatDetails.chatType,
+        currentChatDetails.agentChatHistory,
+        currentChatDetails.proposedUserAction
       );
       if (response.team_status === "inprogress") {
         // setIsSubmitButtonDisabled(true);
