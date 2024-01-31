@@ -1,8 +1,10 @@
 import { useParams } from "react-router";
 import { useQuery } from "@wasp/queries";
+import { useHistory } from "react-router-dom";
 
 import getChats from "@wasp/queries/getChats";
 import getChat from "@wasp/queries/getChat";
+import type { User } from "@wasp/entities";
 
 import CreateNewChatBtn from "./components/CreateNewChat";
 import ChatsList from "./components/ChatList";
@@ -21,7 +23,8 @@ function DefaultMessage() {
   );
 }
 
-export default function ChatPage() {
+export default function ChatPage({ user }: { user: User }) {
+  const history = useHistory();
   const { data: chats, isLoading: isLoadingChats } = useQuery(getChats);
   const { id: chatId }: { id: string } = useParams();
   let googleRedirectLoginMsg: any = getQueryParam("msg");
@@ -49,6 +52,12 @@ export default function ChatPage() {
   if (googleRedirectLoginMsg) {
     if (currentChatDetails?.userRespondedWithNextAction) {
       googleRedirectLoginMsg = null;
+    }
+  }
+
+  if (user) {
+    if (!user.hasPaid) {
+      history.push("/pricing");
     }
   }
 

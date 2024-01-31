@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useRef, useEffect } from "react";
 import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import { useQuery } from "@wasp/queries";
 import getConversations from "@wasp/queries/getConversations";
@@ -31,6 +32,7 @@ export default function ConversationWrapper({
 }) {
   const { socket } = useSocket();
   const [isLoading, setIsLoading] = useState(false);
+  const history = useHistory();
   let previousConversationsLength = useRef(0);
   let previousChatDetailsRef = useRef<{ team_status: string } | null>(null);
   const conversationWindowRef = useRef(null);
@@ -122,7 +124,11 @@ export default function ConversationWrapper({
       // setIsLoading(false);
       await updateExistingChat({ chat_id: Number(chatId), showLoader: false });
       console.log("Error: " + err.message);
-      window.alert("Error: Something went wrong. Please try again later.");
+      if (err.message === "No Subscription Found") {
+        history.push("/pricing");
+      } else {
+        window.alert("Error: Something went wrong. Please try again later.");
+      }
     }
   }
 

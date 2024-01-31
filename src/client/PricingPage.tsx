@@ -13,14 +13,14 @@ const prices = [
   //   disabled: true,
   // },
   {
-    name: "Premium Monthly Subscription",
+    name: "Monthly Subscription",
     id: "monthly",
     href: "#",
     priceMonthly: "$1",
-    description: "Get unlimited usage for your projects.",
+    description: "Buy a monthly subscription to use Captn services.",
     features: [
-      "Free trial for one month",
-      "Unlimited usage of all features",
+      "30-day free trial",
+      "No credit card required for trial subscription",
       "Cancel any time",
     ],
   },
@@ -57,8 +57,23 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="mt-10 pb-24 sm:pb-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl pt-10 pb-24 sm:pb-32 lg:grid lg:grid-cols-2 lg:gap-x-8 lg:py-32 lg:px-8">
+      <div className="px-6 lg:px-0 lg:pt-4">
+        <div className="mx-auto max-w-2xl">
+          <div className="max-w-lg">
+            <h1 className=" text-4xl font-bold tracking-tight text-captn-dark-blue sm:text-6xl">
+              Capt'n AI
+            </h1>
+            <p className="mt-4 text-xl leading-8 text-captn-dark-blue">
+              To set sail and fully explore Captn's offerings, you'll need an
+              active subscription as your compass. Navigate the complete range
+              of features with our smooth subscription, charting a course with a
+              30-day free trial and no credit card required.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div>
         <div className="mx-auto grid max-w-md grid-cols-1 gap-8">
           {prices.map((price) => (
             <div
@@ -119,5 +134,10 @@ export default function PricingPage() {
         </div>
       </div>
     </div>
+    // <div className="mt-10 pb-24 sm:pb-32">
+    //   <div className="mx-auto max-w-7xl px-6 lg:px-8">
+
+    //   </div>
+    // </div>
   );
 }
