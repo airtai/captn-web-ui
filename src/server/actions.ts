@@ -135,6 +135,9 @@ export const addNewConversationToChat: AddNewConversationToChat<
   if (!context.user) {
     throw new HttpError(401);
   }
+  if (!context.user.hasPaid) {
+    throw new HttpError(500, "No Subscription Found");
+  }
 
   await context.entities.Conversation.create({
     data: {

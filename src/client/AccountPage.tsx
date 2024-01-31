@@ -34,12 +34,14 @@ export default function Example({ user }: { user: User }) {
               </dd>
             </div>
             <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
-              <dt className="text-sm font-medium text-gray-500">Your Plan</dt>
+              <dt className="text-sm font-medium text-gray-500">
+                Subscription status
+              </dt>
               {user.hasPaid ? (
                 <>
                   {user.subscriptionStatus !== "past_due" ? (
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-1 sm:mt-0">
-                      Premium Monthly Subscription
+                      Monthly Subscription
                       <span className="text-xs leading-7 text-gray-600">
                         {user.subscriptionStatus === "canceled"
                           ? " (Cancelled, will be switched to the Basic plan at the end of the billing period.)"
@@ -62,7 +64,7 @@ export default function Example({ user }: { user: User }) {
                 <>
                   <dd className="mt-1 text-sm text-gray-900 sm:col-span-1 sm:mt-0">
                     {/* Credits remaining: {user.credits} */}
-                    Basic
+                    N/A
                   </dd>
                   <BuyMoreButton
                     isLoading={isLoading}
@@ -132,7 +134,7 @@ function BuyMoreButton({
           isLoading && "animate-pulse"
         }`}
       >
-        {!isLoading ? "Free Trial" : "Loading..."}
+        {!isLoading ? "Upgrade to free trial" : "Loading..."}
       </button>
     </div>
   );
