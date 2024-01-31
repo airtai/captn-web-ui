@@ -1,7 +1,9 @@
+import { useParams } from "react-router";
 import { Link } from "@wasp/router";
 import type { Chat } from "@wasp/entities";
 
 export default function ChatsList(chats: Chat[]) {
+  const { id: chatId }: { id: string } = useParams();
   return (
     <div data-testid="chat-list">
       {
@@ -10,7 +12,13 @@ export default function ChatsList(chats: Chat[]) {
         chats.chats.map((chat, idx) => (
           <Link key={chat.id} to="/chat/:id?" params={{ id: chat.id }}>
             <li key={idx}>
-              <div className="flex items-center p-2 text-white hover:bg-captn-light-blue hover:text-captn-dark-blue group rounded-lg ">
+              <div
+                className={`flex items-center p-2 group rounded-lg ${
+                  chat.id === Number(chatId)
+                    ? "bg-captn-light-cream text-captn-dark-blue hover:bg-captn-light-blue hover:text-captn-dark-blue"
+                    : "text-white hover:bg-captn-light-blue hover:text-captn-dark-blue"
+                }`}
+              >
                 <svg
                   stroke="currentColor"
                   fill="none"

@@ -1,16 +1,20 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 
+import updateExistingChat from "@wasp/actions/updateExistingChat";
+
 export default function ChatFrom({
   handleFormSubmit,
   isSubmitButtonDisabled,
   chatId,
   googleRedirectLoginMsg,
+  userSelectedActionMessage,
   addMessagesToConversation,
 }: {
   handleFormSubmit: any;
   isSubmitButtonDisabled: boolean;
   chatId: number;
   googleRedirectLoginMsg: string;
+  userSelectedActionMessage: string;
   addMessagesToConversation: any;
 }) {
   const [formInputValue, setFormInputValue] = useState("");
@@ -18,9 +22,22 @@ export default function ChatFrom({
     async (node: any) => {
       if (node !== null && googleRedirectLoginMsg) {
         await addMessagesToConversation(googleRedirectLoginMsg);
+        const payload = {
+          chat_id: chatId,
+          userRespondedWithNextAction: true,
+        };
+        await updateExistingChat(payload);
+      }
+      if (node !== null && userSelectedActionMessage) {
+        await addMessagesToConversation(userSelectedActionMessage);
+        const payload = {
+          chat_id: chatId,
+          userRespondedWithNextAction: true,
+        };
+        await updateExistingChat(payload);
       }
     },
-    [googleRedirectLoginMsg]
+    [googleRedirectLoginMsg, userSelectedActionMessage]
   );
 
   useEffect(() => {

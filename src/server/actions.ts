@@ -99,13 +99,22 @@ export const createChat: CreateChat<void, Conversation> = async (
   const chat = await context.entities.Chat.create({
     data: {
       user: { connect: { id: context.user.id } },
+      smartSuggestions: {
+        type: "manyOf",
+        suggestions: [
+          "Boost sales",
+          "Increase brand awareness",
+          "Drive website traffic",
+          "Promote a product or service",
+        ],
+      },
     },
   });
 
   return await context.entities.Conversation.create({
     data: {
       message:
-        "Welcome aboard! I'm Captn, your digital marketing companion. Think of me as your expert sailor, ready to ensure your Google Ads journey is smooth sailing. Before we set sail, could you please tell me about your business?",
+        "Welcome aboard! I'm Captn, your digital marketing companion. Think of me as your expert sailor, ready to ensure your Google Ads journey is smooth sailing. Before we set sail, could you steer our course by sharing the business goal you'd like to improve?",
       role: "assistant",
       chat: { connect: { id: chat.id } },
       user: { connect: { id: context.user.id } },
@@ -152,6 +161,7 @@ type UpdateExistingChatPayload = {
   team_status?: boolean;
   showLoader?: boolean;
   smartSuggestions?: Record<string, any>;
+  userRespondedWithNextAction?: boolean;
 };
 
 export const updateExistingChat: UpdateExistingChat<
@@ -161,6 +171,17 @@ export const updateExistingChat: UpdateExistingChat<
   if (!context.user) {
     throw new HttpError(401);
   }
+  if (args.userRespondedWithNextAction === true) {
+    await context.entities.Chat.update({
+      where: {
+        id: args.chat_id,
+      },
+      data: {
+        userRespondedWithNextAction: args.userRespondedWithNextAction,
+      },
+    });
+  }
+
   if (args.showLoader === true || args.showLoader === false) {
     await context.entities.Chat.update({
       where: {
@@ -191,6 +212,9 @@ type AgentPayload = {
   chat_id: number;
   message: any;
   team_id: number | null | undefined;
+  chatType: string | null | undefined;
+  agentChatHistory: string | null | undefined;
+  proposedUserAction: string[] | null | undefined;
 };
 
 export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
@@ -198,10 +222,16 @@ export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
     chat_id,
     message,
     team_id,
+    chatType,
+    agentChatHistory,
+    proposedUserAction,
   }: {
     chat_id: number;
     message: any;
     team_id: number | null | undefined;
+    chatType: string | null | undefined;
+    agentChatHistory: string | null | undefined;
+    proposedUserAction: string[] | null | undefined;
   },
   context: any
 ) => {
@@ -214,6 +244,9 @@ export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
     message: message,
     user_id: context.user.id,
     team_id: team_id,
+    chat_type: chatType,
+    agent_chat_history: agentChatHistory,
+    proposed_user_action: proposedUserAction,
   };
   console.log("===========");
   console.log("Payload to Python server");

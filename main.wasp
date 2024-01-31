@@ -124,6 +124,11 @@ entity Chat {=psl
     team_id                   Int?
     team_name                 String?
     team_status               String?
+    chatType                 String?
+    proposedUserAction       String[]          @default([])
+    userRespondedWithNextAction             Boolean         @default(false)
+    emailContent             String?
+    agentChatHistory         String?
     showLoader  Boolean         @default(false)
     smartSuggestions  Json         @default("{ \"suggestions\": [\"\"], \"type\": \"\"}")
     user        User?    @relation(fields: [userId], references: [id])
@@ -285,6 +290,12 @@ api stripeWebhook {
   fn: import { stripeWebhook } from "@server/webhooks.js",
   entities: [User],
   httpRoute: (POST, "/stripe-webhook")
+}
+
+api captnDailyAnalysisWebhook {
+  fn: import { captnDailyAnalysisWebhook } from "@server/webhooks.js",
+  entities: [User, Chat, Conversation],
+  httpRoute: (POST, "/captn-daily-analysis-webhook")
 }
 
 // /* 🕵️‍♂️ These are the Wasp Cron Jobs. Use them to set up recurring tasks and/or queues:

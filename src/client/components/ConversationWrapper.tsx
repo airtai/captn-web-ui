@@ -21,11 +21,13 @@ export default function ConversationWrapper({
   currentChatDetails,
   refetchChat,
   googleRedirectLoginMsg,
+  userSelectedActionMessage,
 }: {
   chatId: number;
   currentChatDetails: any;
   refetchChat: any;
   googleRedirectLoginMsg: string;
+  userSelectedActionMessage: string;
 }) {
   const { socket } = useSocket();
   const [isLoading, setIsLoading] = useState(false);
@@ -104,7 +106,10 @@ export default function ConversationWrapper({
       const response: any = await addAgentMessageToConversation(
         Number(chatId),
         messages,
-        teamId
+        teamId,
+        currentChatDetails.chatType,
+        currentChatDetails.agentChatHistory,
+        currentChatDetails.proposedUserAction
       );
       if (response.team_status === "inprogress") {
         // setIsSubmitButtonDisabled(true);
@@ -166,6 +171,7 @@ export default function ConversationWrapper({
               isSubmitButtonDisabled={isSubmitButtonDisabled}
               chatId={chatId}
               googleRedirectLoginMsg={googleRedirectLoginMsg}
+              userSelectedActionMessage={userSelectedActionMessage}
               addMessagesToConversation={addMessagesToConversation}
             />
           </div>
