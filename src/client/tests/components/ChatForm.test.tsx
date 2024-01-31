@@ -12,6 +12,7 @@ test("Test ChatForm component rendering", async () => {
       isSubmitButtonDisabled={false}
       chatId={1}
       googleRedirectLoginMsg="Login message"
+      userSelectedActionMessage=""
       addMessagesToConversation={() => {}}
     />
   );
