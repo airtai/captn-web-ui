@@ -134,7 +134,7 @@ function BuyMoreButton({
           isLoading && "animate-pulse"
         }`}
       >
-        {!isLoading ? "Upgrade to get a free trial" : "Loading..."}
+        {!isLoading ? "Upgrade to free trial" : "Loading..."}
       </button>
     </div>
   );
