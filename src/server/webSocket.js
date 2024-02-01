@@ -6,7 +6,7 @@ import { ADS_SERVER_URL } from "./config.js";
 async function checkTeamStatus(context, socket, chat_id) {
   let json;
   const ws = new WebSocket(
-    `ws://127.0.0.1:9000/openai/ws/${socket.data.user.id}`
+    `ws://${ADS_SERVER_URL.split("//")[1]}/openai/ws/${socket.data.user.id}`
   );
   ws.onopen = () => {
     console.log("========");

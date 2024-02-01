@@ -4,6 +4,7 @@ import { useState } from "react";
 import Markdown from "markdown-to-jsx";
 
 import type { Conversation } from "@wasp/entities";
+import { useSocketListener } from "@wasp/webSocket";
 import AgentLoader from "./AgentLoader";
 import SmartSuggestionButton from "./SmartSuggestionButton";
 import SmartSuggestionCheckbox from "./SmartSuggestionCheckbox";
@@ -28,6 +29,20 @@ export default function ConversationsList({
       smartSuggestions.suggestions?.length === 1 &&
       smartSuggestions.suggestions[0] === ""
     );
+
+  const [agentMessages, setAgentMessages] = useState("");
+
+  useSocketListener("messageFromAgent", updateState);
+  function updateState(msg: string) {
+    setAgentMessages(agentMessages + msg);
+  }
+
+  if (!isLoading && agentMessages) {
+    // store the existing agent message in DB against the conversation
+    //update existing conversation
+    setAgentMessages("");
+  }
+
   return (
     <div data-testid="conversations-wrapper" className="w-full">
       {conversations.map((conversation, idx) => {
@@ -69,36 +84,27 @@ export default function ConversationsList({
             />
           );
 
+        const agentConversationHistory = conversation.agentConversationHistory;
+
         return (
           <div key={idx}>
-            <div
-              style={{ minHeight: "85px" }}
-              className={`flex items-center px-5 group bg-${conversationBgColor} flex-col`}
-            >
-              <div
-                style={{ maxWidth: "840px", margin: "auto" }}
-                className={`relative ml-3 block w-full p-4 pl-10 text-sm text-${conversationTextColor}  border-${conversationBgColor} rounded-lg bg-${conversationBgColor} `}
-              >
-                <span
-                  className="absolute inline-block"
-                  style={{
-                    left: "-15px",
-                    top: "6px",
-                    height: " 45px",
-                    width: "45px",
-                  }}
-                >
-                  {conversationLogo}
-                </span>
-                <div className="chat-conversations text-base flex flex-col gap-2">
-                  <Markdown>{conversation.message}</Markdown>
-                </div>
-              </div>
-            </div>
+            <ConversationCard
+              conversation={conversation}
+              conversationBgColor={conversationBgColor}
+              conversationTextColor={conversationTextColor}
+              conversationLogo={conversationLogo}
+              agentConversationHistory={agentConversationHistory}
+            />
           </div>
         );
       })}
       {isLoading && <AgentLoader logo={logo} />}
+      {isLoading && (
+        <AgentConversation
+          agentConversationHistory={agentMessages}
+          conversationType="streaming"
+        />
+      )}
 
       {isSmartSuggestionsAvailable && (
         <div data-testid="smart-suggestions">
@@ -118,3 +124,111 @@ export default function ConversationsList({
     </div>
   );
 }
+
+const ConversationCard = ({
+  conversation,
+  conversationBgColor,
+  conversationTextColor,
+  conversationLogo,
+  agentConversationHistory,
+}: {
+  conversation: any;
+  conversationBgColor: any;
+  conversationTextColor: any;
+  conversationLogo: any;
+  agentConversationHistory: any;
+}) => {
+  const [isShowAgentConversation, setIsShowAgentConversation] = useState(false);
+
+  const handleClick = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    setIsShowAgentConversation(!isShowAgentConversation);
+  };
+
+  return (
+    <div
+      style={{ minHeight: "85px" }}
+      className={`flex items-center px-5 group bg-${conversationBgColor} flex-col`}
+    >
+      <div
+        style={{ maxWidth: "840px", margin: "auto" }}
+        className={`relative ml-3 block w-full p-4 pl-10 text-sm text-${conversationTextColor}  border-${conversationBgColor} rounded-lg bg-${conversationBgColor} `}
+      >
+        <span
+          className="absolute inline-block"
+          style={{
+            left: "-15px",
+            top: "6px",
+            height: " 45px",
+            width: "45px",
+          }}
+        >
+          {conversationLogo}
+        </span>
+        <div className="chat-conversations text-base flex flex-col gap-2">
+          <Markdown>{conversation.message}</Markdown>
+          {agentConversationHistory && (
+            <AgentConversation
+              agentConversationHistory={agentConversationHistory}
+              conversationType="non-streaming"
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface AgentConversationProps {
+  agentConversationHistory: string;
+  conversationType: string;
+}
+
+const AgentConversation: React.FC<AgentConversationProps> = ({
+  agentConversationHistory,
+  conversationType,
+}) => {
+  const [isShowAgentConversation, setIsShowAgentConversation] = useState(false);
+
+  const handleClick = () => {
+    setIsShowAgentConversation(!isShowAgentConversation);
+  };
+
+  const baseColor =
+    conversationType === "streaming" ? "captn-dark-blue" : "captn-light-blue";
+
+  const containerStyle =
+    conversationType === "streaming"
+      ? { maxWidth: "760px", margin: "auto" }
+      : {};
+  const borderStyle =
+    conversationType === "streaming"
+      ? { border: "1px solid #003851" }
+      : { border: "1px solid #6faabc" };
+
+  return (
+    <div style={containerStyle}>
+      <button
+        onClick={handleClick}
+        className={`underline font-medium text-xs ${`text-${baseColor}`}`}
+      >
+        {isShowAgentConversation || conversationType === "streaming"
+          ? "Hide details"
+          : "Show details"}
+      </button>
+      {(isShowAgentConversation || conversationType === "streaming") && (
+        <div className="text-xs px-3 py-5" style={borderStyle}>
+          <Markdown>{agentConversationHistory}</Markdown>
+          <button
+            onClick={handleClick}
+            className={`mt-5 mx-auto flex px-3 min-h-[44px] py-1 items-center gap-3 transition-colors duration-200 cursor-pointer text-xs rounded-md text-white bg-captn-cta-green hover:bg-captn-cta-green-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex-grow overflow-hidden`}
+          >
+            Hide details
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};

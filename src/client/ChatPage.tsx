@@ -105,14 +105,14 @@ export default function ChatPage({ user }: { user: User }) {
           <DefaultMessage />
         )}
       </div>
-      <div className="md:w-[260px] flex-shrink-0 overflow-x-hidden dark bg-captn-dark-blue">
+      {/* <div className="md:w-[260px] flex-shrink-0 overflow-x-hidden dark bg-captn-dark-blue">
         <div
           style={{ borderLeft: "1px solid #eae4d9" }}
           className="border-x-captn-light-cream h-full px-3 py-4 overflow-y-auto bg-captn-dark-blue"
         >
           <p className="text-white break-words">{agentMessages}</p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
