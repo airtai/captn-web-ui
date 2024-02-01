@@ -65,7 +65,7 @@ export default function ChatPage({ user }: { user: User }) {
   }
   useSocketListener("messageFromAgent", updateState);
   function updateState(msg: string) {
-    setAgentMessages(agentMessages + "\n\n" + msg);
+    setAgentMessages(agentMessages + msg);
   }
 
   return (
@@ -110,7 +110,7 @@ export default function ChatPage({ user }: { user: User }) {
           style={{ borderLeft: "1px solid #eae4d9" }}
           className="border-x-captn-light-cream h-full px-3 py-4 overflow-y-auto bg-captn-dark-blue"
         >
-          <p className="text-white">{agentMessages}</p>
+          <p className="text-white break-words">{agentMessages}</p>
         </div>
       </div>
     </div>

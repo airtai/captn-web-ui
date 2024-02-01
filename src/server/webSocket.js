@@ -9,27 +9,19 @@ async function checkTeamStatus(context, socket, chat_id) {
     `ws://127.0.0.1:9000/openai/ws/${socket.data.user.id}`
   );
   ws.onopen = () => {
-    console.log("ws.on open");
-  };
-
-  ws.onopen = () => {
     console.log("========");
     console.log("ws.on open");
-    ws.send("Summa");
+    console.log("========");
+    ws.send("Hello");
   };
   ws.on("message", (message) => {
-    console.log("========");
-    console.log("ws.on message");
     socket.emit("messageFromAgent", `${message}`);
-    console.log("========");
-    console.log(`Received message from server: ${message}`);
+    // console.log(`Received message from server: ${message}`);
   });
   ws.on("close", () => {
-    console.log("========");
-    console.log("ws.on close");
     console.log("WebSocket connection closed");
-    console.log("========");
   });
+
   try {
     while (true) {
       // Infinite loop, adjust the exit condition as needed
@@ -115,6 +107,25 @@ export const checkTeamStatusAndUpdateInDB = (io, context) => {
       const userEmail = socket.data.user.email;
       console.log("========");
       console.log("a user connected: ", userEmail);
+
+      // Socket to receive agent messages
+      // const ws = new WebSocket(
+      //   `ws://127.0.0.1:9000/openai/ws/${socket.data.user.id}`
+      // );
+
+      // ws.onopen = () => {
+      //   console.log("========");
+      //   console.log("ws.on open");
+      //   console.log("========");
+      //   ws.send("Summa");
+      // };
+      // ws.on("message", (message) => {
+      //   socket.emit("messageFromAgent", `${message}`);
+      //   // console.log(`Received message from server: ${message}`);
+      // });
+      // ws.on("close", () => {
+      //   console.log("WebSocket connection closed");
+      // });
 
       socket.on("newConversationAdded", async (chat_id) => {
         await checkTeamStatus(context, socket, chat_id);
