@@ -1,10 +1,12 @@
 import { useParams } from "react-router";
+import { useState } from "react";
 import { useQuery } from "@wasp/queries";
 import { useHistory } from "react-router-dom";
 
 import getChats from "@wasp/queries/getChats";
 import getChat from "@wasp/queries/getChat";
 import type { User } from "@wasp/entities";
+import { useSocket, useSocketListener } from "@wasp/webSocket";
 
 import CreateNewChatBtn from "./components/CreateNewChat";
 import ChatsList from "./components/ChatList";
@@ -29,6 +31,7 @@ export default function ChatPage({ user }: { user: User }) {
   const { id: chatId }: { id: string } = useParams();
   let googleRedirectLoginMsg: any = getQueryParam("msg");
   const userSelectedAction: any = getQueryParam("selected_user_action");
+  const [agentMessages, setAgentMessages] = useState("");
   const {
     data: currentChatDetails,
     refetch: refetchChat,
@@ -59,6 +62,10 @@ export default function ChatPage({ user }: { user: User }) {
     if (!user.hasPaid) {
       history.push("/pricing");
     }
+  }
+  useSocketListener("messageFromAgent", updateState);
+  function updateState(msg: string) {
+    setAgentMessages(agentMessages + "\n\n" + msg);
   }
 
   return (
@@ -97,6 +104,14 @@ export default function ChatPage({ user }: { user: User }) {
         ) : (
           <DefaultMessage />
         )}
+      </div>
+      <div className="md:w-[260px] flex-shrink-0 overflow-x-hidden dark bg-captn-dark-blue">
+        <div
+          style={{ borderLeft: "1px solid #eae4d9" }}
+          className="border-x-captn-light-cream h-full px-3 py-4 overflow-y-auto bg-captn-dark-blue"
+        >
+          <p className="text-white">{agentMessages}</p>
+        </div>
       </div>
     </div>
   );

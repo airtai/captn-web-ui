@@ -1,9 +1,35 @@
 import HttpError from "@wasp/core/HttpError.js";
 
+import WebSocket from "ws";
 import { ADS_SERVER_URL } from "./config.js";
 
 async function checkTeamStatus(context, socket, chat_id) {
   let json;
+  const ws = new WebSocket(
+    `ws://127.0.0.1:9000/openai/ws/${socket.data.user.id}`
+  );
+  ws.onopen = () => {
+    console.log("ws.on open");
+  };
+
+  ws.onopen = () => {
+    console.log("========");
+    console.log("ws.on open");
+    ws.send("Summa");
+  };
+  ws.on("message", (message) => {
+    console.log("========");
+    console.log("ws.on message");
+    socket.emit("messageFromAgent", `${message}`);
+    console.log("========");
+    console.log(`Received message from server: ${message}`);
+  });
+  ws.on("close", () => {
+    console.log("========");
+    console.log("ws.on close");
+    console.log("WebSocket connection closed");
+    console.log("========");
+  });
   try {
     while (true) {
       // Infinite loop, adjust the exit condition as needed
@@ -28,8 +54,27 @@ async function checkTeamStatus(context, socket, chat_id) {
           break;
         }
       }
-      // Add a 1-second delay before the next iteration
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // ws.onopen = () => {
+      //   console.log("========");
+      //   console.log("ws.on open");
+      //   ws.send("Summa");
+      // };
+      // ws.on("message", (message) => {
+      //   console.log("========");
+      //   console.log("ws.on message");
+      //   socket.emit("messageFromAgent", `${message}`);
+      //   console.log("========");
+      //   console.log(`Received message from server: ${message}`);
+      // });
+
+      // update the below code to emit a message to the user
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          // socket.emit("messageFromAgent", generateRandomString());
+          resolve();
+        }, 1000);
+      });
     }
     // Call another function after breaking the loop
     await updateConversationsInDb(context, socket, json, chat_id);
