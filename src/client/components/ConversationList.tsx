@@ -207,9 +207,13 @@ const AgentConversation: React.FC<AgentConversationProps> = ({
   conversationType,
 }) => {
   const [isShowAgentConversation, setIsShowAgentConversation] = useState(false);
+  const [isOpenOnLoad, setIsOpenOnLoad] = useState(
+    conversationType === "streaming" ? true : false
+  );
 
   const handleClick = () => {
     setIsShowAgentConversation(!isShowAgentConversation);
+    setIsOpenOnLoad(false);
   };
 
   const baseColor =
@@ -230,11 +234,11 @@ const AgentConversation: React.FC<AgentConversationProps> = ({
         onClick={handleClick}
         className={`underline font-medium text-xs ${`text-${baseColor}`}`}
       >
-        {isShowAgentConversation || conversationType === "streaming"
+        {isShowAgentConversation || isOpenOnLoad
           ? "Hide details"
           : "Show details"}
       </button>
-      {(isShowAgentConversation || conversationType === "streaming") && (
+      {(isShowAgentConversation || isOpenOnLoad) && (
         <div className="text-xs px-3 py-5 break-all " style={borderStyle}>
           <Markdown>{agentConversationHistory}</Markdown>
           {/* <button
