@@ -37,6 +37,9 @@ export default function ConversationWrapper({
   let previousChatDetailsRef = useRef<{ team_status: string } | null>(null);
   const conversationWindowRef = useRef(null);
   const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
+  const [lastConversationId, setLastConversationId] = useState<number | null>(
+    null
+  );
   const { data: conversations, refetch: refetchConversation } = useQuery(
     getConversations,
     {
@@ -64,11 +67,17 @@ export default function ConversationWrapper({
     scrollToBottom();
   }, [currentChatDetails?.smartSuggestions]);
 
-  useSocketListener("newConversationAddedToDB", updateState);
+  useSocketListener(
+    "newConversationAddedToDB",
+    (lastConversationId: number) => {
+      updateState(lastConversationId);
+    }
+  );
 
-  function updateState() {
+  function updateState(lastConversationId: number) {
     refetchConversation();
     refetchChat();
+    setLastConversationId(lastConversationId);
   }
 
   useEffect(() => {
@@ -168,6 +177,7 @@ export default function ConversationWrapper({
                   isLoading={currentChatDetails.team_status === "inprogress"}
                   smartSuggestions={currentChatDetails.smartSuggestions}
                   smartSuggestionOnClick={handleFormSubmit}
+                  lastConversationId={lastConversationId}
                 />
               )}
             </div>

@@ -88,7 +88,7 @@ async function updateConversationsInDb(context, socket, json, chat_id) {
     },
   });
 
-  await context.entities.Conversation.create({
+  const conv = await context.entities.Conversation.create({
     data: {
       message: json["msg"],
       role: "assistant",
@@ -97,7 +97,7 @@ async function updateConversationsInDb(context, socket, json, chat_id) {
     },
   });
 
-  socket.emit("newConversationAddedToDB");
+  socket.emit("newConversationAddedToDB", conv.id);
 }
 
 export const checkTeamStatusAndUpdateInDB = (io, context) => {

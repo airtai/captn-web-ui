@@ -1,10 +1,12 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Markdown from "markdown-to-jsx";
 
 import type { Conversation } from "@wasp/entities";
 import { useSocketListener } from "@wasp/webSocket";
+import updateExistingConversation from "@wasp/actions/updateExistingConversation";
+
 import AgentLoader from "./AgentLoader";
 import SmartSuggestionButton from "./SmartSuggestionButton";
 import SmartSuggestionCheckbox from "./SmartSuggestionCheckbox";
@@ -15,6 +17,7 @@ type ConversationsListProps = {
   isLoading: boolean;
   smartSuggestions: Record<string, any>;
   smartSuggestionOnClick: any;
+  lastConversationId: number | null;
 };
 
 export default function ConversationsList({
@@ -22,6 +25,7 @@ export default function ConversationsList({
   isLoading,
   smartSuggestions,
   smartSuggestionOnClick,
+  lastConversationId,
 }: ConversationsListProps) {
   const isSmartSuggestionsAvailable =
     smartSuggestions?.suggestions?.length > 0 &&
@@ -31,17 +35,29 @@ export default function ConversationsList({
     );
 
   const [agentMessages, setAgentMessages] = useState("");
+  const [lastConversation, setLastConversation] = useState<Conversation | null>(
+    null
+  );
 
   useSocketListener("messageFromAgent", updateState);
   function updateState(msg: string) {
     setAgentMessages(agentMessages + msg);
   }
 
-  if (!isLoading && agentMessages) {
-    // store the existing agent message in DB against the conversation
-    //update existing conversation
-    setAgentMessages("");
-  }
+  useEffect(() => {
+    if (lastConversationId) {
+      const payload = {
+        conversation_id: lastConversationId,
+        agentConversationHistory: agentMessages,
+      };
+      (async () => {
+        await updateExistingConversation(payload);
+        if (agentMessages !== "") {
+          setAgentMessages("");
+        }
+      })();
+    }
+  }, [lastConversationId]);
 
   return (
     <div data-testid="conversations-wrapper" className="w-full">
@@ -219,14 +235,14 @@ const AgentConversation: React.FC<AgentConversationProps> = ({
           : "Show details"}
       </button>
       {(isShowAgentConversation || conversationType === "streaming") && (
-        <div className="text-xs px-3 py-5" style={borderStyle}>
+        <div className="text-xs px-3 py-5 break-all " style={borderStyle}>
           <Markdown>{agentConversationHistory}</Markdown>
-          <button
+          {/* <button
             onClick={handleClick}
             className={`mt-5 mx-auto flex px-3 min-h-[44px] py-1 items-center gap-3 transition-colors duration-200 cursor-pointer text-xs rounded-md text-white bg-captn-cta-green hover:bg-captn-cta-green-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex-grow overflow-hidden`}
           >
             Hide details
-          </button>
+          </button> */}
         </div>
       )}
     </div>

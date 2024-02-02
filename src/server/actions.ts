@@ -8,6 +8,7 @@ import type {
   CreateChat,
   AddNewConversationToChat,
   UpdateExistingChat,
+  UpdateExistingConversation,
   GetAgentResponse,
 } from "@wasp/actions/types";
 import type { StripePaymentResult, OpenAIResponse } from "./types";
@@ -209,6 +210,28 @@ export const updateExistingChat: UpdateExistingChat<
       },
     });
   }
+};
+
+type UpdateExistingConversationPayload = {
+  conversation_id: number;
+  agentConversationHistory: string;
+};
+
+export const updateExistingConversation: UpdateExistingConversation<
+  UpdateExistingConversationPayload,
+  void
+> = async (args: any, context: any) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+  await context.entities.Conversation.update({
+    where: {
+      id: args.conversation_id,
+    },
+    data: {
+      agentConversationHistory: args.agentConversationHistory,
+    },
+  });
 };
 
 type AgentPayload = {
