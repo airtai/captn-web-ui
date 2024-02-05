@@ -55,10 +55,10 @@ a:hover {
   }
 }
 
-.login-form-wrapper > span {
+/* .login-form-wrapper > span {
   display: none !important;
 }
 
 .login-form-wrapper > div > :nth-child(n + 3) {
   display: none;
-}
+} */

@@ -1,9 +1,13 @@
 import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { LoginForm } from "@wasp/auth/forms/Login";
-import { AuthWrapper } from "./authWrapper";
+
 import useAuth from "@wasp/auth/useAuth";
+import Auth from "./Auth";
+import { type CustomizationOptions, State } from "@wasp/auth/forms/types";
+import imgUrl from "../static/captn-logo-large.png";
+
+import { AuthWrapper } from "./authWrapper";
 import { appearance } from "../appearance";
 
 export default function Login() {
@@ -20,24 +24,23 @@ export default function Login() {
   return (
     <AuthWrapper>
       <div className="login-form-wrapper">
-        <LoginForm appearance={appearance} />
-        <br />
-        <span className="text-sm font-medium text-gray-900">
-          Don't have an account yet?{" "}
-          <Link to="/signup" className="underline">
-            go to signup
-          </Link>
-          .
-        </span>
-        <br />
-        <span className="text-sm font-medium text-gray-900">
-          Forgot your password?{" "}
-          <Link to="/request-password-reset" className="underline">
-            reset it
-          </Link>
-          .
-        </span>
+        <LoginForm appearance={appearance} logo={imgUrl} />
       </div>
     </AuthWrapper>
+  );
+}
+
+export function LoginForm({
+  appearance,
+  logo,
+  socialLayout,
+}: CustomizationOptions) {
+  return (
+    <Auth
+      appearance={appearance}
+      logo={logo}
+      socialLayout={socialLayout}
+      state={State.Login}
+    />
   );
 }
