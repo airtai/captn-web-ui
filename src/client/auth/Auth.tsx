@@ -18,7 +18,7 @@ import {
 } from "@wasp/auth/forms/internal/Message";
 
 const logoStyle = {
-  height: "5rem",
+  height: "6rem",
 };
 
 const Container = styled("div", {
@@ -133,7 +133,7 @@ function Auth({
     } else {
       const err = {
         title:
-          "To proceed, please ensure you have accepted the Privacy Policy, Terms & Conditions and Marketing Emails",
+          "To proceed, please ensure you have accepted the Terms & Conditions, Privacy Policy, and opted to receive marketing emails.",
         description: "",
       };
       setErrorMessage(err);
@@ -185,7 +185,7 @@ function Auth({
       </div>
 
       {errorMessage && (
-        <MessageError>
+        <MessageError className="text-sm">
           {errorMessage.title}
           {errorMessage.description && ": "}
           {errorMessage.description}

@@ -62,7 +62,7 @@ export default function ChatPage({ user }: { user: User }) {
   }
 
   return (
-    <div className="relative z-0 flex h-full w-full overflow-hidden h-screen">
+    <div className="relative z-0 flex h-[calc(100vh-64px)] w-full overflow-hidden h-screen">
       <div
         id="default-sidebar"
         className="md:w-[260px] flex-shrink-0 overflow-x-hidden dark bg-captn-dark-blue"

@@ -1,7 +1,7 @@
 export default function PrivacyPage() {
   return (
     <div>
-      <div className="mx-auto max-w-7xl pt-10 pb-24 sm:pb-32  lg:gap-x-8 lg:py-32 lg:px-8">
+      <div className="mx-auto max-w-7xl pt-10 pb-24 sm:pb-32  lg:gap-x-8 lg:py-5 lg:px-8">
         <div className="container mx-auto py-8">
           <h1 className="text-3xl font-semibold mb-4">Privacy Policy</h1>
           <p className="text-gray-600 mb-4">Last updated January 29, 2024</p>
@@ -139,7 +139,8 @@ export default function PrivacyPage() {
               To remove access of the application to your account, you can do it
               directly in your Google account by following this link:{" "}
               <a
-                href="https://myaccount.google.com/permissions‍"
+                // href="https://myaccount.google.com/permissions‍"
+                href="https://myaccount.google.com/connections"
                 target="_black"
                 className="text-captn-light-blue"
               >
@@ -184,23 +185,24 @@ export default function PrivacyPage() {
               <li>
                 Google Analytics:{" "}
                 <a
-                  href="https://www.googleapis.com/auth/analytics.readonly"
+                  href="https://developers.google.com/analytics/devguides/config/admin/v1"
                   target="_blank"
                   className="text-captn-light-blue"
                 >
-                  https://www.googleapis.com/auth/analytics.readonly
+                  https://developers.google.com/analytics/devguides/config/admin/v1
                 </a>{" "}
                 - Enables you to interact with your Google Analytics data
                 through Capt’n.ai.
               </li>
+
               <li>
                 Google Ad:{" "}
                 <a
-                  href="https://www.googleapis.com/auth/adwords"
+                  href="https://developers.google.com/google-ads/api/docs/oauth/internals"
                   target="_blank"
                   className="text-captn-light-blue"
                 >
-                  https://www.googleapis.com/auth/adwords
+                  https://developers.google.com/google-ads/api/docs/oauth/internals
                 </a>{" "}
                 - Allows Capt’n.ai to fetch and display your Google Ads data for
                 interactive queries.
@@ -208,11 +210,11 @@ export default function PrivacyPage() {
               <li>
                 Google Search Console:{" "}
                 <a
-                  href="https://www.googleapis.com/auth/webmasters.readonly"
+                  href="https://developers.google.com/webmaster-tools/v1/sites/get"
                   target="_blank"
                   className="text-captn-light-blue"
                 >
-                  https://www.googleapis.com/auth/webmasters.readonly
+                  https://developers.google.com/webmaster-tools/v1/sites/get
                 </a>{" "}
                 - Permits Capt’n.ai to access and display your Google Search
                 Console data, making it available for interactive chat.
