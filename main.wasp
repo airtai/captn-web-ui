@@ -184,6 +184,15 @@ page EmailVerificationPage {
   component: import { EmailVerification } from "@client/auth/EmailVerification",
 }
 
+route TocPageRoute { path: "/toc", to: TocPage }
+page TocPage {
+  component: import TocPage from "@client/TocPage",
+}
+route PrivacyRoute { path: "/privacy", to: PrivacyPage }
+page PrivacyPage {
+  component: import PrivacyPage from "@client/PrivacyPage",
+}
+
 // route GptRoute { path: "/gpt", to: GptPage }
 // page GptPage {
 //   component: import GptPage from "@client/GptPage"

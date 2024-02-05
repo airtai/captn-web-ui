@@ -1,6 +1,7 @@
 import { useState, createContext, useEffect } from "react";
 import { createTheme } from "@stitches/react";
 import { styled } from "@wasp/stitches.config";
+import { Link } from "react-router-dom";
 
 import {
   type State,
@@ -17,7 +18,7 @@ import {
 } from "@wasp/auth/forms/internal/Message";
 
 const logoStyle = {
-  height: "3rem",
+  height: "5rem",
 };
 
 const Container = styled("div", {
@@ -142,17 +143,32 @@ function Auth({
   return (
     <Container className={customTheme}>
       <div>
-        {logo && <img style={logoStyle} src={logo} alt="Your Company" />}
-        <HeaderText>{title}</HeaderText>
-        <div>
+        {logo && (
+          <img
+            className="mt-10 mx-auto"
+            style={logoStyle}
+            src={logo}
+            alt="Your Company"
+          />
+        )}
+        {/* <HeaderText>{title}</HeaderText> */}
+        <p className="mt-7 text-2xl">{title}</p>
+        <div className="mt-3">
           <input
             type="checkbox"
             id="toc"
             checked={tocChecked}
             onChange={handleTocChange}
           />
-          <label htmlFor="toc">
-            I agree to the Terms & Conditions and Privacy Policy
+          <label className="text-sm ml-2" htmlFor="toc">
+            I agree to the{" "}
+            <Link to="/toc" className="underline" target="_blank">
+              Terms & Conditions
+            </Link>{" "}
+            and{" "}
+            <Link to="/privacy" className="underline" target="_blank">
+              Privacy Policy
+            </Link>
           </label>
         </div>
         <div>
@@ -162,7 +178,7 @@ function Auth({
             checked={marketingEmailsChecked}
             onChange={handleMarketingEmailsChange}
           />
-          <label htmlFor="marketingEmails">
+          <label className="text-sm ml-2" htmlFor="marketingEmails">
             I agree to receiving marketing emails
           </label>
         </div>
@@ -185,7 +201,7 @@ function Auth({
           //   additionalSignupFields={additionalSignupFields}
           // />
           <SocialAuth>
-            <SocialAuthLabel>{cta} with</SocialAuthLabel>
+            {/* <SocialAuthLabel>{cta} with</SocialAuthLabel> */}
             <SocialAuthButtons gap="large" direction={socialButtonsDirection}>
               <SocialButton href={googleSignInUrl} onClick={handleClick}>
                 <SocialIcons.Google />{" "}
