@@ -113,7 +113,7 @@ export default function PrivacyPage() {
               account. Upon authentication, user allows the application:
             </p>
             <br />
-            <ul className="list-disc pl-6">
+            <ul className="list-decimal pl-6">
               <li>Associate user with personal info on Google</li>
               <li>
                 See user's personal info, including any personal info user made
