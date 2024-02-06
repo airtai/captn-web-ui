@@ -11,11 +11,11 @@ import DarkModeSwitcher from '../admin/components/DarkModeSwitcher';
 import { UserMenuItems } from '../components/UserMenuItems';
 import { Link } from '@wasp/router';
 
-const navigation = [
-  { name: 'AI Scheduler (Demo App)', href: '/demo-app' },
-  { name: 'Pricing', href: '/pricing' },
-  { name: 'Documentation', href: DOCS_URL },
-  { name: 'Blog', href: BLOG_URL },
+export const navigation = [
+  { name: 'Home', href: '/' },
+  { name: 'Chat', href: '/chat' },
+  // { name: 'Documentation', href: DOCS_URL },
+  // { name: 'Blog', href: BLOG_URL },
 ];
 
 const NavLogo = () => (
@@ -123,7 +123,10 @@ export default function AppNavBar() {
                     </div>
                   </Link>
                 ) : (
-                  <UserMenuItems user={user} setMobileMenuOpen={setMobileMenuOpen}/>
+                  <UserMenuItems
+                    user={user}
+                    setMobileMenuOpen={setMobileMenuOpen}
+                  />
                 )}
               </div>
             </div>

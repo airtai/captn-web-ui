@@ -2,7 +2,7 @@ app SaaSTemplate {
   wasp: {
     version: "^0.11.8"
   },
-  title: "My Open SaaS App",
+  title: "Capt'n.ai",
   head: [
         "<meta property='og:type' content='website' />",
         "<meta property='og:url' content='https://opensaas.sh' />", 
@@ -49,7 +49,7 @@ app SaaSTemplate {
       additionalFields: import setIsAdminViaEmailSignup from "@server/auth/setIsAdminViaEmailSignup.js",
     },
     onAuthFailedRedirectTo: "/login",
-    onAuthSucceededRedirectTo: "/demo-app",
+    onAuthSucceededRedirectTo: "/chat",
   },
   db: { 
     system: PostgreSQL,
@@ -223,10 +223,10 @@ page SignupPage {
 //   component: import { EmailVerification } from "@client/auth/EmailVerification",
 // }
 
-route DemoAppRoute { path: "/demo-app", to: DemoAppPage }
-page DemoAppPage {
+route ChatPageRoute { path: "/chat", to: ChatPage }
+page ChatPage {
   authRequired: true,
-  component: import DemoAppPage from "@client/app/DemoAppPage"
+  component: import ChatPage from "@client/app/ChatPage"
 }
 
 route PricingPageRoute { path: "/pricing", to: PricingPage }

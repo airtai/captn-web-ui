@@ -3,10 +3,10 @@ import daBoiAvatar from '../static/da-boi.png';
 import avatarPlaceholder from '../static/avatar-placeholder.png';
 
 export const navigation = [
-  { name: 'Features', href: '#features' },
-  { name: 'Pricing', href: '/pricing' },
-  { name: 'Documentation', href: DOCS_URL },
-  { name: 'Blog', href: BLOG_URL },
+  { name: 'Home', href: '/' },
+  { name: 'Chat', href: '/chat' },
+  // { name: 'Documentation', href: DOCS_URL },
+  // { name: 'Blog', href: BLOG_URL },
 ];
 export const features = [
   {
@@ -35,7 +35,6 @@ export const features = [
   },
 ];
 export const testimonials = [
-
   {
     name: 'Da Boi',
     role: 'Wasp Mascot',

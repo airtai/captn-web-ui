@@ -15,7 +15,7 @@ export const UserMenuItems = ({
 
   const handleMobileMenuClick = () => {
     if (setMobileMenuOpen) setMobileMenuOpen(false);
-  }
+  };
 
   return (
     <>
@@ -24,7 +24,7 @@ export const UserMenuItems = ({
           path === '/admin' ? 'px-6' : 'sm:px-6'
         }`}
       >
-        {path === '/' || path === '/admin' ? (
+        {/* {path === '/' || path === '/admin' ? (
           <li>
             <Link
               to='/demo-app'
@@ -34,7 +34,7 @@ export const UserMenuItems = ({
               AI Scheduler (Demo App)
             </Link>
           </li>
-        ) : null}
+        ) : null} */}
         <li>
           <Link
             to='/account'
