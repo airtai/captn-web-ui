@@ -119,6 +119,8 @@ jobs:
             contents: write
         if: github.ref_name == 'main'
         env:
+          STAGING_BACKEND_DOMAIN: ${{ vars.STAGING_BACKEND_DOMAIN }}
+          STAGING_SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
           REACT_APP_CUSTOMER_PORTAL_LINK: ${{ vars.REACT_APP_CUSTOMER_PORTAL_LINK }}
 
           REACT_APP_API_URL: ${{ github.ref_name == 'main' && secrets.PROD_REACT_APP_API_URL || secrets.STAGING_REACT_APP_API_URL }}
@@ -144,3 +146,19 @@ jobs:
               uses: JamesIves/github-pages-deploy-action@v4
               with:
                 folder: .wasp/build/web-app/build
+
+            - name: Deploy UI to staging
+              if: github.ref_name == 'dev'
+              run: |
+                'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
+                eval $(ssh-agent -s)
+                mkdir -p ~/.ssh
+                chmod 700 ~/.ssh
+                ssh-keyscan "$STAGING_BACKEND_DOMAIN" >> ~/.ssh/known_hosts
+                chmod 644 ~/.ssh/known_hosts
+                echo "$STAGING_SSH_KEY" | base64 --decode > key.pem
+                chmod 600 key.pem
+                ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$STAGING_BACKEND_DOMAIN" "ls -lah /home/azureuser/UI"
+                scp -i key.pem -r .wasp/build/web-app/build azureuser@"$STAGING_BACKEND_DOMAIN":/home/azureuser/UI
+                ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$STAGING_BACKEND_DOMAIN" "ls -lah /home/azureuser/UI"
+                rm key.pem
