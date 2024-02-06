@@ -30,7 +30,7 @@ jobs:
               run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh
 
             - name: Run client tests
-              run: wasp test client run --silent
+              run: cd app && wasp test client run --silent
 
             
 
@@ -59,7 +59,7 @@ jobs:
 
             - run: docker pull ghcr.io/$GITHUB_REPOSITORY:$GITHUB_REF_NAME || docker pull ghcr.io/$GITHUB_REPOSITORY || true
             - name: Build wasp
-              run: wasp build
+              run: cd app && wasp build
             - run: docker build --build-arg PORT=$PORT -t ghcr.io/$GITHUB_REPOSITORY:$GITHUB_REF_NAME ./.wasp/build/
             - name: Add tag latest if branch is main
               if: github.ref_name == 'main'
@@ -126,7 +126,7 @@ jobs:
               run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh
 
             - name: Build wasp
-              run: wasp build
+              run: cd app && wasp build
             - name: Build frontend
               run: cd .wasp/build/web-app && npm install && REACT_APP_API_URL=$REACT_APP_API_URL REACT_APP_CUSTOMER_PORTAL_LINK=$REACT_APP_CUSTOMER_PORTAL_LINK npm run build
             - name: Copy 404.html
