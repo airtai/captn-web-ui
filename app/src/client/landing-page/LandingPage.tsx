@@ -62,7 +62,7 @@ export default function LandingPage() {
               <a
                 key={item.name}
                 href={item.href}
-                className='text-sm font-semibold leading-6 text-gray-900 duration-300 ease-in-out hover:text-yellow-500 dark:text-white'
+                className='text-sm leading-6 text-gray-900 duration-300 ease-in-out hover:text-yellow-500 dark:text-white'
               >
                 {item.name}
               </a>
@@ -169,15 +169,17 @@ export default function LandingPage() {
             <div className='mx-auto max-w-8xl px-6 lg:px-8'>
               <div className='lg:mb-18 mx-auto max-w-3xl text-center'>
                 <h1 className='text-4xl font-bold text-gray-900 sm:text-6xl dark:text-white'>
-                  Some <span className='italic'>cool</span> words about your
-                  product
+                  Capt'n AI
+                  {/* <span className='italic'>cool</span> words about
+                  your product */}
                 </h1>
                 <p className='mt-6 mx-auto max-w-2xl text-lg leading-8 text-gray-600 dark:text-white'>
-                  With some more exciting words about your product!
+                  Hey 🧙‍♂️! This is a sneak peek at my product's evolving
+                  homepage. Get ready for an amazing launch soon!
                 </p>
                 <div className='mt-10 flex items-center justify-center gap-x-6'>
                   <a
-                    href={DOCS_URL}
+                    href='/chat'
                     className='rounded-md px-3.5 py-2.5 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-200 hover:ring-2 hover:ring-yellow-300 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:text-white'
                   >
                     Get Started <span aria-hidden='true'>→</span>
@@ -200,7 +202,7 @@ export default function LandingPage() {
         </div>
 
         {/* Clients section */}
-        <div className='mt-12 mx-auto max-w-7xl px-6 lg:px-8 flex flex-col items-between gap-y-6'>
+        {/* <div className='mt-12 mx-auto max-w-7xl px-6 lg:px-8 flex flex-col items-between gap-y-6'>
           <h2 className='mb-6 text-center font-semibold tracking-wide text-gray-500 dark:text-white'>
             Built with / Used by:
           </h2>
@@ -211,7 +213,7 @@ export default function LandingPage() {
                 <defs>
                   <path id='a' d='M.06.5h272v190H.06z' />
                 </defs>
-                <g fill-rule='evenodd'>
+                <g fillRule='evenodd'>
                   <path
                     className='dark:fill-white'
                     fill='#545454'
@@ -273,10 +275,10 @@ export default function LandingPage() {
               </svg>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Feature section */}
-        <div id='features' className='mx-auto mt-48 max-w-7xl px-6 lg:px-8'>
+        {/* <div id='features' className='mx-auto mt-48 max-w-7xl px-6 lg:px-8'>
           <div className='mx-auto max-w-2xl text-center'>
             <p className='mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl dark:text-white'>
               The <span className='text-yellow-500'>Best</span> Features
@@ -303,10 +305,10 @@ export default function LandingPage() {
               ))}
             </dl>
           </div>
-        </div>
+        </div> */}
 
         {/* Testimonial section */}
-        <div className='mx-auto mt-32 max-w-7xl sm:mt-56 sm:px-6 lg:px-8'>
+        {/* <div className='mx-auto mt-32 max-w-7xl sm:mt-56 sm:px-6 lg:px-8'>
           <div className='relative sm:left-5 -m-2 rounded-xl bg-yellow-400/20 lg:ring-1 lg:ring-yellow-500/50 lg:-m-4 '>
             <div className='relative sm:top-5 sm:right-5 bg-gray-900 dark:bg-boxdark px-8 py-20 shadow-xl sm:rounded-xl sm:px-10 sm:py-16 md:px-12 lg:px-20'>
               <h2 className='text-left text-xl font-semibold tracking-wide leading-7 text-gray-500 dark:text-white'>
@@ -340,10 +342,10 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* FAQ */}
-        <div className='mt-32 mx-auto max-w-2xl divide-y divide-gray-900/10 dark:divide-gray-200/10 px-6 pb-8 sm:pb-24 sm:pt-12 lg:max-w-7xl lg:px-8 lg:py-32'>
+        {/* <div className='mt-32 mx-auto max-w-2xl divide-y divide-gray-900/10 dark:divide-gray-200/10 px-6 pb-8 sm:pb-24 sm:pt-12 lg:max-w-7xl lg:px-8 lg:py-32'>
           <h2 className='text-2xl font-bold leading-10 tracking-tight text-gray-900 dark:text-white'>
             Frequently asked questions
           </h2>
@@ -372,11 +374,11 @@ export default function LandingPage() {
               </div>
             ))}
           </dl>
-        </div>
+        </div> */}
       </main>
 
       {/* Footer */}
-      <div className='mx-auto mt-6 max-w-7xl px-6 lg:px-8 dark:bg-boxdark-2'>
+      {/* <div className='mx-auto mt-6 max-w-7xl px-6 lg:px-8 dark:bg-boxdark-2'>
         <footer
           aria-labelledby='footer-heading'
           className='relative border-t border-gray-900/10 dark:border-gray-200/10 py-24 sm:mt-32'
@@ -421,7 +423,7 @@ export default function LandingPage() {
             </div>
           </div>
         </footer>
-      </div>
+      </div> */}
     </div>
   );
 }

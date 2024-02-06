@@ -52,16 +52,16 @@ export default function AppNavBar() {
             <a
               key={item.name}
               href={item.href}
-              className='text-sm font-semibold leading-6 text-gray-900 duration-300 ease-in-out hover:text-yellow-500 dark:text-white'
+              className='text-sm  leading-6 text-gray-900 duration-300 ease-in-out hover:text-yellow-500 dark:text-white'
             >
               {item.name}
             </a>
           ))}
         </div>
         <div className='hidden lg:flex lg:flex-1 gap-3 justify-end items-center'>
-          <ul className='flex justify-center items-center gap-2 sm:gap-4'>
+          {/* <ul className='flex justify-center items-center gap-2 sm:gap-4'>
             <DarkModeSwitcher />
-          </ul>
+          </ul> */}
 
           {isUserLoading ? null : !user ? (
             <a
