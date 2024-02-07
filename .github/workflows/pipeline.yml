@@ -33,6 +33,7 @@ jobs:
               run: |
                 PATCH_FILE_PATH=$(cat $(whereis wasp | cut -d " " -f 2) | tail -1 | cut -d " " -f 1 | cut -d "=" -f 2)/Generator/templates/server/patches/oauth+0.9.15.patch
                 echo $PATCH_FILE_PATH
+                rm $PATCH_FILE_PATH
 
             - name: Run client tests
               run: cd app && wasp test client run --silent
@@ -54,6 +55,12 @@ jobs:
 
             - name: Install wasp
               run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh
+
+            - name: Remove wasp patch file (temporary workaround)
+              run: |
+                PATCH_FILE_PATH=$(cat $(whereis wasp | cut -d " " -f 2) | tail -1 | cut -d " " -f 1 | cut -d "=" -f 2)/Generator/templates/server/patches/oauth+0.9.15.patch
+                echo $PATCH_FILE_PATH
+                rm $PATCH_FILE_PATH
 
             - name: Log in to the Container registry
               uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
@@ -129,6 +136,12 @@ jobs:
 
             - name: Install wasp
               run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh
+
+            - name: Remove wasp patch file (temporary workaround)
+              run: |
+                PATCH_FILE_PATH=$(cat $(whereis wasp | cut -d " " -f 2) | tail -1 | cut -d " " -f 1 | cut -d "=" -f 2)/Generator/templates/server/patches/oauth+0.9.15.patch
+                echo $PATCH_FILE_PATH
+                rm $PATCH_FILE_PATH
 
             - name: Build wasp
               run: cd app && wasp build
