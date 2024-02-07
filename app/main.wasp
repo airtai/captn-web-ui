@@ -1,4 +1,4 @@
-app SaaSTemplate {
+app CaptnAI {
   wasp: {
     version: "^0.11.8"
   },
@@ -53,9 +53,9 @@ app SaaSTemplate {
   },
   db: { 
     system: PostgreSQL,
-    seeds: [
-      import { devSeedUsers } from "@server/scripts/usersSeed.js",
-    ]
+    // seeds: [
+    //   import { devSeedUsers } from "@server/scripts/usersSeed.js",
+    // ]
   },
   client: {
     rootComponent: import App from "@client/App",
@@ -112,10 +112,10 @@ entity User {=psl
   sendEmail                 Boolean         @default(false)
   datePaid                  DateTime?
   credits                   Int             @default(3)
-  gptResponses              GptResponse[]
   externalAuthAssociations  SocialLogin[]
-  contactFormMessages       ContactFormMessage[]     
-  tasks                     Task[]
+  contactFormMessages       ContactFormMessage[] 
+  chats    Chat[]
+  conversations    Conversation[]
 psl=}
 
 entity SocialLogin {=psl
@@ -128,24 +128,7 @@ entity SocialLogin {=psl
   @@unique([provider, providerId, userId])
 psl=}
 
-entity GptResponse {=psl
-  id                        String          @id @default(uuid())
-  content                   String
-  user                      User            @relation(fields: [userId], references: [id])
-  userId                    Int
-  createdAt                 DateTime        @default(now())
-  updatedAt                 DateTime        @updatedAt
-psl=}
 
-entity Task {=psl
-  id                        String          @id @default(uuid())
-  description               String
-  time                      String          @default("1")
-  isDone                    Boolean         @default(false)
-  user                      User            @relation(fields: [userId], references: [id])
-  userId                    Int
-  createdAt                 DateTime        @default(now())
-psl=}
 
 // TODO: add functionality to allow users to send messages to admin
 // and make them accessible via the admin dashboard
@@ -157,6 +140,40 @@ entity ContactFormMessage {=psl
   createdAt                 DateTime        @default(now())
   isRead                    Boolean         @default(false)
   repliedAt                 DateTime?       
+psl=}
+
+entity Chat {=psl
+    id          Int     @id @default(autoincrement())
+    createdAt                 DateTime        @default(now())
+    updatedAt                 DateTime        @updatedAt
+    team_id                   Int?
+    team_name                 String?
+    team_status               String?
+    chatType                 String?
+    proposedUserAction       String[]          @default([])
+    userRespondedWithNextAction             Boolean         @default(false)
+    emailContent             String?
+    agentChatHistory         String?
+    showLoader  Boolean         @default(false)
+    smartSuggestions  Json         @default("{ \"suggestions\": [\"\"], \"type\": \"\"}")
+    user        User?    @relation(fields: [userId], references: [id])
+    userId      Int?
+    name        String?
+    conversations    Conversation[]
+psl=}
+
+
+entity Conversation {=psl
+    id                          Int             @id @default(autoincrement())
+    createdAt                   DateTime        @default(now())
+    updatedAt                   DateTime        @updatedAt
+    message                     String
+    role                        String
+    chat                        Chat?           @relation(fields: [chatId], references: [id])
+    chatId                      Int?
+    user                        User?           @relation(fields: [userId], references: [id])
+    userId                      Int?
+
 psl=}
 
 entity DailyStats {=psl 
@@ -223,7 +240,7 @@ page SignupPage {
 //   component: import { EmailVerification } from "@client/auth/EmailVerification",
 // }
 
-route ChatPageRoute { path: "/chat", to: ChatPage }
+route ChatPageRoute { path: "/chat/:id?", to: ChatPage }
 page ChatPage {
   authRequired: true,
   component: import ChatPage from "@client/app/ChatPage"
@@ -312,26 +329,6 @@ page AdminUIButtonsPage {
 
 // 📝 Actions aka Mutations
 
-action generateGptResponse {
-  fn: import { generateGptResponse } from "@server/actions.js",
-  entities: [User, Task, GptResponse]
-}
-
-action createTask {
-  fn: import { createTask } from "@server/actions.js",
-  entities: [Task]
-}
-
-action deleteTask {
-  fn: import { deleteTask } from "@server/actions.js",
-  entities: [Task]
-}
-
-action updateTask {
-  fn: import { updateTask } from "@server/actions.js",
-  entities: [Task]
-}
-
 action stripePayment {
   fn: import { stripePayment } from "@server/actions.js",
   entities: [User]
@@ -348,16 +345,6 @@ action updateUserById {
 }
 
 // 📚 Queries
-
-query getGptResponses {
-  fn: import { getGptResponses } from "@server/queries.js",
-  entities: [User, GptResponse]
-}
-
-query getAllTasksByUser {
-  fn: import { getAllTasksByUser } from "@server/queries.js",
-  entities: [Task]
-}
 
 query getDailyStats {
   fn: import { getDailyStats } from "@server/queries.js",

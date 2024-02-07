@@ -1,11 +1,6 @@
 import HttpError from '@wasp/core/HttpError.js';
-import type { DailyStats, GptResponse, User, PageViewSource, Task } from '@wasp/entities';
-import type {
-  GetGptResponses,
-  GetDailyStats,
-  GetPaginatedUsers,
-  GetAllTasksByUser
-} from '@wasp/queries/types';
+import type { DailyStats, User, PageViewSource } from '@wasp/entities';
+import type { GetDailyStats, GetPaginatedUsers } from '@wasp/queries/types';
 
 type DailyStatsWithSources = DailyStats & {
   sources: PageViewSource[];
@@ -16,36 +11,10 @@ type DailyStatsValues = {
   weeklyStats: DailyStatsWithSources[];
 };
 
-export const getGptResponses: GetGptResponses<void, GptResponse[]> = async (args, context) => {
-  if (!context.user) {
-    throw new HttpError(401);
-  }
-  return context.entities.GptResponse.findMany({
-    where: {
-      user: {
-        id: context.user.id,
-      },
-    },
-  });
-};
-
-export const getAllTasksByUser: GetAllTasksByUser<void, Task[]> = async (_args, context) => {
-  if (!context.user) {
-    throw new HttpError(401);
-  }
-  return context.entities.Task.findMany({
-    where: {
-      user: {
-        id: context.user.id,
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
-}
-
-export const getDailyStats: GetDailyStats<void, DailyStatsValues> = async (_args, context) => {
+export const getDailyStats: GetDailyStats<void, DailyStatsValues> = async (
+  _args,
+  context
+) => {
   if (!context.user?.isAdmin) {
     throw new HttpError(401);
   }
@@ -79,16 +48,29 @@ type GetPaginatedUsersInput = {
   subscriptionStatus?: string[];
 };
 type GetPaginatedUsersOutput = {
-  users: Pick<User, 'id' | 'email' | 'username' | 'lastActiveTimestamp' | 'hasPaid' | 'subscriptionStatus' | 'stripeId'>[];
+  users: Pick<
+    User,
+    | 'id'
+    | 'email'
+    | 'username'
+    | 'lastActiveTimestamp'
+    | 'hasPaid'
+    | 'subscriptionStatus'
+    | 'stripeId'
+  >[];
   totalPages: number;
 };
 
-export const getPaginatedUsers: GetPaginatedUsers<GetPaginatedUsersInput, GetPaginatedUsersOutput> = async (
-  args,
-  context
-) => {
-  let subscriptionStatus = args.subscriptionStatus?.filter((status) => status !== 'hasPaid');
-  subscriptionStatus = subscriptionStatus?.length ? subscriptionStatus : undefined;
+export const getPaginatedUsers: GetPaginatedUsers<
+  GetPaginatedUsersInput,
+  GetPaginatedUsersOutput
+> = async (args, context) => {
+  let subscriptionStatus = args.subscriptionStatus?.filter(
+    (status) => status !== 'hasPaid'
+  );
+  subscriptionStatus = subscriptionStatus?.length
+    ? subscriptionStatus
+    : undefined;
 
   const queryResults = await context.entities.User.findMany({
     skip: args.skip,
