@@ -10,6 +10,13 @@ module.exports = {
         satoshi: ['Satoshi', 'sans-serif'],
       },
       colors: {
+        'captn-light-blue': '#6faabc',
+        'captn-dark-blue': '#003851',
+        'captn-light-cream': '#eae4d9',
+        'captn-cta-green': '#71ad3d',
+        'captn-cta-red': '#e57373',
+        'captn-cta-green-hover': '#9ac475',
+        'captn-cta-red-hover': '#ef5350',
         current: 'currentColor',
         transparent: 'transparent',
         // white: '#FFFFFF',

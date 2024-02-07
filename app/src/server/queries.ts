@@ -1,6 +1,17 @@
 import HttpError from '@wasp/core/HttpError.js';
-import type { DailyStats, User, PageViewSource } from '@wasp/entities';
-import type { GetDailyStats, GetPaginatedUsers } from '@wasp/queries/types';
+import type {
+  DailyStats,
+  User,
+  PageViewSource,
+  Chat,
+  Conversation,
+} from '@wasp/entities';
+import type {
+  GetDailyStats,
+  GetPaginatedUsers,
+  GetChats,
+  GetConversations,
+} from '@wasp/queries/types';
 
 type DailyStatsWithSources = DailyStats & {
   sources: PageViewSource[];
@@ -116,4 +127,41 @@ export const getPaginatedUsers: GetPaginatedUsers<
     users: queryResults,
     totalPages,
   };
+};
+
+export const getChats: GetChats<void, Chat[]> = async (args, context) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+  return context.entities.Chat.findMany({
+    where: {
+      user: {
+        id: context.user.id,
+      },
+    },
+    orderBy: { id: 'desc' },
+  });
+};
+
+type GetConversationPayload = {
+  chatId: number;
+};
+
+export const getConversations: GetConversations<
+  GetConversationPayload,
+  Conversation[]
+> = async (args, context) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+  try {
+    const conversation = context.entities.Conversation.findMany({
+      where: { chatId: args.chatId, userId: context.user.id },
+      orderBy: { id: 'asc' },
+    });
+    return conversation;
+  } catch (error) {
+    console.error('Error while fetching conversations:', error);
+    return [];
+  }
 };

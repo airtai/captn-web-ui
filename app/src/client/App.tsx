@@ -14,11 +14,19 @@ export default function App({ children }: { children: ReactNode }) {
   const { data: user } = useAuth();
 
   const shouldDisplayAppNavBar = useMemo(() => {
-    return location.pathname !== '/' && location.pathname !== '/login' && location.pathname !== '/signup';
+    return (
+      location.pathname !== '/' &&
+      location.pathname !== '/login' &&
+      location.pathname !== '/signup'
+    );
   }, [location]);
 
   const isAdminDashboard = useMemo(() => {
     return location.pathname.startsWith('/admin');
+  }, [location]);
+
+  const isChatPage = useMemo(() => {
+    return location.pathname.startsWith('/chat');
   }, [location]);
 
   useEffect(() => {
@@ -43,16 +51,16 @@ export default function App({ children }: { children: ReactNode }) {
 
   return (
     <>
-    <div className='min-h-screen dark:text-white dark:bg-boxdark-2'>
-      {isAdminDashboard ? (
-        <>{children}</>
-      ) : (
-        <>
-          {shouldDisplayAppNavBar && <AppNavBar />}
-          <div className='mx-auto max-w-7xl sm:px-6 lg:px-8'>{children}</div>
-        </>
-      )}
-    </div>
+      <div className='min-h-screen dark:text-white dark:bg-boxdark-2'>
+        {isAdminDashboard || isChatPage ? (
+          <>{children}</>
+        ) : (
+          <>
+            {shouldDisplayAppNavBar && <AppNavBar />}
+            <div className='mx-auto max-w-7xl sm:px-6 lg:px-8'>{children}</div>
+          </>
+        )}
+      </div>
     </>
   );
 }

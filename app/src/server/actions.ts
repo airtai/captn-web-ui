@@ -1,10 +1,14 @@
 import Stripe from 'stripe';
 import fetch from 'node-fetch';
 import HttpError from '@wasp/core/HttpError.js';
-import type { User } from '@wasp/entities';
+import type { User, Chat } from '@wasp/entities';
 import type { StripePayment } from '@wasp/actions/types';
 import type { StripePaymentResult } from './types';
-import { UpdateCurrentUser, UpdateUserById } from '@wasp/actions/types';
+import {
+  UpdateCurrentUser,
+  UpdateUserById,
+  CreateNewChat,
+} from '@wasp/actions/types';
 import {
   fetchStripeCustomer,
   createStripeCheckoutSession,
@@ -92,4 +96,31 @@ export const updateCurrentUser: UpdateCurrentUser<Partial<User>, User> = async (
     },
     data: user,
   });
+};
+
+export const createNewChat: CreateNewChat<void, Chat> = async (
+  user,
+  context
+) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+
+  const chat = await context.entities.Chat.create({
+    data: {
+      user: { connect: { id: context.user.id } },
+    },
+  });
+
+  const conversation = await context.entities.Conversation.create({
+    data: {
+      chat: { connect: { id: chat.id } },
+      user: { connect: { id: context.user.id } },
+      message:
+        "Welcome aboard! I'm Captn, your digital marketing companion. Think of me as your expert sailor, ready to ensure your Google Ads journey is smooth sailing. Before we set sail, could you steer our course by sharing the business goal you'd like to improve?",
+      role: 'assistant',
+    },
+  });
+
+  return chat;
 };

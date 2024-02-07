@@ -85,7 +85,8 @@ app CaptnAI {
     ("openai", "^4.24.1"),
     ("prettier", "3.1.1"),
     ("prettier-plugin-tailwindcss", "0.5.11"),
-    ("zod", "3.22.4")
+    ("zod", "3.22.4"),
+    ("markdown-to-jsx", "7.3.2")
   ],
 }
 
@@ -344,6 +345,11 @@ action updateUserById {
   entities: [User]
 }
 
+action createNewChat {
+  fn: import { createNewChat } from "@server/actions.js",
+  entities: [Chat, Conversation]
+}
+
 // 📚 Queries
 
 query getDailyStats {
@@ -354,6 +360,16 @@ query getDailyStats {
 query getPaginatedUsers {
   fn: import { getPaginatedUsers } from "@server/queries.js",
   entities: [User]
+}
+
+query getChats {
+  fn: import { getChats } from "@server/queries.js",
+  entities: [Chat]
+}
+
+query getConversations {
+  fn: import { getConversations } from "@server/queries.js",
+  entities: [Conversation]
 }
 
 /*
