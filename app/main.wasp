@@ -350,6 +350,21 @@ action createNewChat {
   entities: [Chat, Conversation]
 }
 
+action updateCurrentChat {
+  fn: import { updateCurrentChat } from "@server/actions.js",
+  entities: [Chat]
+}
+
+action createNewConversation {
+  fn: import { createNewConversation } from "@server/actions.js",
+  entities: [Conversation]
+}
+
+action getAgentResponse {
+  fn: import { getAgentResponse } from "@server/actions.js",
+  entities: [Chat, Conversation]
+}
+
 // 📚 Queries
 
 query getDailyStats {

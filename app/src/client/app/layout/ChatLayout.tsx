@@ -1,15 +1,70 @@
 import { useState, ReactNode, FC } from 'react';
+import createNewConversation from '@wasp/actions/createNewConversation';
+import updateCurrentChat from '@wasp/actions/updateCurrentChat';
+
 import Header from '../../admin/components/Header';
 import ChatSidebar from '../../components/ChatSidebar';
+import ChatForm from '../../components/ChatForm';
 import useAuth from '@wasp/auth/useAuth';
+import type { Conversation } from '@wasp/entities';
+import getAgentResponse from '@wasp/actions/getAgentResponse';
+
+type OutputMessage = {
+  role: string;
+  content: string;
+};
+
+export function prepareOpenAIRequest(input: Conversation[]): OutputMessage[] {
+  const messages: OutputMessage[] = input.map((message) => {
+    return {
+      role: message.role,
+      content: message.message,
+    };
+  });
+  return messages;
+}
 
 interface Props {
   children?: ReactNode;
+  activeChatId: number;
 }
 
-const ChatLayout: FC<Props> = ({ children }) => {
+const ChatLayout: FC<Props> = ({ children, activeChatId }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: user } = useAuth();
+
+  const handleFormSubmit = async (userQuery: string) => {
+    const allConversations = await createNewConversation({
+      chatId: activeChatId,
+      userQuery,
+      role: 'user',
+    });
+    const messages: any = prepareOpenAIRequest(allConversations);
+    await updateCurrentChat({
+      id: activeChatId,
+      data: { showLoader: true },
+    });
+    const response = await getAgentResponse({
+      chatId: activeChatId,
+      messages: messages,
+      team_id: null,
+      chatType: null,
+      agentChatHistory: null,
+      proposedUserAction: null,
+    });
+    console.log('response: ', response);
+    await createNewConversation({
+      chatId: activeChatId,
+      userQuery: response['content'],
+      role: 'assistant',
+    });
+    await updateCurrentChat({
+      id: activeChatId,
+      data: { showLoader: false },
+    });
+  };
+  // make call to api -> from action file access conversation entity and pass it to openai
+  // get response from openai and save it against the conversation
 
   return (
     <div className='dark:bg-boxdark-2 dark:text-bodydark bg-captn-light-blue'>
@@ -37,48 +92,7 @@ const ChatLayout: FC<Props> = ({ children }) => {
             <div>{children}</div>
           </main>
           {/* <!-- ===== Main Content End ===== --> */}
-          <div data-testid='chat-form' className='mt-2 mb-2'>
-            <form className=''>
-              <label
-                htmlFor='search'
-                className='mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white'
-              >
-                Search
-              </label>
-              <div className='relative bottom-0 left-0 right-0 flex items-center justify-between m-1'>
-                <input
-                  type='search'
-                  id='userQuery'
-                  name='search'
-                  className='block rounded-lg w-full h-12 text-sm text-captn-light-cream bg-captn-dark-blue focus:ring-blue-500 focus:border-blue-500'
-                  placeholder='Message CaptnAI...'
-                  required
-                />
-                <button
-                  type='submit'
-                  className={`text-white bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 absolute right-2 font-medium rounded-lg text-sm px-1.5 py-1.5`}
-                >
-                  <span className=''>
-                    <svg
-                      width='24'
-                      height='24'
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      className='text-captn-light-cream'
-                    >
-                      <path
-                        d='M7 11L12 6L17 11M12 18V7'
-                        stroke='currentColor'
-                        strokeWidth='2'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                      ></path>
-                    </svg>
-                  </span>
-                </button>
-              </div>
-            </form>
-          </div>
+          <ChatForm handleFormSubmit={handleFormSubmit} />
         </div>
 
         {/* <!-- ===== Content Area End ===== --> */}

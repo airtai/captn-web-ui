@@ -151,7 +151,7 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen }: ChatSidebarProps) => {
                     <NavLink
                       key={chat.id}
                       to={`/chat/${chat.id}?`}
-                      className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-gray-700 dark:hover:bg-meta-4 ${
+                      className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out ${
                         pathname === '/' && 'bg-gray-700 dark:bg-meta-4'
                       } ${
                         chat.id === activeChat

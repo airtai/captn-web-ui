@@ -18,7 +18,7 @@ const ChatPage = ({ user }: { user: User }) => {
   );
 
   return (
-    <ChatLayout>
+    <ChatLayout activeChatId={activeChatId}>
       <div className='flex h-full flex-col'>
         <div className='flex-1 overflow-hidden'>
           {conversations && <ConversationsList conversations={conversations} />}

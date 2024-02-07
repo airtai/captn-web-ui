@@ -1,19 +1,26 @@
 import Stripe from 'stripe';
 import fetch from 'node-fetch';
 import HttpError from '@wasp/core/HttpError.js';
-import type { User, Chat } from '@wasp/entities';
+import type { User, Chat, Conversation } from '@wasp/entities';
 import type { StripePayment } from '@wasp/actions/types';
 import type { StripePaymentResult } from './types';
 import {
   UpdateCurrentUser,
   UpdateUserById,
   CreateNewChat,
+  CreateNewConversation,
+  UpdateCurrentChat,
+  GetAgentResponse,
 } from '@wasp/actions/types';
 import {
   fetchStripeCustomer,
   createStripeCheckoutSession,
 } from './stripeUtils.js';
 import { TierIds } from '@wasp/shared/constants.js';
+import { _Conversation } from '@wasp/_types';
+
+export const ADS_SERVER_URL =
+  process.env.ADS_SERVER_URL || 'http://127.0.0.1:9000';
 
 export const stripePayment: StripePayment<string, StripePaymentResult> = async (
   tier,
@@ -123,4 +130,117 @@ export const createNewChat: CreateNewChat<void, Chat> = async (
   });
 
   return chat;
+};
+
+export const updateCurrentChat: UpdateCurrentChat<
+  { id: number; data: Partial<Chat> },
+  Chat
+> = async ({ id, data }, context) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+
+  const chat = await context.entities.Chat.update({
+    where: {
+      id: id,
+    },
+    data,
+  });
+
+  return chat;
+};
+
+export const createNewConversation: CreateNewConversation<
+  { chatId: number; userQuery: string; role: 'user' | 'assistant' },
+  Conversation[]
+> = async ({ chatId, userQuery, role }, context) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+
+  await context.entities.Conversation.create({
+    data: {
+      chat: { connect: { id: chatId } },
+      user: { connect: { id: context.user.id } },
+      message: userQuery,
+      role,
+    },
+  });
+
+  return context.entities.Conversation.findMany({
+    where: { chatId: chatId, userId: context.user.id },
+    orderBy: { id: 'asc' },
+  });
+};
+
+type AgentPayload = {
+  chatId: number;
+  messages: any;
+  team_id: number | null | undefined;
+  chatType: string | null | undefined;
+  agentChatHistory: string | null | undefined;
+  proposedUserAction: string[] | null | undefined;
+};
+
+export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
+  {
+    chatId,
+    messages,
+    team_id,
+    chatType,
+    agentChatHistory,
+    proposedUserAction,
+  }: {
+    chatId: number;
+    messages: any;
+    team_id: number | null | undefined;
+    chatType: string | null | undefined;
+    agentChatHistory: string | null | undefined;
+    proposedUserAction: string[] | null | undefined;
+  },
+  context: any
+) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+
+  const payload = {
+    chat_id: chatId,
+    message: messages,
+    user_id: context.user.id,
+    team_id: team_id,
+    chat_type: chatType,
+    agent_chat_history: agentChatHistory,
+    proposed_user_action: proposedUserAction,
+  };
+  console.log('===========');
+  console.log('Payload to Python server');
+  console.log(payload);
+  console.log('===========');
+  try {
+    const response = await fetch(`${ADS_SERVER_URL}/openai/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    const json: any = (await response.json()) as { detail?: string }; // Parse JSON once
+
+    if (!response.ok) {
+      const errorMsg =
+        json.detail || `HTTP error with status code ${response.status}`;
+      console.error('Server Error:', errorMsg);
+      throw new Error(errorMsg);
+    }
+
+    return {
+      content: json['content'],
+      smart_suggestions: json['smart_suggestions'],
+      team_status: json['team_status'],
+      team_name: json['team_name'],
+      team_id: json['team_id'],
+    };
+  } catch (error: any) {
+    throw new HttpError(500, 'Something went wrong. Please try again later');
+  }
 };
