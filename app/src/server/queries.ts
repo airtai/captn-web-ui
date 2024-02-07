@@ -11,6 +11,7 @@ import type {
   GetPaginatedUsers,
   GetChats,
   GetConversations,
+  GetChat,
 } from '@wasp/queries/types';
 
 type DailyStatsWithSources = DailyStats & {
@@ -164,4 +165,23 @@ export const getConversations: GetConversations<
     console.error('Error while fetching conversations:', error);
     return [];
   }
+};
+
+type GetChatPayload = {
+  chatId: number;
+};
+
+export const getChat: GetChat<GetChatPayload, Chat> = async (
+  args: any,
+  context: any
+) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+
+  return context.entities.Chat.findUnique({
+    where: {
+      id: args.chatId,
+    },
+  });
 };

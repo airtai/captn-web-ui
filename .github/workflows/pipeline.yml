@@ -29,6 +29,10 @@ jobs:
             - name: Install wasp
               run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh
 
+            - name: Remove wasp patch file (temporary workaround)
+              run: PATCH_FILE_PATH=$(cat $(whereis wasp | cut -d " " -f 2) | tail -1 | cut -d " " -f 1 | cut -d "=" -f 2)/Generator/templates/server/patches/oauth+0.9.15.patch
+              run: echo $PATCH_FILE_PATH
+
             - name: Run client tests
               run: cd app && wasp test client run --silent
 

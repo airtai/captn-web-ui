@@ -1,4 +1,4 @@
-import { useState, ReactNode, FC } from 'react';
+import { useState, ReactNode, FC, useRef, useEffect } from 'react';
 import createNewConversation from '@wasp/actions/createNewConversation';
 import updateCurrentChat from '@wasp/actions/updateCurrentChat';
 
@@ -32,6 +32,7 @@ interface Props {
 const ChatLayout: FC<Props> = ({ children, activeChatId }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: user } = useAuth();
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const handleFormSubmit = async (userQuery: string) => {
     const allConversations = await createNewConversation({
@@ -52,7 +53,6 @@ const ChatLayout: FC<Props> = ({ children, activeChatId }) => {
       agentChatHistory: null,
       proposedUserAction: null,
     });
-    console.log('response: ', response);
     await createNewConversation({
       chatId: activeChatId,
       userQuery: response['content'],
@@ -63,6 +63,17 @@ const ChatLayout: FC<Props> = ({ children, activeChatId }) => {
       data: { showLoader: false },
     });
   };
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      setTimeout(() => {
+        scrollRef.current?.scrollTo({
+          top: scrollRef.current?.scrollHeight,
+          behavior: 'smooth',
+        });
+      }, 100); // Add a delay of 500 milliseconds before scrolling
+    }
+  }, [children]);
   // make call to api -> from action file access conversation entity and pass it to openai
   // get response from openai and save it against the conversation
 
@@ -88,7 +99,7 @@ const ChatLayout: FC<Props> = ({ children, activeChatId }) => {
           {/* <!-- ===== Header End ===== --> */}
 
           {/* <!-- ===== Main Content Start ===== --> */}
-          <main className='flex-auto overflow-y-auto'>
+          <main className='flex-auto overflow-y-auto' ref={scrollRef}>
             <div>{children}</div>
           </main>
           {/* <!-- ===== Main Content End ===== --> */}

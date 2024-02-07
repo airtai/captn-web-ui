@@ -377,6 +377,11 @@ query getPaginatedUsers {
   entities: [User]
 }
 
+query getChat {
+  fn: import { getChat } from "@server/queries.js",
+  entities: [Chat]
+}
+
 query getChats {
   fn: import { getChats } from "@server/queries.js",
   entities: [Chat]
