@@ -1,68 +1,19 @@
 import { useState, ReactNode, FC, useRef, useEffect } from 'react';
-import createNewConversation from '@wasp/actions/createNewConversation';
-import updateCurrentChat from '@wasp/actions/updateCurrentChat';
 
 import Header from '../../admin/components/Header';
 import ChatSidebar from '../../components/ChatSidebar';
 import ChatForm from '../../components/ChatForm';
 import useAuth from '@wasp/auth/useAuth';
-import type { Conversation } from '@wasp/entities';
-import getAgentResponse from '@wasp/actions/getAgentResponse';
-
-type OutputMessage = {
-  role: string;
-  content: string;
-};
-
-export function prepareOpenAIRequest(input: Conversation[]): OutputMessage[] {
-  const messages: OutputMessage[] = input.map((message) => {
-    return {
-      role: message.role,
-      content: message.message,
-    };
-  });
-  return messages;
-}
 
 interface Props {
   children?: ReactNode;
-  activeChatId: number;
+  handleFormSubmit: any;
 }
 
-const ChatLayout: FC<Props> = ({ children, activeChatId }) => {
+const ChatLayout: FC<Props> = ({ children, handleFormSubmit }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: user } = useAuth();
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  const handleFormSubmit = async (userQuery: string) => {
-    const allConversations = await createNewConversation({
-      chatId: activeChatId,
-      userQuery,
-      role: 'user',
-    });
-    const messages: any = prepareOpenAIRequest(allConversations);
-    await updateCurrentChat({
-      id: activeChatId,
-      data: { showLoader: true },
-    });
-    const response = await getAgentResponse({
-      chatId: activeChatId,
-      messages: messages,
-      team_id: null,
-      chatType: null,
-      agentChatHistory: null,
-      proposedUserAction: null,
-    });
-    await createNewConversation({
-      chatId: activeChatId,
-      userQuery: response['content'],
-      role: 'assistant',
-    });
-    await updateCurrentChat({
-      id: activeChatId,
-      data: { showLoader: false },
-    });
-  };
 
   useEffect(() => {
     if (scrollRef.current) {

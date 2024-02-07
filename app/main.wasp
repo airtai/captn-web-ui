@@ -88,6 +88,9 @@ app CaptnAI {
     ("zod", "3.22.4"),
     ("markdown-to-jsx", "7.3.2")
   ],
+  webSocket: {
+    fn: import { checkTeamStatusAndUpdateInDB } from "@server/websocket/webSocket.js"
+  },
 }
 
 /* 💽 Wasp defines DB entities via Prisma Database Models: 

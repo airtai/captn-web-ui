@@ -116,6 +116,15 @@ export const createNewChat: CreateNewChat<void, Chat> = async (
   const chat = await context.entities.Chat.create({
     data: {
       user: { connect: { id: context.user.id } },
+      smartSuggestions: {
+        type: 'manyOf',
+        suggestions: [
+          'Boost sales',
+          'Increase brand awareness',
+          'Drive website traffic',
+          'Promote a product or service',
+        ],
+      },
     },
   });
 
@@ -182,7 +191,10 @@ type AgentPayload = {
   proposedUserAction: string[] | null | undefined;
 };
 
-export const getAgentResponse: GetAgentResponse<AgentPayload> = async (
+export const getAgentResponse: GetAgentResponse<
+  AgentPayload,
+  Record<string, any>
+> = async (
   {
     chatId,
     messages,
