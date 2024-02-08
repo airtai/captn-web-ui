@@ -168,7 +168,7 @@ jobs:
             - name: Deploy UI to staging
               if: github.ref_name == 'dev'
               run: |
-                'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
+                apt-get update -y && apt-get install openssh-client git -y
                 eval $(ssh-agent -s)
                 mkdir -p ~/.ssh
                 chmod 700 ~/.ssh
