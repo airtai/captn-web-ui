@@ -103,6 +103,7 @@ jobs:
             AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
             STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
             SUBSCRIPTION_PRICE_ID: ${{ secrets.SUBSCRIPTION_PRICE_ID }}
+            PRO_SUBSCRIPTION_PRICE_ID: ${{ secrets.PRO_SUBSCRIPTION_PRICE_ID }}
             STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
         steps:
             - uses: actions/checkout@v3
