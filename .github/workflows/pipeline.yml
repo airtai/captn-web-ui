@@ -38,6 +38,12 @@ jobs:
             - name: Run client tests
               run: cd app && wasp test client run --silent
 
+            - name: Build wasp
+              run: wasp build
+            
+            - name: Build frontend
+              run: cd .wasp/build/web-app && npm install && REACT_APP_API_URL=$REACT_APP_API_URL REACT_APP_CUSTOMER_PORTAL_LINK=$REACT_APP_CUSTOMER_PORTAL_LINK npm run build
+
             
 
     docker_build_push:
