@@ -28,7 +28,7 @@ const ChatLayout: FC<Props> = ({
   const history = useHistory();
 
   if (!user?.hasPaid) {
-    history.push('/pricing');
+    history.push('/');
   }
 
   useEffect(() => {

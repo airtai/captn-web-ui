@@ -179,9 +179,10 @@ export const getChat: GetChat<GetChatPayload, Chat> = async (
     throw new HttpError(401);
   }
 
-  return context.entities.Chat.findUnique({
+  return context.entities.Chat.findFirstOrThrow({
     where: {
       id: args.chatId,
+      userId: context.user.id,
     },
   });
 };
