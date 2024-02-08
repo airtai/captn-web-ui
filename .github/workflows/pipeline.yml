@@ -87,7 +87,7 @@ jobs:
             BACKEND_DOMAIN: ${{ github.ref_name == 'main' && vars.PROD_BACKEND_DOMAIN || vars.STAGING_BACKEND_DOMAIN }}
             WASP_WEB_CLIENT_URL: ${{ github.ref_name == 'main' && vars.PROD_WASP_WEB_CLIENT_URL || vars.STAGING_WASP_WEB_CLIENT_URL }}
             DATABASE_URL: ${{ github.ref_name == 'main' && secrets.PROD_DATABASE_URL || secrets.STAGING_DATABASE_URL }}
-            REACT_APP_API_URL: ${{ github.ref_name == 'main' && secrets.PROD_REACT_APP_API_URL || secrets.STAGING_REACT_APP_API_URL }}
+            REACT_APP_API_URL: ${{ github.ref_name == 'main' && vars.PROD_REACT_APP_API_URL || vars.STAGING_REACT_APP_API_URL }}
             JWT_SECRET: ${{ github.ref_name == 'main' && secrets.PROD_JWT_SECRET || secrets.STAGING_JWT_SECRET }}
             SSH_KEY: ${{ github.ref_name == 'main' && secrets.PROD_SSH_KEY || secrets.STAGING_SSH_KEY }}
         steps:
@@ -123,7 +123,7 @@ jobs:
           STAGING_SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
           REACT_APP_CUSTOMER_PORTAL_LINK: ${{ vars.REACT_APP_CUSTOMER_PORTAL_LINK }}
 
-          REACT_APP_API_URL: ${{ github.ref_name == 'main' && secrets.PROD_REACT_APP_API_URL || secrets.STAGING_REACT_APP_API_URL }}
+          REACT_APP_API_URL: ${{ github.ref_name == 'main' && vars.PROD_REACT_APP_API_URL || vars.STAGING_REACT_APP_API_URL }}
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
