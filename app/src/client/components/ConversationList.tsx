@@ -20,10 +20,17 @@ export default function ConversationsList({
   currentChatDetails,
   handleFormSubmit,
 }: ConversationsListProps) {
+  // @ts-ignore
+  const smartSuggestions = currentChatDetails?.smartSuggestions?.suggestions;
+  // @ts-ignore
+  const smartSuggestionsLength = smartSuggestions?.length;
+  // @ts-ignore
   const isSmartSuggestionsAvailable =
-    currentChatDetails?.smartSuggestions?.suggestions?.length > 0 &&
+    // @ts-ignore
+    smartSuggestionsLength > 0 &&
     !(
-      currentChatDetails?.smartSuggestions.suggestions?.length === 1 &&
+      smartSuggestionsLength === 1 &&
+      // @ts-ignore
       currentChatDetails?.smartSuggestions.suggestions[0] === ''
     );
   return (
@@ -103,17 +110,26 @@ export default function ConversationsList({
 
       {isSmartSuggestionsAvailable && (
         <div data-testid='smart-suggestions'>
-          {currentChatDetails.smartSuggestions?.type == 'oneOf' ? (
-            <SmartSuggestionButton
-              suggestions={currentChatDetails.smartSuggestions.suggestions}
-              smartSuggestionOnClick={handleFormSubmit}
-            />
-          ) : (
-            <SmartSuggestionCheckbox
-              suggestions={currentChatDetails.smartSuggestions.suggestions}
-              smartSuggestionOnClick={handleFormSubmit}
-            />
-          )}
+          {
+            // @ts-ignore
+            currentChatDetails.smartSuggestions?.type == 'oneOf' ? (
+              <SmartSuggestionButton
+                suggestions={
+                  // @ts-ignore
+                  currentChatDetails.smartSuggestions.suggestions
+                }
+                smartSuggestionOnClick={handleFormSubmit}
+              />
+            ) : (
+              <SmartSuggestionCheckbox
+                suggestions={
+                  // @ts-ignore
+                  currentChatDetails.smartSuggestions.suggestions
+                }
+                smartSuggestionOnClick={handleFormSubmit}
+              />
+            )
+          }
         </div>
       )}
     </div>

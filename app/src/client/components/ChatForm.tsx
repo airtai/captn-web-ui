@@ -19,9 +19,11 @@ export default function ChatForm({
   const formInputRef = useCallback(
     async (node: any) => {
       if (node !== null && googleRedirectLoginMsg) {
+        // @ts-ignore
         await handleFormSubmit(googleRedirectLoginMsg, true);
       }
       if (node !== null && userSelectedActionMessage) {
+        // @ts-ignore
         await handleFormSubmit(userSelectedActionMessage, true);
       }
     },

@@ -73,7 +73,6 @@ export const checkTeamStatusAndUpdateInDB = (io, context) => {
       console.log('a user connected: ', userEmail);
 
       socket.on('newConversationAdded', async (chat_id) => {
-        console.log('chat_id', chat_id);
         await checkTeamStatus(context, socket, chat_id);
       });
     }
