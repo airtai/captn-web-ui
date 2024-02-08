@@ -129,7 +129,7 @@ jobs:
         needs: [docker_build_push]
         permissions:
             contents: write
-        if: github.ref_name == 'main'
+        if: github.ref_name == 'main' || github.ref_name == 'dev'
         env:
           STAGING_BACKEND_DOMAIN: ${{ vars.STAGING_BACKEND_DOMAIN }}
           STAGING_SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
