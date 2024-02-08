@@ -11,12 +11,20 @@ const stripe = new Stripe(process.env.STRIPE_KEY!, {
   apiVersion: '2022-11-15', // TODO find out where this is in the Stripe dashboard and document
 });
 
-export const stripeWebhook: StripeWebhook = async (request, response, context) => {
+export const stripeWebhook: StripeWebhook = async (
+  request,
+  response,
+  context
+) => {
   const sig = request.headers['stripe-signature'] as string;
   let event: Stripe.Event;
 
   try {
-    event = stripe.webhooks.constructEvent(request.body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
+    event = stripe.webhooks.constructEvent(
+      request.body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    );
     // console.table({sig: 'stripe webhook signature verified', type: event.type})
   } catch (err: any) {
     console.log(err.message);
@@ -32,11 +40,17 @@ export const stripeWebhook: StripeWebhook = async (request, response, context) =
       const session = event.data.object as Stripe.Checkout.Session;
       userStripeId = session.customer as string;
 
-      const { line_items } = await stripe.checkout.sessions.retrieve(session.id, {
-        expand: ['line_items'],
-      });
+      const { line_items } = await stripe.checkout.sessions.retrieve(
+        session.id,
+        {
+          expand: ['line_items'],
+        }
+      );
 
-      if (line_items?.data[0]?.price?.id === process.env.HOBBY_SUBSCRIPTION_PRICE_ID) {
+      if (
+        line_items?.data[0]?.price?.id ===
+        process.env.HOBBY_SUBSCRIPTION_PRICE_ID
+      ) {
         console.log('Hobby subscription purchased ');
         await context.entities.User.updateMany({
           where: {
@@ -48,7 +62,9 @@ export const stripeWebhook: StripeWebhook = async (request, response, context) =
             subscriptionTier: TierIds.HOBBY,
           },
         });
-      } else if (line_items?.data[0]?.price?.id === process.env.PRO_SUBSCRIPTION_PRICE_ID) {
+      } else if (
+        line_items?.data[0]?.price?.id === process.env.PRO_SUBSCRIPTION_PRICE_ID
+      ) {
         console.log('Pro subscription purchased ');
         await context.entities.User.updateMany({
           where: {
@@ -149,17 +165,34 @@ export const stripeWebhook: StripeWebhook = async (request, response, context) =
             },
           });
 
-          if (customer.email) {
-            await emailSender.send({
-              to: customer.email,
-              subject: 'We hate to see you go :(',
-              text: 'We hate to see you go. Here is a sweet offer...',
-              html: 'We hate to see you go. Here is a sweet offer...',
+          // if (customer.email) {
+          //   await emailSender.send({
+          //     to: customer.email,
+          //     subject: 'We hate to see you go :(',
+          //     text: 'We hate to see you go. Here is a sweet offer...',
+          //     html: 'We hate to see you go. Here is a sweet offer...',
+          //   });
+          // }
+        }
+
+        if (!subscription.cancel_at_period_end) {
+          console.log('Subscription resumed at period end');
+          if (customer) {
+            await context.entities.User.update({
+              where: {
+                id: customer.id,
+              },
+              data: {
+                subscriptionStatus: 'active',
+              },
             });
           }
         }
       }
-    } else if (event.type === 'customer.subscription.deleted') {
+    } else if (
+      event.type === 'customer.subscription.deleted' ||
+      event.type === 'customer.subscription.canceled'
+    ) {
       const subscription = event.data.object as Stripe.Subscription;
       userStripeId = subscription.customer as string;
 
@@ -190,6 +223,9 @@ export const stripeWebhook: StripeWebhook = async (request, response, context) =
 // This allows us to override Wasp's defaults and parse the raw body of the request from Stripe to verify the signature
 export const stripeMiddlewareFn: MiddlewareConfigFn = (middlewareConfig) => {
   middlewareConfig.delete('express.json');
-  middlewareConfig.set('express.raw', express.raw({ type: 'application/json' }));
+  middlewareConfig.set(
+    'express.raw',
+    express.raw({ type: 'application/json' })
+  );
   return middlewareConfig;
 };

@@ -5,6 +5,7 @@ import ChatSidebar from '../../components/ChatSidebar';
 import ChatForm from '../../components/ChatForm';
 import useAuth from '@wasp/auth/useAuth';
 import type { Chat } from '@wasp/entities';
+import { useHistory } from 'react-router-dom';
 
 interface Props {
   children?: ReactNode;
@@ -24,6 +25,11 @@ const ChatLayout: FC<Props> = ({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: user } = useAuth();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const history = useHistory();
+
+  if (!user?.hasPaid) {
+    history.push('/pricing');
+  }
 
   useEffect(() => {
     if (scrollRef.current) {

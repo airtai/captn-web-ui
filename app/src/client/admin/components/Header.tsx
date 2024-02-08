@@ -9,7 +9,7 @@ const Header = (props: {
   user?: Partial<User>;
 }) => {
   return (
-    <header className='sticky top-0 z-999 flex w-full bg-captn-light-cream dark:captn-light-cream dark:drop-shadow-none'>
+    <header className='sticky top-0 z-999 flex w-full bg-white dark:bg-boxdark dark:drop-shadow-none'>
       <div className='flex flex-grow items-center justify-between sm:justify-end sm:gap-5 px-8 py-5 shadow '>
         <div className='flex items-center gap-2 sm:gap-4 lg:hidden'>
           {/* <!-- Hamburger Toggle BTN --> */}

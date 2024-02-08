@@ -10,6 +10,7 @@ import { DOCS_URL, BLOG_URL } from '@wasp/shared/constants';
 import DarkModeSwitcher from '../admin/components/DarkModeSwitcher';
 import { UserMenuItems } from '../components/UserMenuItems';
 import { Link } from '@wasp/router';
+import FreeTrialButton from '../components/FreeTrialButton';
 
 export const navigation = [
   { name: 'Home', href: '/' },
@@ -52,23 +53,24 @@ export default function AppNavBar() {
             <a
               key={item.name}
               href={item.href}
-              className='text-sm  leading-6 text-gray-900 duration-300 ease-in-out hover:text-yellow-500 dark:text-white'
+              className='no-underline text-sm leading-6 text-gray-900 duration-300 ease-in-out hover:text-captn-light-blue dark:text-white'
             >
               {item.name}
             </a>
           ))}
         </div>
         <div className='hidden lg:flex lg:flex-1 gap-3 justify-end items-center'>
-          {/* <ul className='flex justify-center items-center gap-2 sm:gap-4'>
-            <DarkModeSwitcher />
-          </ul> */}
+          <ul className='flex justify-center items-center gap-2 sm:gap-4'>
+            {/* <DarkModeSwitcher /> */}
+            {!user?.hasPaid && <FreeTrialButton />}
+          </ul>
 
           {isUserLoading ? null : !user ? (
             <a
               href={!user ? '/login' : '/account'}
               className='text-sm font-semibold leading-6 ml-4'
             >
-              <div className='flex items-center duration-300 ease-in-out text-gray-900 hover:text-yellow-500 dark:text-white'>
+              <div className='flex items-center duration-300 ease-in-out text-gray-900 hover:text-captn-light-blue dark:text-white'>
                 Log in <BiLogIn size='1.1rem' className='ml-1 mt-[0.1rem]' />
               </div>
             </a>
@@ -118,7 +120,7 @@ export default function AppNavBar() {
               <div className='py-6'>
                 {isUserLoading ? null : !user ? (
                   <Link to='/login'>
-                    <div className='flex justify-end items-center duration-300 ease-in-out text-gray-900 hover:text-yellow-500 dark:text-white'>
+                    <div className='flex justify-end items-center duration-300 ease-in-out text-gray-900 hover:text-captn-light-blue dark:text-white'>
                       Log in <BiLogIn size='1.1rem' className='ml-1' />
                     </div>
                   </Link>

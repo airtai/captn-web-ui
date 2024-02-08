@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { CgProfile } from 'react-icons/cg';
-import type { User } from '@wasp/entities'
+import type { User } from '@wasp/entities';
 import { UserMenuItems } from './UserMenuItems';
 
-const DropdownUser = ({ user } : { user: Partial<User> }) => {
+const DropdownUser = ({ user }: { user: Partial<User> }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
@@ -13,8 +13,12 @@ const DropdownUser = ({ user } : { user: Partial<User> }) => {
 
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
-      if (!dropdown.current) return
-      if (!dropdownOpen || dropdown.current.contains(target) || trigger.current.contains(target)) {
+      if (!dropdown.current) return;
+      if (
+        !dropdownOpen ||
+        dropdown.current.contains(target) ||
+        trigger.current.contains(target)
+      ) {
         return;
       }
       setDropdownOpen(false);
@@ -38,14 +42,18 @@ const DropdownUser = ({ user } : { user: Partial<User> }) => {
       <button
         ref={trigger}
         onClick={toggleDropdown}
-        className='flex items-center gap-4 duration-300 ease-in-out text-gray-900 hover:text-yellow-500'
+        className='flex items-center gap-4 duration-300 ease-in-out text-gray-900 hover:text-captn-light-blue'
       >
         <span className='hidden text-right lg:block'>
-          <span className='block text-sm font-medium dark:text-white'>{user.username}</span>
+          <span className='block text-sm font-medium dark:text-white'>
+            {user.username}
+          </span>
         </span>
         <CgProfile size='1.1rem' className='ml-1 mt-[0.1rem] dark:text-white' />
         <svg
-          className={`hidden fill-current dark:fill-white sm:block ${dropdownOpen ? 'rotate-180' : ''}`}
+          className={`hidden fill-current dark:fill-white sm:block ${
+            dropdownOpen ? 'rotate-180' : ''
+          }`}
           width='12'
           height='8'
           viewBox='0 0 12 8'

@@ -6,6 +6,8 @@ import { BiLogIn } from 'react-icons/bi';
 import { Link } from '@wasp/router';
 import logo from '../static/logo.png';
 import openSaasBanner from '../static/open-saas-banner.png';
+import { useHistory } from 'react-router-dom';
+
 import {
   features,
   navigation,
@@ -18,6 +20,7 @@ import { DOCS_URL } from '@wasp/shared/constants';
 import { UserMenuItems } from '../components/UserMenuItems';
 import useAuth from '@wasp/auth/useAuth';
 import DarkModeSwitcher from '../admin/components/DarkModeSwitcher';
+import FreeTrialButton from '../components/FreeTrialButton';
 
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -27,6 +30,8 @@ export default function LandingPage() {
   const NavLogo = () => (
     <img className='h-8 w-8' src={logo} alt='Your SaaS App' />
   );
+
+  const history = useHistory();
 
   return (
     <div className='bg-white dark:text-white dark:bg-boxdark-2'>
@@ -39,7 +44,7 @@ export default function LandingPage() {
           <div className='flex items-center lg:flex-1'>
             <a
               href='/'
-              className='flex items-center -m-1.5 p-1.5 text-gray-900 duration-300 ease-in-out hover:text-yellow-500'
+              className='no-underline flex items-center -m-1.5 p-1.5 text-gray-900 duration-300 ease-in-out hover:text-captn-light-blue'
             >
               <NavLogo />
               <span className='ml-2 text-sm font-semibold leading-6 dark:text-white'>
@@ -62,7 +67,7 @@ export default function LandingPage() {
               <a
                 key={item.name}
                 href={item.href}
-                className='text-sm leading-6 text-gray-900 duration-300 ease-in-out hover:text-yellow-500 dark:text-white'
+                className='no-underline text-sm leading-6 text-gray-900 duration-300 ease-in-out hover:text-captn-light-blue dark:text-white'
               >
                 {item.name}
               </a>
@@ -74,9 +79,14 @@ export default function LandingPage() {
               {/* <ul className='flex justify-center items-center gap-2 2xsm:gap-4'>
                 <DarkModeSwitcher />
               </ul> */}
+              {!user?.hasPaid && (
+                <div className='flex items-center justify-center'>
+                  <FreeTrialButton />
+                </div>
+              )}
               {isUserLoading ? null : !user ? (
                 <Link to='/login'>
-                  <div className='flex justify-end items-center duration-300 ease-in-out text-gray-900 hover:text-yellow-500 dark:text-white'>
+                  <div className='flex justify-end items-center duration-300 ease-in-out text-gray-900 hover:text-captn-light-blue dark:text-white'>
                     Log in <BiLogIn size='1.1rem' className='ml-1' />
                   </div>
                 </Link>
@@ -125,7 +135,7 @@ export default function LandingPage() {
                 <div className='py-6'>
                   {isUserLoading ? null : !user ? (
                     <Link to='/login'>
-                      <div className='flex justify-end items-center duration-300 ease-in-out text-gray-900 hover:text-yellow-500 dark:text-white'>
+                      <div className='flex justify-end items-center duration-300 ease-in-out text-gray-900 hover:text-captn-light-blue dark:text-white'>
                         Log in <BiLogIn size='1.1rem' className='ml-1' />
                       </div>
                     </Link>
@@ -178,12 +188,16 @@ export default function LandingPage() {
                   homepage. Get ready for an amazing launch soon!
                 </p>
                 <div className='mt-10 flex items-center justify-center gap-x-6'>
-                  <a
-                    href='/chat'
-                    className='rounded-md px-3.5 py-2.5 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-200 hover:ring-2 hover:ring-yellow-300 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:text-white'
-                  >
-                    Get Started <span aria-hidden='true'>→</span>
-                  </a>
+                  {!user?.hasPaid ? (
+                    <FreeTrialButton />
+                  ) : (
+                    <a
+                      href='/chat'
+                      className='no-underline rounded-md px-3.5 py-2.5 text-sm text-white ring-1 ring-inset ring-gray-200 hover:ring-2 hover:ring-captn-light-blue shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:text-white bg-captn-cta-green'
+                    >
+                      Go to chat <span aria-hidden='true'>→</span>
+                    </a>
+                  )}
                 </div>
               </div>
               <div className='mt-14 flow-root sm:mt-14 '>

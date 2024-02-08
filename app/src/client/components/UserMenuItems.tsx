@@ -28,7 +28,7 @@ export const UserMenuItems = ({
           <li>
             <Link
               to='/demo-app'
-              className='flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-yellow-500'
+              className='flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-captn-light-blue'
             >
               <MdOutlineSpaceDashboard size='1.1rem' />
               AI Scheduler (Demo App)
@@ -39,7 +39,7 @@ export const UserMenuItems = ({
           <Link
             to='/account'
             onClick={handleMobileMenuClick}
-            className='flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-yellow-500'
+            className='no-underline flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-captn-light-blue'
           >
             <svg
               className='fill-current'
@@ -68,11 +68,11 @@ export const UserMenuItems = ({
             path === '/admin' ? 'px-6' : 'sm:px-6'
           }`}
         >
-          <li className='flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-yellow-500'>
+          <li className='flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-captn-light-blue'>
             <Link
               to='/admin'
               onClick={handleMobileMenuClick}
-              className='flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-yellow-500'
+              className='no-underline  flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-captn-light-blue'
             >
               <TfiDashboard size='1.1rem' />
               Admin Dashboard
@@ -82,7 +82,7 @@ export const UserMenuItems = ({
       )}
       <button
         onClick={() => logout()}
-        className={`flex items-center gap-3.5 py-4 text-sm font-medium duration-300 ease-in-out hover:text-yellow-500 ${
+        className={`flex items-center gap-3.5 py-4 text-sm font-medium duration-300 ease-in-out hover:text-captn-light-blue ${
           path === '/admin' ? 'px-6' : 'sm:px-6'
         }`}
       >

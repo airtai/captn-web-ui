@@ -8,7 +8,6 @@ env:
     WASP_WEB_CLIENT_URL: ${{ vars.WASP_WEB_CLIENT_URL }}
     BACKEND_DOMAIN: ${{ vars.BACKEND_DOMAIN }}
     REACT_APP_API_URL: ${{ vars.REACT_APP_API_URL }}
-    REACT_APP_CUSTOMER_PORTAL_LINK: ${{ vars.REACT_APP_CUSTOMER_PORTAL_LINK }}
     DATABASE_URL: ${{ secrets.DATABASE_URL }}
     JWT_SECRET: ${{ secrets.JWT_SECRET }}
     ADS_SERVER_URL: ${{ vars.ADS_SERVER_URL }}
@@ -42,7 +41,7 @@ jobs:
               run: wasp build
             
             - name: Build frontend
-              run: cd .wasp/build/web-app && npm install && REACT_APP_API_URL=$REACT_APP_API_URL REACT_APP_CUSTOMER_PORTAL_LINK=$REACT_APP_CUSTOMER_PORTAL_LINK npm run build
+              run: cd .wasp/build/web-app && npm install && REACT_APP_API_URL=$REACT_APP_API_URL npm run build
 
             
 
@@ -152,7 +151,7 @@ jobs:
             - name: Build wasp
               run: cd app && wasp build
             - name: Build frontend
-              run: cd .wasp/build/web-app && npm install && REACT_APP_API_URL=$REACT_APP_API_URL REACT_APP_CUSTOMER_PORTAL_LINK=$REACT_APP_CUSTOMER_PORTAL_LINK npm run build
+              run: cd .wasp/build/web-app && npm install && REACT_APP_API_URL=$REACT_APP_API_URL npm run build
             - name: Copy 404.html
               run: cp 404.html .wasp/build/web-app/build
 

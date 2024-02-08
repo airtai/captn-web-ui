@@ -113,6 +113,10 @@ export const createNewChat: CreateNewChat<void, Chat> = async (
     throw new HttpError(401);
   }
 
+  if (!context.user.hasPaid) {
+    throw new HttpError(500, 'No Subscription Found');
+  }
+
   const chat = await context.entities.Chat.create({
     data: {
       user: { connect: { id: context.user.id } },
@@ -165,6 +169,10 @@ export const createNewConversation: CreateNewConversation<
 > = async ({ chatId, userQuery, role }, context) => {
   if (!context.user) {
     throw new HttpError(401);
+  }
+
+  if (!context.user.hasPaid) {
+    throw new HttpError(500, 'No Subscription Found');
   }
 
   await context.entities.Conversation.create({
