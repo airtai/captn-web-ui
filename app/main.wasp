@@ -407,6 +407,12 @@ api stripeWebhook {
   httpRoute: (POST, "/stripe-webhook")
 }
 
+api captnDailyAnalysisWebhook {
+  fn: import { captnDailyAnalysisWebhook } from "@server/webhooks/captn.js",
+  entities: [User, Chat, Conversation],
+  httpRoute: (POST, "/captn-daily-analysis-webhook")
+}
+
 /* 🕵️‍♂️ These are the Wasp Jobs. Use them to set up recurring tasks and/or queues:
  * https://wasp-lang.dev/docs/advanced/jobs
  */

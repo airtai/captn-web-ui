@@ -43,6 +43,8 @@ const ChatPage = ({ user }: { user: User }) => {
   const location = useLocation();
   const { pathname } = location;
   const history = useHistory();
+  const queryParams = new URLSearchParams(location.search);
+
   const activeChatId = Number(pathname.split('/').pop());
   const {
     data: currentChatDetails,
@@ -65,7 +67,10 @@ const ChatPage = ({ user }: { user: User }) => {
     refetchChat();
   }
 
-  const handleFormSubmit = async (userQuery: string) => {
+  const handleFormSubmit = async (
+    userQuery: string,
+    isUserRespondedWithNextAction: boolean = false
+  ) => {
     try {
       const allConversations = await createNewConversation({
         chatId: activeChatId,
@@ -78,6 +83,7 @@ const ChatPage = ({ user }: { user: User }) => {
         data: {
           showLoader: true,
           smartSuggestions: { suggestions: [''], type: '' },
+          userRespondedWithNextAction: isUserRespondedWithNextAction,
         },
       });
       const response = await getAgentResponse({
@@ -121,26 +127,67 @@ const ChatPage = ({ user }: { user: User }) => {
     }
   };
 
+  let googleRedirectLoginMsg = queryParams.get('msg');
+  if (
+    googleRedirectLoginMsg &&
+    currentChatDetails?.userRespondedWithNextAction
+  ) {
+    googleRedirectLoginMsg = null;
+  }
+
+  const userSelectedAction: any = queryParams.get('selected_user_action');
+  let userSelectedActionMessage: string | null = null;
+
+  if (userSelectedAction) {
+    if (!currentChatDetails?.userRespondedWithNextAction) {
+      if (currentChatDetails?.proposedUserAction) {
+        userSelectedActionMessage =
+          currentChatDetails.proposedUserAction[Number(userSelectedAction) - 1];
+      }
+    }
+  }
+
   return (
-    <ChatLayout handleFormSubmit={handleFormSubmit}>
+    <ChatLayout
+      handleFormSubmit={handleFormSubmit}
+      currentChatDetails={currentChatDetails}
+      googleRedirectLoginMsg={googleRedirectLoginMsg}
+      userSelectedActionMessage={userSelectedActionMessage}
+    >
       <div className='flex h-full flex-col'>
-        <div
-          className={`flex-1 overflow-hidden ${
-            currentChatDetails?.showLoader ? 'opacity-60' : 'opacity-100'
-          }`}
-        >
-          {conversations && (
-            <ConversationsList
-              conversations={conversations}
-              currentChatDetails={currentChatDetails}
-              handleFormSubmit={handleFormSubmit}
-            />
-          )}
-          {currentChatDetails?.showLoader && <Loader />}
-        </div>
+        {currentChatDetails ? (
+          <div
+            className={`flex-1 overflow-hidden ${
+              currentChatDetails?.showLoader ? 'opacity-60' : 'opacity-100'
+            }`}
+          >
+            {conversations && (
+              <ConversationsList
+                conversations={conversations}
+                currentChatDetails={currentChatDetails}
+                handleFormSubmit={handleFormSubmit}
+              />
+            )}
+            {currentChatDetails?.showLoader && <Loader />}
+          </div>
+        ) : (
+          <DefaultMessage />
+        )}
       </div>
     </ChatLayout>
   );
 };
 
 export default ChatPage;
+
+function DefaultMessage() {
+  return (
+    <p
+      className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xl md:text-6xl text-captn-light-cream opacity-70'
+      style={{ lineHeight: 'normal' }}
+    >
+      Please initiate a new chat or select existing chats to resume your
+      conversation.
+    </p>
+  );
+}

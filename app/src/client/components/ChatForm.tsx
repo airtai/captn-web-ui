@@ -1,17 +1,41 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
+import type { Chat } from '@wasp/entities';
 
 interface ChatFormProps {
   handleFormSubmit: (userQuery: string) => void;
+  currentChatDetails: Chat;
+  googleRedirectLoginMsg?: string | null;
+  userSelectedActionMessage?: string | null;
 }
 
-export default function ChatForm({ handleFormSubmit }: ChatFormProps) {
+export default function ChatForm({
+  handleFormSubmit,
+  currentChatDetails,
+  googleRedirectLoginMsg,
+  userSelectedActionMessage,
+}: ChatFormProps) {
   const [formInputValue, setFormInputValue] = useState('');
+
+  const formInputRef = useCallback(
+    async (node: any) => {
+      if (node !== null && googleRedirectLoginMsg) {
+        await handleFormSubmit(googleRedirectLoginMsg, true);
+      }
+      if (node !== null && userSelectedActionMessage) {
+        await handleFormSubmit(userSelectedActionMessage, true);
+      }
+    },
+    [googleRedirectLoginMsg, userSelectedActionMessage]
+  );
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const target = event.target as HTMLFormElement;
-    const userQuery = target.userQuery.value;
-    setFormInputValue('');
-    handleFormSubmit(userQuery);
+    if (!currentChatDetails.showLoader) {
+      const target = event.target as HTMLFormElement;
+      const userQuery = target.userQuery.value;
+      setFormInputValue('');
+      handleFormSubmit(userQuery);
+    }
   };
 
   return (
@@ -31,7 +55,7 @@ export default function ChatForm({ handleFormSubmit }: ChatFormProps) {
             className='block rounded-lg w-full h-12 text-sm text-captn-light-cream bg-captn-dark-blue focus:ring-blue-500 focus:border-blue-500'
             placeholder='Message CaptnAI...'
             required
-            // ref={formInputRef}
+            ref={formInputRef}
             value={formInputValue}
             onChange={(e) => setFormInputValue(e.target.value)}
           />

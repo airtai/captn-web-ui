@@ -4,13 +4,23 @@ import Header from '../../admin/components/Header';
 import ChatSidebar from '../../components/ChatSidebar';
 import ChatForm from '../../components/ChatForm';
 import useAuth from '@wasp/auth/useAuth';
+import type { Chat } from '@wasp/entities';
 
 interface Props {
   children?: ReactNode;
   handleFormSubmit: any;
+  currentChatDetails?: Chat | null;
+  googleRedirectLoginMsg?: string | null;
+  userSelectedActionMessage?: string | null;
 }
 
-const ChatLayout: FC<Props> = ({ children, handleFormSubmit }) => {
+const ChatLayout: FC<Props> = ({
+  children,
+  handleFormSubmit,
+  currentChatDetails,
+  googleRedirectLoginMsg,
+  userSelectedActionMessage,
+}) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: user } = useAuth();
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -54,7 +64,16 @@ const ChatLayout: FC<Props> = ({ children, handleFormSubmit }) => {
             <div>{children}</div>
           </main>
           {/* <!-- ===== Main Content End ===== --> */}
-          <ChatForm handleFormSubmit={handleFormSubmit} />
+          {currentChatDetails ? (
+            <ChatForm
+              handleFormSubmit={handleFormSubmit}
+              currentChatDetails={currentChatDetails}
+              googleRedirectLoginMsg={googleRedirectLoginMsg}
+              userSelectedActionMessage={userSelectedActionMessage}
+            />
+          ) : (
+            <></>
+          )}
         </div>
 
         {/* <!-- ===== Content Area End ===== --> */}

@@ -88,7 +88,7 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen }: ChatSidebarProps) => {
           onClick={() => setSidebarOpen(!sidebarOpen)}
           aria-controls='sidebar'
           aria-expanded={sidebarOpen}
-          className='block lg:hidden'
+          className='block lg:hidden text-captn-light-cream'
         >
           <svg
             className='fill-current'
@@ -108,7 +108,7 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen }: ChatSidebarProps) => {
       <div>
         <Link
           to='#'
-          className='mt-7 my-1 mx-4 mb-10 flex items-center justify-left gap-2.5 rounded-md bg-captn-cta-green py-4 px-4 text-center font-medium text-white hover:bg-opacity-90'
+          className='no-underline mt-7 my-1 mx-4 mb-10 flex items-center justify-left gap-2.5 rounded-md bg-captn-cta-green py-4 px-4 text-center font-medium text-white hover:bg-opacity-90'
           onClick={handleCreateNewChat}
         >
           <span>
@@ -151,7 +151,7 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen }: ChatSidebarProps) => {
                     <NavLink
                       key={chat.id}
                       to={`/chat/${chat.id}?`}
-                      className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out ${
+                      className={`no-underline group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out ${
                         pathname === '/' && 'bg-gray-700 dark:bg-meta-4'
                       } ${
                         chat.id === activeChat
