@@ -71,58 +71,62 @@ const ChatPage = ({ user }: { user: User }) => {
     userQuery: string,
     isUserRespondedWithNextAction: boolean = false
   ) => {
-    try {
-      const allConversations = await createNewConversation({
-        chatId: activeChatId,
-        userQuery,
-        role: 'user',
-      });
-      const messages: any = prepareOpenAIRequest(allConversations);
-      await updateCurrentChat({
-        id: activeChatId,
-        data: {
-          showLoader: true,
-          smartSuggestions: { suggestions: [''], type: '' },
-          userRespondedWithNextAction: isUserRespondedWithNextAction,
-        },
-      });
-      const response = await getAgentResponse({
-        chatId: activeChatId,
-        messages: messages,
-        team_id: currentChatDetails.team_id,
-        chatType: currentChatDetails.chatType,
-        agentChatHistory: currentChatDetails.agentChatHistory,
-        proposedUserAction: currentChatDetails.proposedUserAction,
-      });
-      if (response.team_status === 'inprogress') {
-        socket.emit('newConversationAdded', activeChatId);
-      }
-      response['content'] &&
-        (await createNewConversation({
+    if (currentChatDetails.userId !== user.id) {
+      window.alert('Error: This chat does not belong to you.');
+    } else {
+      try {
+        const allConversations = await createNewConversation({
           chatId: activeChatId,
-          userQuery: response['content'],
-          role: 'assistant',
-        }));
-      await updateCurrentChat({
-        id: activeChatId,
-        data: {
-          showLoader: false,
-          team_id: response['team_id'],
-          team_name: response['team_name'],
-          team_status: response['team_status'],
-          smartSuggestions: response['smart_suggestions'],
-        },
-      });
-    } catch (err: any) {
-      await updateCurrentChat({
-        id: activeChatId,
-        data: { showLoader: false },
-      });
-      console.log('Error: ' + err.message);
-      if (err.message === 'No Subscription Found') {
-        history.push('/pricing');
-      } else {
-        window.alert('Error: Something went wrong. Please try again later.');
+          userQuery,
+          role: 'user',
+        });
+        const messages: any = prepareOpenAIRequest(allConversations);
+        await updateCurrentChat({
+          id: activeChatId,
+          data: {
+            showLoader: true,
+            smartSuggestions: { suggestions: [''], type: '' },
+            userRespondedWithNextAction: isUserRespondedWithNextAction,
+          },
+        });
+        const response = await getAgentResponse({
+          chatId: activeChatId,
+          messages: messages,
+          team_id: currentChatDetails.team_id,
+          chatType: currentChatDetails.chatType,
+          agentChatHistory: currentChatDetails.agentChatHistory,
+          proposedUserAction: currentChatDetails.proposedUserAction,
+        });
+        if (response.team_status === 'inprogress') {
+          socket.emit('newConversationAdded', activeChatId);
+        }
+        response['content'] &&
+          (await createNewConversation({
+            chatId: activeChatId,
+            userQuery: response['content'],
+            role: 'assistant',
+          }));
+        await updateCurrentChat({
+          id: activeChatId,
+          data: {
+            showLoader: false,
+            team_id: response['team_id'],
+            team_name: response['team_name'],
+            team_status: response['team_status'],
+            smartSuggestions: response['smart_suggestions'],
+          },
+        });
+      } catch (err: any) {
+        await updateCurrentChat({
+          id: activeChatId,
+          data: { showLoader: false },
+        });
+        console.log('Error: ' + err.message);
+        if (err.message === 'No Subscription Found') {
+          history.push('/pricing');
+        } else {
+          window.alert('Error: Something went wrong. Please try again later.');
+        }
       }
     }
   };
