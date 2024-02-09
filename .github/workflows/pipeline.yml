@@ -38,7 +38,7 @@ jobs:
               run: cd app && wasp test client run --silent
 
             - name: Build wasp
-              run: wasp build
+              run: cd app && wasp build
             
             - name: Build frontend
               run: cd .wasp/build/web-app && npm install && REACT_APP_API_URL=$REACT_APP_API_URL npm run build
