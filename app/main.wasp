@@ -5,19 +5,20 @@ app CaptnAI {
   title: "Capt'n.ai",
   head: [
         "<meta property='og:type' content='website' />",
-        "<meta property='og:url' content='https://opensaas.sh' />", 
-        "<meta property='og:description' content='I made a SaaS App. Buy my stuff.' />",
-        "<meta property='og:image' content='https://opensaas.sh/public-banner.png' />",
-        "<meta name='twitter:image' content='https://opensaas.sh/public-banner.png' />", 
+        "<meta property='og:url' content='https://captn.ai' />", 
+        "<meta property='og:description' content='CaptnAI.' />",
+        "<meta property='og:image' content='https://captn.ai/public-banner.png' />",
+        "<meta name='twitter:image' content='https://captn.ai/public-banner.png' />", 
         "<meta name='twitter:image:width' content='800' />",
         "<meta name='twitter:image:height' content='400' />",
         "<meta name='twitter:card' content='summary_large_image' />",
         // you can put your analytics scripts here
-        "<script defer data-domain='<your-site-id>' src='https://plausible.io/js/script.js'></script>",
+        // "<script defer data-domain='<your-site-id>' src='https://plausible.io/js/script.js'></script>",
         // plausible has script extension `script.local.js` for local development
-        "<script defer data-domain='<your-site-id>' src='https://plausible.io/js/script.local.js'></script>",
+        // "<script defer data-domain='<your-site-id>' src='https://plausible.io/js/script.local.js'></script>",
         // google analytics only needs one script and will automatically detect if you are in dev mode 
-        "<!-- Google tag (gtag.js) --><script>...</script>"
+        // "<!-- Google tag (gtag.js) --><script>...</script>",
+        "<script async src='https://www.googletagmanager.com/gtag/js?id=G-NQN20RRZVD'></script>",
   ],
   // 🔐 Auth out of the box! https://wasp-lang.dev/docs/auth/overview
   auth: {

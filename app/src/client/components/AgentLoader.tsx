@@ -28,11 +28,11 @@ export default function AgentLoader({ logo }: { logo: string }) {
   return (
     <div
       data-testid='agent-loader'
-      className={`flex items-center px-5 py-2 group  flex-col animate-pulse bg-captn-light-cream`}
+      className={`flex items-center px-5 py-2 group  flex-col animate-pulse bg-captn-dark-blue`}
       style={{ minHeight: '85px' }}
     >
       <div
-        className='relative ml-3 block w-full p-4 pl-10 text-sm text-captn-dark-blue  border-captn-light-cream rounded-lg bg-captn-light-cream '
+        className='relative ml-3 block w-full p-4 pl-10 text-sm text-captn-light-cream  rounded-lg '
         style={{ maxWidth: '840px', margin: 'auto' }}
       >
         <span
