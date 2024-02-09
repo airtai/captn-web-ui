@@ -16,6 +16,7 @@ async function createConversation(
   });
 }
 
+// TODO: This function is expected to get chatID from the request body and then create a new conversation with the initial message in the chat.
 export const captnDailyAnalysisWebhook: CaptnDailyAnalysisWebhook = async (
   request,
   response,
@@ -58,3 +59,36 @@ export const captnDailyAnalysisWebhook: CaptnDailyAnalysisWebhook = async (
     response.status(400).send(`Webhook Error: Invalid user id ${userId}`);
   }
 };
+
+// export const createNewChatWebhook: CaptnDailyAnalysisWebhook = async (
+//   request,
+//   response,
+//   context
+// ) => {
+//   console.log('createNewChatWebhook');
+//   const userId = Number(request.body.userId);
+//   const customer = await context.entities.User.findFirst({
+//     where: {
+//       id: userId,
+//     },
+//     select: {
+//       id: true,
+//       email: true,
+//     },
+//   });
+//   if (customer) {
+//     const chat = await context.entities.Chat.create({
+//       data: {
+//         user: { connect: { id: customer.id } },
+//         chatType: 'daily_analysis',
+//       },
+//     });
+
+//     response.json({
+//       chatID: chat.id,
+//     });
+//   } else {
+//     console.log('Invalid user id: ', userId);
+//     response.status(400).send(`Webhook Error: Invalid user id ${userId}`);
+//   }
+// };
