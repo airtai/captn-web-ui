@@ -179,13 +179,14 @@ export default function LandingPage() {
             <div className='mx-auto max-w-8xl px-6 lg:px-8'>
               <div className='lg:mb-18 mx-auto max-w-3xl text-center'>
                 <h1 className='text-4xl font-bold text-gray-900 sm:text-6xl dark:text-white'>
-                  Capt'n AI
-                  {/* <span className='italic'>cool</span> words about
-                  your product */}
+                  Capt'n AI: Your <span className='italic'>AI-Powered</span>{' '}
+                  Digital Marketing First Mate
                 </h1>
+                {/* <p className='mt-6 mx-auto max-w-2xl text-lg leading-8 text-gray-600 dark:text-white'>
+                  Your All-in-One Digital Marketing Solution, Steered by AI
+                </p> */}
                 <p className='mt-6 mx-auto max-w-2xl text-lg leading-8 text-gray-600 dark:text-white'>
-                  Hey 🧙‍♂️! This is a sneak peek at my product's evolving
-                  homepage. Get ready for an amazing launch soon!
+                  Try Capt'n AI free for a month! No credit card required!
                 </p>
                 <div className='mt-10 flex items-center justify-center gap-x-6'>
                   {!user?.hasPaid ? (
@@ -292,22 +293,22 @@ export default function LandingPage() {
         </div> */}
 
         {/* Feature section */}
-        {/* <div id='features' className='mx-auto mt-48 max-w-7xl px-6 lg:px-8'>
+        <div id='features' className='mx-auto mt-48 max-w-7xl px-6 lg:px-8'>
           <div className='mx-auto max-w-2xl text-center'>
             <p className='mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl dark:text-white'>
-              The <span className='text-yellow-500'>Best</span> Features
+              <span className='text-captn-light-blue'>Features</span>
             </p>
-            <p className='mt-6 text-lg leading-8 text-gray-600 dark:text-white'>
+            {/* <p className='mt-6 text-lg leading-8 text-gray-600 dark:text-white'>
               Don't work harder.
               <br /> Work smarter.
-            </p>
+            </p> */}
           </div>
           <div className='mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl'>
             <dl className='grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16'>
               {features.map((feature) => (
                 <div key={feature.name} className={`relative pl-16`}>
                   <dt className='text-base font-semibold leading-7 text-gray-900 dark:text-white'>
-                    <div className='absolute left-0 top-0 flex h-10 w-10 items-center justify-center border border-yellow-400 bg-yellow-100/50 dark:bg-boxdark rounded-lg'>
+                    <div className='absolute left-0 top-0 flex h-10 w-10 items-center justify-center border border-captn-light-blue bg-captn-light-blue-100/50 dark:bg-boxdark rounded-lg'>
                       <div className='text-2xl'>{feature.icon}</div>
                     </div>
                     {feature.name}
@@ -319,7 +320,7 @@ export default function LandingPage() {
               ))}
             </dl>
           </div>
-        </div> */}
+        </div>
 
         {/* Testimonial section */}
         {/* <div className='mx-auto mt-32 max-w-7xl sm:mt-56 sm:px-6 lg:px-8'>
@@ -359,7 +360,7 @@ export default function LandingPage() {
         </div> */}
 
         {/* FAQ */}
-        {/* <div className='mt-32 mx-auto max-w-2xl divide-y divide-gray-900/10 dark:divide-gray-200/10 px-6 pb-8 sm:pb-24 sm:pt-12 lg:max-w-7xl lg:px-8 lg:py-32'>
+        <div className='mt-32 mx-auto max-w-2xl divide-y divide-gray-900/10 dark:divide-gray-200/10 px-6 pb-8 sm:pb-24 sm:pt-12 lg:max-w-7xl lg:px-8 lg:py-32'>
           <h2 className='text-2xl font-bold leading-10 tracking-tight text-gray-900 dark:text-white'>
             Frequently asked questions
           </h2>
@@ -388,11 +389,11 @@ export default function LandingPage() {
               </div>
             ))}
           </dl>
-        </div> */}
+        </div>
       </main>
 
       {/* Footer */}
-      {/* <div className='mx-auto mt-6 max-w-7xl px-6 lg:px-8 dark:bg-boxdark-2'>
+      <div className='mx-auto mt-6 max-w-7xl px-6 lg:px-8 dark:bg-boxdark-2'>
         <footer
           aria-labelledby='footer-heading'
           className='relative border-t border-gray-900/10 dark:border-gray-200/10 py-24 sm:mt-32'
@@ -401,7 +402,7 @@ export default function LandingPage() {
             Footer
           </h2>
           <div className='flex items-start justify-end mt-10 gap-20'>
-            <div>
+            {/* <div>
               <h3 className='text-sm font-semibold leading-6 text-gray-900 dark:text-white'>
                 App
               </h3>
@@ -417,7 +418,7 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </div> */}
             <div>
               <h3 className='text-sm font-semibold leading-6 text-gray-900 dark:text-white'>
                 Company
@@ -437,7 +438,7 @@ export default function LandingPage() {
             </div>
           </div>
         </footer>
-      </div> */}
+      </div>
     </div>
   );
 }
