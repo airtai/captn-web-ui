@@ -170,7 +170,11 @@ jobs:
               if: github.ref_name == 'main'
               uses: JamesIves/github-pages-deploy-action@v4
               with:
+<<<<<<< HEAD
                 folder: app/.wasp/build/web-app/build
+=======
+                folder: .wasp/build/web-app/build
+>>>>>>> dev
 
             - name: Deploy UI to staging
               if: github.ref_name == 'dev'
@@ -184,6 +188,12 @@ jobs:
                 echo "$STAGING_SSH_KEY" | base64 --decode > key.pem
                 chmod 600 key.pem
                 ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$STAGING_BACKEND_DOMAIN" "ls -lah /var/www/html/UI"
+<<<<<<< HEAD
                 scp -i key.pem -r app/.wasp/build/web-app/build azureuser@"$STAGING_BACKEND_DOMAIN":/var/www/html/UI
                 ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$STAGING_BACKEND_DOMAIN" "ls -lah /var/www/html/UI"
                 rm key.pem
+=======
+                scp -i key.pem -r .wasp/build/web-app/build azureuser@"$STAGING_BACKEND_DOMAIN":/var/www/html/UI
+                ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$STAGING_BACKEND_DOMAIN" "ls -lah /var/www/html/UI"
+                rm key.pem
+>>>>>>> dev
