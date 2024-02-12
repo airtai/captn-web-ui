@@ -27,9 +27,11 @@ const ChatLayout: FC<Props> = ({
   const scrollRef = useRef<HTMLDivElement>(null);
   const history = useHistory();
 
-  if (!user?.hasPaid) {
-    history.push('/');
-  }
+  useEffect(() => {
+    if (!user?.hasPaid) {
+      history.push('/pricing');
+    }
+  }, [user, history]);
 
   useEffect(() => {
     if (scrollRef.current) {

@@ -16,7 +16,7 @@ export const tiers = [
   {
     name: 'Monthly Subscription',
     id: TierIds.PRO,
-    priceMonthly: '$1',
+    priceMonthly: '$29',
     description: 'Buy a monthly subscription to use Captn services.',
     features: [
       '30-day free trial',
