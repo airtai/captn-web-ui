@@ -75,6 +75,13 @@ const ChatPage = ({ user }: { user: User }) => {
       window.alert('Error: This chat does not belong to you.');
     } else {
       try {
+        await updateCurrentChat({
+          id: activeChatId,
+          data: {
+            smartSuggestions: { suggestions: [''], type: '' },
+            userRespondedWithNextAction: isUserRespondedWithNextAction,
+          },
+        });
         const allConversations = await createNewConversation({
           chatId: activeChatId,
           userQuery,
@@ -85,8 +92,6 @@ const ChatPage = ({ user }: { user: User }) => {
           id: activeChatId,
           data: {
             showLoader: true,
-            smartSuggestions: { suggestions: [''], type: '' },
-            userRespondedWithNextAction: isUserRespondedWithNextAction,
           },
         });
         const response = await getAgentResponse({
