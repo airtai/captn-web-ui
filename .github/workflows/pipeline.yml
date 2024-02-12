@@ -104,7 +104,6 @@ jobs:
             DATABASE_URL: ${{ github.ref_name == 'main' && secrets.PROD_DATABASE_URL || secrets.STAGING_DATABASE_URL }}
             REACT_APP_API_URL: ${{ github.ref_name == 'main' && vars.PROD_REACT_APP_API_URL || vars.STAGING_REACT_APP_API_URL }}
             JWT_SECRET: ${{ github.ref_name == 'main' && secrets.PROD_JWT_SECRET || secrets.STAGING_JWT_SECRET }}
-            SUBSCRIPTION_PRICE_ID: ${{ github.ref_name == 'main' && secrets.PROD_SUBSCRIPTION_PRICE_ID || secrets.STAGING_SUBSCRIPTION_PRICE_ID }}
             PRO_SUBSCRIPTION_PRICE_ID: ${{ github.ref_name == 'main' && secrets.PROD_PRO_SUBSCRIPTION_PRICE_ID || secrets.STAGING_PRO_SUBSCRIPTION_PRICE_ID }}
             STRIPE_KEY: ${{ github.ref_name == 'main' && secrets.PROD_STRIPE_KEY || secrets.STAGING_STRIPE_KEY }}
             STRIPE_WEBHOOK_SECRET: ${{ github.ref_name == 'main' && secrets.PROD_STRIPE_WEBHOOK_SECRET || secrets.STAGING_STRIPE_WEBHOOK_SECRET }}
