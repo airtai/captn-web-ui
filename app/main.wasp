@@ -423,11 +423,17 @@ api captnDailyAnalysisWebhook {
   httpRoute: (POST, "/captn-daily-analysis-webhook")
 }
 
-// api createNewChatWebhook {
-//   fn: import { createNewChatWebhook } from "@server/webhooks/captn.js",
-//   entities: [User, Chat],
-//   httpRoute: (POST, "/create-chat-webhook")
-// }
+api createNewChatWebhook {
+  fn: import { createNewChatWebhook } from "@server/webhooks/captn.js",
+  entities: [User, Chat],
+  httpRoute: (POST, "/create-chat-webhook")
+}
+
+api deleteChatWebhook {
+  fn: import { deleteChatWebhook } from "@server/webhooks/captn.js",
+  entities: [Chat],
+  httpRoute: (POST, "/delete-chat-webhook")
+}
 
 /* 🕵️‍♂️ These are the Wasp Jobs. Use them to set up recurring tasks and/or queues:
  * https://wasp-lang.dev/docs/advanced/jobs
