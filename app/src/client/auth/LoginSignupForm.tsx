@@ -213,11 +213,13 @@ export const LoginSignupForm = ({
         </label>
       </div>
       {errorMessage && (
-        <MessageError>
-          {errorMessage.title}
-          {errorMessage.description && ': '}
-          {errorMessage.description}
-        </MessageError>
+        <div className='text-sm'>
+          <MessageError>
+            {errorMessage.title}
+            {errorMessage.description && ': '}
+            {errorMessage.description}
+          </MessageError>
+        </div>
       )}
       <SocialAuth>
         <SocialAuthLabel>{cta} with</SocialAuthLabel>
