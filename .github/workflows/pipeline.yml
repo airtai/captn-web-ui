@@ -184,6 +184,6 @@ jobs:
                 echo "$STAGING_SSH_KEY" | base64 --decode > key.pem
                 chmod 600 key.pem
                 ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$STAGING_BACKEND_DOMAIN" "ls -lah /var/www/html/UI"
-                scp -i key.pem -r .wasp/build/web-app/build azureuser@"$STAGING_BACKEND_DOMAIN":/var/www/html/UI
+                scp -i key.pem -r app/.wasp/build/web-app/build azureuser@"$STAGING_BACKEND_DOMAIN":/var/www/html/UI
                 ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$STAGING_BACKEND_DOMAIN" "ls -lah /var/www/html/UI"
                 rm key.pem
