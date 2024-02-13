@@ -56,7 +56,7 @@ export const captnDailyAnalysisWebhook: CaptnDailyAnalysisWebhook = async (
       .map((action, index) => `${index + 1}. ${action}`)
       .join('\n');
 
-    const conversationMessage = `${request.body.initial_message_in_chat}\n\n<b>Proposed User Actions:</b>\n${proposedUserActionList}`;
+    const conversationMessage = `${request.body.initial_message_in_chat}\n\n### Proposed User Action ###\n${proposedUserActionList}`;
 
     await createConversation(
       conversationMessage,
