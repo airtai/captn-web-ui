@@ -14,19 +14,20 @@ export default function ChatForm({
 }: ChatFormProps) {
   const [formInputValue, setFormInputValue] = useState('');
 
-  // const formInputRef = useCallback(
-  //   async (node: any) => {
-  //     if (node !== null && googleRedirectLoginMsg) {
-  //       // @ts-ignore
-  //       await handleFormSubmit(googleRedirectLoginMsg, true);
-  //     }
-  //     if (node !== null && userSelectedActionMessage) {
-  //       // @ts-ignore
-  //       await handleFormSubmit(userSelectedActionMessage, true);
-  //     }
-  //   },
-  //   [googleRedirectLoginMsg, userSelectedActionMessage]
-  // );
+  const formInputRef = useCallback(
+    async (node: any) => {
+      if (node !== null && googleRedirectLoginMsg) {
+        // @ts-ignore
+        await handleFormSubmit(googleRedirectLoginMsg, true);
+      }
+      // if (node !== null && userSelectedActionMessage) {
+      //   // @ts-ignore
+      //   await handleFormSubmit(userSelectedActionMessage, true);
+      // }
+    },
+    [googleRedirectLoginMsg]
+    // [googleRedirectLoginMsg, userSelectedActionMessage]
+  );
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -55,7 +56,7 @@ export default function ChatForm({
             className='block rounded-lg w-full h-12 text-sm text-captn-light-cream bg-captn-dark-blue focus:ring-blue-500 focus:border-blue-500'
             placeholder='Message CaptnAI...'
             required
-            // ref={formInputRef}
+            ref={formInputRef}
             value={formInputValue}
             onChange={(e) => setFormInputValue(e.target.value)}
           />

@@ -67,6 +67,13 @@ const ChatPage = ({ user }: { user: User }) => {
     refetchChat();
   }
 
+  // Function to remove query parameters
+  const removeQueryParameters = () => {
+    history.push({
+      search: '', // This removes all query parameters
+    });
+  };
+
   const handleFormSubmit = async (
     userQuery: string,
     isUserRespondedWithNextAction: boolean = false
@@ -75,6 +82,7 @@ const ChatPage = ({ user }: { user: User }) => {
       window.alert('Error: This chat does not belong to you.');
     } else {
       try {
+        isUserRespondedWithNextAction && removeQueryParameters();
         await updateCurrentChat({
           id: activeChatId,
           data: {
