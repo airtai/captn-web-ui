@@ -37,6 +37,17 @@ a {
   margin:10px;
 }
 
+.chat-conversations .captn-daily-analysis h2{
+  margin-bottom: 10px;
+}
+.chat-conversations .captn-daily-analysis p{
+  margin: 10px auto;
+}
+
+.chat-conversations .captn-daily-analysis ul > li{
+  list-style: disc;
+}
+
 @layer utilities {
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
