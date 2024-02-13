@@ -12,7 +12,6 @@ interface Props {
   handleFormSubmit: any;
   currentChatDetails?: Chat | null;
   googleRedirectLoginMsg?: string | null;
-  userSelectedActionMessage?: string | null;
 }
 
 const ChatLayout: FC<Props> = ({
@@ -20,7 +19,6 @@ const ChatLayout: FC<Props> = ({
   handleFormSubmit,
   currentChatDetails,
   googleRedirectLoginMsg,
-  userSelectedActionMessage,
 }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: user } = useAuth();
@@ -77,7 +75,6 @@ const ChatLayout: FC<Props> = ({
               handleFormSubmit={handleFormSubmit}
               currentChatDetails={currentChatDetails}
               googleRedirectLoginMsg={googleRedirectLoginMsg}
-              userSelectedActionMessage={userSelectedActionMessage}
             />
           ) : (
             <></>

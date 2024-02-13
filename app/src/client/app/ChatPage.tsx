@@ -161,7 +161,6 @@ const ChatPage = ({ user }: { user: User }) => {
       handleFormSubmit={handleFormSubmit}
       currentChatDetails={currentChatDetails}
       googleRedirectLoginMsg={googleRedirectLoginMsg}
-      userSelectedActionMessage={userSelectedActionMessage}
     >
       <div className='flex h-full flex-col'>
         {currentChatDetails ? (
@@ -175,6 +174,7 @@ const ChatPage = ({ user }: { user: User }) => {
                 conversations={conversations}
                 currentChatDetails={currentChatDetails}
                 handleFormSubmit={handleFormSubmit}
+                userSelectedActionMessage={userSelectedActionMessage}
               />
             )}
             {currentChatDetails?.showLoader && <Loader />}
