@@ -32,6 +32,11 @@ a {
   text-decoration: underline;
 }
 
+.chat-conversations ol, .chat-conversations  ul, .chat-conversations  li{
+  list-style: auto;
+  margin:10px;
+}
+
 @layer utilities {
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {

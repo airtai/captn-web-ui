@@ -48,8 +48,14 @@ export const captnDailyAnalysisWebhook: CaptnDailyAnalysisWebhook = async (
       },
     });
 
+    const proposedUserActionList = updatedChat.proposedUserAction
+      .map((action, index) => `${index + 1}. ${action}`)
+      .join('\n');
+
+    const conversationMessage = `${request.body.initial_message_in_chat}\n\nProposed User Actions:\n${proposedUserActionList}`;
+
     await createConversation(
-      request.body.initial_message_in_chat,
+      conversationMessage,
       context,
       updatedChat.id,
       userId
