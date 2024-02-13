@@ -13,12 +13,14 @@ type ConversationsListProps = {
   conversations: Conversation[];
   currentChatDetails: Chat;
   handleFormSubmit: any;
+  userSelectedActionMessage?: string | null;
 };
 
 export default function ConversationsList({
   conversations,
   currentChatDetails,
   handleFormSubmit,
+  userSelectedActionMessage,
 }: ConversationsListProps) {
   // @ts-ignore
   const smartSuggestions = currentChatDetails?.smartSuggestions?.suggestions;
@@ -127,6 +129,8 @@ export default function ConversationsList({
                   currentChatDetails.smartSuggestions.suggestions
                 }
                 smartSuggestionOnClick={handleFormSubmit}
+                chatType={currentChatDetails.chatType}
+                userSelectedActionMessage={userSelectedActionMessage}
               />
             )
           }

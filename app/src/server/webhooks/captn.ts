@@ -45,6 +45,10 @@ export const captnDailyAnalysisWebhook: CaptnDailyAnalysisWebhook = async (
         agentChatHistory: request.body.messages,
         proposedUserAction: request.body.proposed_user_action,
         emailContent: request.body.email_content,
+        smartSuggestions: {
+          suggestions: request.body.proposed_user_action,
+          type: 'manyOf',
+        },
       },
     });
 
@@ -52,7 +56,7 @@ export const captnDailyAnalysisWebhook: CaptnDailyAnalysisWebhook = async (
       .map((action, index) => `${index + 1}. ${action}`)
       .join('\n');
 
-    const conversationMessage = `${request.body.initial_message_in_chat}\n\nProposed User Actions:\n${proposedUserActionList}`;
+    const conversationMessage = `${request.body.initial_message_in_chat}\n\n<b>Proposed User Actions:</b>\n${proposedUserActionList}`;
 
     await createConversation(
       conversationMessage,
