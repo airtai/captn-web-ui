@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import type { Chat } from '@wasp/entities';
 import { useHistory } from 'react-router-dom';
 import createNewChat from '@wasp/actions/createNewChat';
+import createNewDailyAnalysisChat from '@wasp/actions/createNewDailyAnalysisChat';
 
 import Markdown from 'markdown-to-jsx';
 
@@ -21,8 +22,15 @@ export default function SmartSuggestionButton({
     smartSuggestionOnClick: any
   ) {
     if (currentChatDetails.isExceptionOccured) {
-      const chat: Chat = await createNewChat();
-      history.push(`/chat/${chat.id}`);
+      if (currentChatDetails.chatType === 'daily_analysis') {
+        const newChat: Chat = await createNewDailyAnalysisChat(
+          currentChatDetails
+        );
+        history.push(`/chat/${newChat.id}`);
+      } else {
+        const chat: Chat = await createNewChat();
+        history.push(`/chat/${chat.id}`);
+      }
     } else {
       smartSuggestionOnClick(suggestion);
       setIsShowSuggestions(false);

@@ -364,6 +364,11 @@ action createNewChat {
   entities: [Chat, Conversation]
 }
 
+action createNewDailyAnalysisChat {
+  fn: import { createNewDailyAnalysisChat } from "@server/actions.js",
+  entities: [Chat, Conversation]
+}
+
 action updateCurrentChat {
   fn: import { updateCurrentChat } from "@server/actions.js",
   entities: [Chat]

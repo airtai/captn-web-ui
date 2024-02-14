@@ -8,6 +8,7 @@ import {
   UpdateCurrentUser,
   UpdateUserById,
   CreateNewChat,
+  CreateNewDailyAnalysisChat,
   CreateNewConversation,
   UpdateCurrentChat,
   GetAgentResponse,
@@ -143,6 +144,49 @@ export const createNewChat: CreateNewChat<void, Chat> = async (
   });
 
   return chat;
+};
+
+export const createNewDailyAnalysisChat: CreateNewDailyAnalysisChat<
+  Chat,
+  Chat
+> = async (currentChatDetails, context) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+
+  if (!context.user.hasPaid) {
+    throw new HttpError(500, 'No Subscription Found');
+  }
+
+  const newChat = await context.entities.Chat.create({
+    data: {
+      user: { connect: { id: context.user.id } },
+      agentChatHistory: currentChatDetails.agentChatHistory,
+      proposedUserAction: currentChatDetails.proposedUserAction,
+      emailContent: currentChatDetails.emailContent,
+      chatType: currentChatDetails.chatType,
+      smartSuggestions: {
+        suggestions: currentChatDetails.proposedUserAction,
+        type: 'manyOf',
+      },
+    },
+  });
+  const allChatConversations = await context.entities.Conversation.findMany({
+    where: { chatId: currentChatDetails.id, userId: context.user.id },
+    orderBy: { id: 'asc' },
+  });
+  const conversationMessage = allChatConversations[0].message;
+
+  const conversation = await context.entities.Conversation.create({
+    data: {
+      chat: { connect: { id: newChat.id } },
+      user: { connect: { id: context.user.id } },
+      message: conversationMessage,
+      role: 'assistant',
+    },
+  });
+
+  return newChat;
 };
 
 export const updateCurrentChat: UpdateCurrentChat<
