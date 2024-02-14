@@ -30,17 +30,26 @@ if [ ! -f key.pem ]; then
 fi
 
 
+ssh_command="ssh -o StrictHostKeyChecking=no -i key.pem azureuser@\"$BACKEND_DOMAIN\""
+
 echo "INFO: stopping already running docker container"
-ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$BACKEND_DOMAIN" "docker stop wasp-backend || echo 'No containers available to stop'"
-ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$BACKEND_DOMAIN" "docker container prune -f || echo 'No stopped containers to delete'"
+$ssh_command "docker stop wasp-backend || echo 'No containers available to stop'"
+$ssh_command "docker container prune -f || echo 'No stopped containers to delete'"
 
 echo "INFO: pulling docker image"
-ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$BACKEND_DOMAIN" "echo $GITHUB_PASSWORD | docker login -u '$GITHUB_USERNAME' --password-stdin '$REGISTRY'"
-ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$BACKEND_DOMAIN" "docker pull ghcr.io/$GITHUB_REPOSITORY:'$TAG'"
+$ssh_command "echo $GITHUB_PASSWORD | docker login -u '$GITHUB_USERNAME' --password-stdin '$REGISTRY'"
+$ssh_command "docker pull ghcr.io/$GITHUB_REPOSITORY:'$TAG'"
 sleep 10
 
 echo "Deleting old image"
-ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$BACKEND_DOMAIN" "docker system prune -f || echo 'No images to delete'"
+$ssh_command "docker system prune -f || echo 'No images to delete'"
 
 echo "INFO: starting docker container"
-ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$BACKEND_DOMAIN" "docker run --name wasp-backend -p $PORT:$PORT -e PORT='$PORT' -e DATABASE_URL='$DATABASE_URL' -e WASP_WEB_CLIENT_URL='$WASP_WEB_CLIENT_URL' -e JWT_SECRET='$JWT_SECRET' -e GOOGLE_CLIENT_ID='$GOOGLE_CLIENT_ID' -e GOOGLE_CLIENT_SECRET='$GOOGLE_CLIENT_SECRET' -e AZURE_OPENAI_API_KEY='$AZURE_OPENAI_API_KEY' -e ADS_SERVER_URL='$ADS_SERVER_URL' -e STRIPE_KEY='$STRIPE_KEY' -e PRO_SUBSCRIPTION_PRICE_ID='$PRO_SUBSCRIPTION_PRICE_ID' -e STRIPE_WEBHOOK_SECRET='$STRIPE_WEBHOOK_SECRET' -e ADMIN_EMAILS='$ADMIN_EMAILS' -d ghcr.io/$GITHUB_REPOSITORY:$TAG"
+$ssh_command "docker run --name wasp-backend -p $PORT:$PORT -e PORT='$PORT' \
+    -e DATABASE_URL='$DATABASE_URL' -e WASP_WEB_CLIENT_URL='$WASP_WEB_CLIENT_URL' \
+	-e JWT_SECRET='$JWT_SECRET' -e GOOGLE_CLIENT_ID='$GOOGLE_CLIENT_ID' \
+	-e GOOGLE_CLIENT_SECRET='$GOOGLE_CLIENT_SECRET' \
+	-e AZURE_OPENAI_API_KEY='$AZURE_OPENAI_API_KEY' -e ADS_SERVER_URL='$ADS_SERVER_URL' \
+	-e STRIPE_KEY='$STRIPE_KEY' -e PRO_SUBSCRIPTION_PRICE_ID='$PRO_SUBSCRIPTION_PRICE_ID' \
+	-e STRIPE_WEBHOOK_SECRET='$STRIPE_WEBHOOK_SECRET' -e ADMIN_EMAILS='$ADMIN_EMAILS' \
+	-d ghcr.io/$GITHUB_REPOSITORY:$TAG"
