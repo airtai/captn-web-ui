@@ -259,6 +259,9 @@ export const getAgentResponse: GetAgentResponse<
       team_status: json['team_status'],
       team_name: json['team_name'],
       team_id: json['team_id'],
+      ...(json['is_exception_occured'] !== undefined && {
+        is_exception_occured: Boolean(json['is_exception_occured']),
+      }),
     };
   } catch (error: any) {
     throw new HttpError(500, 'Something went wrong. Please try again later');

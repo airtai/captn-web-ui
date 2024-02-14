@@ -49,6 +49,7 @@ async function updateConversationsInDb(context, socket, json, chat_id) {
     data: {
       team_status: null,
       smartSuggestions: json['smart_suggestions'],
+      isExceptionOccured: json['is_exception_occured'],
     },
   });
 
