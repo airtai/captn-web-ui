@@ -87,8 +87,6 @@ jobs:
                 shell: bash
         needs: [docker_build_push]
         if: github.ref_name == 'main' || github.ref_name == 'dev'
-        # container:
-        #     image: python:3.7-stretch
         env:
             GITHUB_USERNAME: ${{ github.actor }}
             GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
