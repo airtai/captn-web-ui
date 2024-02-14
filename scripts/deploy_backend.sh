@@ -30,7 +30,7 @@ if [ ! -f key.pem ]; then
 fi
 
 
-ssh_command="ssh -o StrictHostKeyChecking=no -i key.pem azureuser@\"$BACKEND_DOMAIN\""
+ssh_command="ssh -o StrictHostKeyChecking=no -i key.pem azureuser@$BACKEND_DOMAIN"
 
 echo "INFO: stopping already running docker container"
 $ssh_command "docker stop wasp-backend || echo 'No containers available to stop'"
