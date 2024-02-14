@@ -127,6 +127,7 @@ const ChatPage = ({ user }: { user: User }) => {
             team_name: response['team_name'],
             team_status: response['team_status'],
             smartSuggestions: response['smart_suggestions'],
+            isExceptionOccured: response['is_exception_occured'] || false,
           },
         });
       } catch (err: any) {

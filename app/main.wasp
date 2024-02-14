@@ -159,6 +159,7 @@ entity Chat {=psl
     userRespondedWithNextAction             Boolean         @default(false)
     emailContent             String?
     agentChatHistory         String?
+    isExceptionOccured       Boolean         @default(false)
     showLoader  Boolean         @default(false)
     smartSuggestions  Json         @default("{ \"suggestions\": [\"\"], \"type\": \"\"}")
     user        User?    @relation(fields: [userId], references: [id])
@@ -360,6 +361,11 @@ action updateUserById {
 
 action createNewChat {
   fn: import { createNewChat } from "@server/actions.js",
+  entities: [Chat, Conversation]
+}
+
+action createNewDailyAnalysisChat {
+  fn: import { createNewDailyAnalysisChat } from "@server/actions.js",
   entities: [Chat, Conversation]
 }
 

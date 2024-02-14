@@ -116,10 +116,7 @@ export default function ConversationsList({
             // @ts-ignore
             currentChatDetails.smartSuggestions?.type == 'oneOf' ? (
               <SmartSuggestionButton
-                suggestions={
-                  // @ts-ignore
-                  currentChatDetails.smartSuggestions.suggestions
-                }
+                currentChatDetails={currentChatDetails}
                 smartSuggestionOnClick={handleFormSubmit}
               />
             ) : (
