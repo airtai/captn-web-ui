@@ -52,11 +52,20 @@ export const captnDailyAnalysisWebhook: CaptnDailyAnalysisWebhook = async (
       },
     });
 
-    const proposedUserActionList = updatedChat.proposedUserAction
-      .map((action, index) => `${index + 1}. ${action}`)
-      .join('\n');
+    const proposedUserActionList =
+      updatedChat.proposedUserAction.length === 0 ||
+      (updatedChat.proposedUserAction.length === 1 &&
+        updatedChat.proposedUserAction[0] === '')
+        ? []
+        : updatedChat.proposedUserAction
+            .map((action, index) => `${index + 1}. ${action}`)
+            .join('\n');
 
-    const conversationMessage = `${request.body.initial_message_in_chat}\n\n### Proposed User Action ###\n${proposedUserActionList}`;
+    const proposedUserActionMsg =
+      proposedUserActionList.length === 0
+        ? ''
+        : `\n\n### Proposed User Action ###\n${proposedUserActionList}`;
+    const conversationMessage = `${request.body.initial_message_in_chat}${proposedUserActionMsg}`;
 
     await createConversation(
       conversationMessage,
