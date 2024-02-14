@@ -87,8 +87,8 @@ jobs:
                 shell: bash
         needs: [docker_build_push]
         if: github.ref_name == 'main' || github.ref_name == 'dev'
-        container:
-            image: python:3.7-stretch
+        # container:
+        #     image: python:3.7-stretch
         env:
             GITHUB_USERNAME: ${{ github.actor }}
             GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
@@ -127,7 +127,7 @@ jobs:
             - run: chmod 600 key.pem
 
             - run: ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$BACKEND_DOMAIN" "docker images"
-            - run: sh scripts/deploy_backend.sh
+            - run: bash scripts/deploy_backend.sh
 
             - run: rm key.pem
 
