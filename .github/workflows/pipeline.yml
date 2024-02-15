@@ -94,7 +94,6 @@ jobs:
             REACT_APP_CUSTOMER_PORTAL_LINK: ${{ vars.REACT_APP_CUSTOMER_PORTAL_LINK }}
             GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
             GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-            AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
             ADMIN_EMAILS: ${{ vars.ADMIN_EMAILS }}
 
             ADS_SERVER_URL: ${{ github.ref_name == 'main' && vars.PROD_ADS_SERVER_URL || vars.STAGING_ADS_SERVER_URL }}
