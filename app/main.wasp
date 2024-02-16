@@ -5,7 +5,7 @@ app CaptnAI {
   title: "Capt'n.ai",
   head: [
         "<meta property='og:type' content='website' />",
-        "<meta property='og:url' content='https://captn.ai' />", 
+        "<meta property='og:url' content='https://staging.backend.captn.ai' />", 
         "<meta property='og:description' content='Your AI-Powered Digital Marketing First Mate.' />",
         "<meta property='og:image' content='https://staging.backend.captn.ai/public-banner.png' />",
         "<meta name='twitter:image' content='https://staging.backend.captn.ai/public-banner.png' />", 
