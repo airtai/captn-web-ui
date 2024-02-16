@@ -32,6 +32,10 @@ a {
   text-decoration: underline;
 }
 
+.user-conversation-container a {
+  color: #003851;
+}
+
 .chat-conversations ol, .chat-conversations  ul, .chat-conversations  li{
   list-style: auto;
   margin:10px;
