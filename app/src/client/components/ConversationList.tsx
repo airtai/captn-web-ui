@@ -84,7 +84,7 @@ export default function ConversationsList({
               className={`flex items-center px-5 group bg-${conversationBgColor} flex-col`}
             >
               <div
-                style={{ maxWidth: '840px', margin: 'auto' }}
+                style={{ maxWidth: '700px', margin: 'auto' }}
                 className={`relative ml-3 block w-full p-4 pl-10 text-sm text-${conversationTextColor}  border-${conversationBgColor} rounded-lg bg-${conversationBgColor} `}
               >
                 <span
