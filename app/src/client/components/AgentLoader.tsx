@@ -33,7 +33,7 @@ export default function AgentLoader({ logo }: { logo: string }) {
     >
       <div
         className='relative ml-3 block w-full p-4 pl-10 text-sm text-captn-light-cream  rounded-lg '
-        style={{ maxWidth: '840px', margin: 'auto' }}
+        style={{ maxWidth: '700px', margin: 'auto' }}
       >
         <span
           className='absolute inline-block'
