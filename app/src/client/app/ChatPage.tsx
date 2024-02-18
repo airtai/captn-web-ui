@@ -1,6 +1,5 @@
 import type { User } from '@wasp/entities';
-import { useLocation } from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation, Redirect } from 'react-router-dom';
 
 import { useQuery } from '@wasp/queries';
 import getChat from '@wasp/queries/getChat';
@@ -39,6 +38,9 @@ export function prepareOpenAIRequest(input: Conversation[]): OutputMessage[] {
 
 const ChatPage = ({ user }: { user: User }) => {
   // Create all api calls required for chat page here
+  if (!user) {
+    return <Redirect to='/login' />;
+  }
   const { socket } = useSocket();
   const location = useLocation();
   const { pathname } = location;

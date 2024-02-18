@@ -257,7 +257,7 @@ page PrivacyPage {
 
 route ChatPageRoute { path: "/chat/:id?", to: ChatPage }
 page ChatPage {
-  authRequired: true,
+  // authRequired: true,
   component: import ChatPage from "@client/app/ChatPage"
 }
 
