@@ -13,6 +13,8 @@ import getConversations from '@wasp/queries/getConversations';
 import ChatLayout from './layout/ChatLayout';
 import ConversationsList from '../components/ConversationList';
 
+import createAuthRequiredChatPage from '../auth/createAuthRequiredChatPage';
+
 const Loader = () => {
   return (
     <div className='absolute top-[38%] left-[45%] -translate-y-2/4 -translate-x-2/4'>
@@ -37,10 +39,6 @@ export function prepareOpenAIRequest(input: Conversation[]): OutputMessage[] {
 }
 
 const ChatPage = ({ user }: { user: User }) => {
-  // Create all api calls required for chat page here
-  if (!user) {
-    return <Redirect to='/login' />;
-  }
   const { socket } = useSocket();
   const location = useLocation();
   const { pathname } = location;
@@ -198,7 +196,9 @@ const ChatPage = ({ user }: { user: User }) => {
   );
 };
 
-export default ChatPage;
+// export default ChatPage;
+
+export default createAuthRequiredChatPage(ChatPage);
 
 function DefaultMessage() {
   return (
