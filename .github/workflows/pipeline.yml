@@ -28,7 +28,13 @@ jobs:
                 sed -i 's/"postinstall": "patch-package"/"postinstall": ""/' $PATCH_FILE_PATH
 
             - name: Run client tests
-              run: wasp test client run --silent
+              run: cd app && wasp test client run --silent
+
+            - name: Build wasp
+              run: cd app && wasp build
+            
+            - name: Build frontend
+              run: cd app && cd .wasp/build/web-app && npm install && REACT_APP_API_URL=$REACT_APP_API_URL npm run build
 
             
 
@@ -65,8 +71,8 @@ jobs:
 
             - run: docker pull ghcr.io/$GITHUB_REPOSITORY:$GITHUB_REF_NAME || docker pull ghcr.io/$GITHUB_REPOSITORY:dev || true
             - name: Build wasp
-              run: wasp build
-            - run: docker build --build-arg PORT=$PORT -t ghcr.io/$GITHUB_REPOSITORY:$GITHUB_REF_NAME ./.wasp/build/
+              run: cd app && wasp build
+            - run: docker build --build-arg PORT=$PORT -t ghcr.io/$GITHUB_REPOSITORY:$GITHUB_REF_NAME ./app/.wasp/build/
             - name: Add tag latest if branch is main
               if: github.ref_name == 'main'
               run: docker tag ghcr.io/$GITHUB_REPOSITORY:$GITHUB_REF_NAME ghcr.io/$GITHUB_REPOSITORY:latest
@@ -81,8 +87,6 @@ jobs:
                 shell: bash
         needs: [docker_build_push]
         if: github.ref_name == 'main' || github.ref_name == 'dev'
-        container:
-            image: python:3.7-stretch
         env:
             GITHUB_USERNAME: ${{ github.actor }}
             GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
@@ -90,7 +94,7 @@ jobs:
             REACT_APP_CUSTOMER_PORTAL_LINK: ${{ vars.REACT_APP_CUSTOMER_PORTAL_LINK }}
             GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
             GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-            AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+            ADMIN_EMAILS: ${{ vars.ADMIN_EMAILS }}
 
             ADS_SERVER_URL: ${{ github.ref_name == 'main' && vars.PROD_ADS_SERVER_URL || vars.STAGING_ADS_SERVER_URL }}
             BACKEND_DOMAIN: ${{ github.ref_name == 'main' && vars.PROD_BACKEND_DOMAIN || vars.STAGING_BACKEND_DOMAIN }}
@@ -98,7 +102,7 @@ jobs:
             DATABASE_URL: ${{ github.ref_name == 'main' && secrets.PROD_DATABASE_URL || secrets.STAGING_DATABASE_URL }}
             REACT_APP_API_URL: ${{ github.ref_name == 'main' && vars.PROD_REACT_APP_API_URL || vars.STAGING_REACT_APP_API_URL }}
             JWT_SECRET: ${{ github.ref_name == 'main' && secrets.PROD_JWT_SECRET || secrets.STAGING_JWT_SECRET }}
-            SUBSCRIPTION_PRICE_ID: ${{ github.ref_name == 'main' && secrets.PROD_SUBSCRIPTION_PRICE_ID || secrets.STAGING_SUBSCRIPTION_PRICE_ID }}
+            PRO_SUBSCRIPTION_PRICE_ID: ${{ github.ref_name == 'main' && secrets.PROD_PRO_SUBSCRIPTION_PRICE_ID || secrets.STAGING_PRO_SUBSCRIPTION_PRICE_ID }}
             STRIPE_KEY: ${{ github.ref_name == 'main' && secrets.PROD_STRIPE_KEY || secrets.STAGING_STRIPE_KEY }}
             STRIPE_WEBHOOK_SECRET: ${{ github.ref_name == 'main' && secrets.PROD_STRIPE_WEBHOOK_SECRET || secrets.STAGING_STRIPE_WEBHOOK_SECRET }}
             SSH_KEY: ${{ github.ref_name == 'main' && secrets.PROD_SSH_KEY || secrets.STAGING_SSH_KEY }}
@@ -120,7 +124,7 @@ jobs:
             - run: chmod 600 key.pem
 
             - run: ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$BACKEND_DOMAIN" "docker images"
-            - run: sh scripts/deploy_backend.sh
+            - run: bash scripts/deploy_backend.sh
 
             - run: rm key.pem
 
@@ -153,17 +157,17 @@ jobs:
                 sed -i 's/"postinstall": "patch-package"/"postinstall": ""/' $PATCH_FILE_PATH
 
             - name: Build wasp
-              run: wasp build
+              run: cd app && wasp build
             - name: Build frontend
-              run: cd .wasp/build/web-app && npm install && REACT_APP_API_URL=$REACT_APP_API_URL REACT_APP_CUSTOMER_PORTAL_LINK=$REACT_APP_CUSTOMER_PORTAL_LINK npm run build
+              run: cd app && cd .wasp/build/web-app && npm install && REACT_APP_API_URL=$REACT_APP_API_URL npm run build
             - name: Copy 404.html
-              run: cp 404.html .wasp/build/web-app/build
+              run: cp 404.html app/.wasp/build/web-app/build
 
             - name: Deploy to github pages
               if: github.ref_name == 'main'
               uses: JamesIves/github-pages-deploy-action@v4
               with:
-                folder: .wasp/build/web-app/build
+                folder: app/.wasp/build/web-app/build
 
             - name: Deploy UI to staging
               if: github.ref_name == 'dev'
@@ -177,6 +181,6 @@ jobs:
                 echo "$STAGING_SSH_KEY" | base64 --decode > key.pem
                 chmod 600 key.pem
                 ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$STAGING_BACKEND_DOMAIN" "ls -lah /var/www/html/UI"
-                scp -i key.pem -r .wasp/build/web-app/build azureuser@"$STAGING_BACKEND_DOMAIN":/var/www/html/UI
+                scp -i key.pem -r app/.wasp/build/web-app/build azureuser@"$STAGING_BACKEND_DOMAIN":/var/www/html/UI
                 ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$STAGING_BACKEND_DOMAIN" "ls -lah /var/www/html/UI"
                 rm key.pem
