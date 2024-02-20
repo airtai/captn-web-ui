@@ -11,7 +11,6 @@ const createAuthRequiredChatPage = (Page) => {
         const redirectUrl = localStorage.getItem('captn:redirectUrl');
         if (redirectUrl) {
           localStorage.removeItem('captn:redirectUrl');
-          console.log('Redirecting to: ', redirectUrl);
           window.location.href = redirectUrl;
           // return <Page {...props} user={user} redirectUrl={redirectUrl} />;
         } else {
