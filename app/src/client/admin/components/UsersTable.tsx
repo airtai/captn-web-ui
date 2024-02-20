@@ -13,7 +13,9 @@ const UsersTable = () => {
   const [page, setPage] = useState(1);
   const [email, setEmail] = useState<string | undefined>(undefined);
   const [statusOptions, setStatusOptions] = useState<StatusOptions[]>([]);
-  const [hasPaidFilter, setHasPaidFilter] = useState<boolean | undefined>(undefined);
+  const [hasPaidFilter, setHasPaidFilter] = useState<boolean | undefined>(
+    undefined
+  );
   const { data, isLoading, error } = useQuery(getPaginatedUsers, {
     skip,
     hasPaidFilter: hasPaidFilter,
@@ -36,7 +38,10 @@ const UsersTable = () => {
           <span className='text-sm font-medium'>Filters:</span>
           <div className='flex items-center justify-between gap-3 w-full px-2'>
             <div className='relative flex items-center gap-3 '>
-              <label htmlFor='email-filter' className='block text-sm text-gray-700 dark:text-white'>
+              <label
+                htmlFor='email-filter'
+                className='block text-sm text-gray-700 dark:text-white'
+              >
                 email:
               </label>
               <input
@@ -48,7 +53,10 @@ const UsersTable = () => {
                 }}
                 className='rounded border border-stroke py-2 px-5 bg-white outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary'
               />
-              <label htmlFor='status-filter' className='block text-sm ml-2 text-gray-700 dark:text-white'>
+              <label
+                htmlFor='status-filter'
+                className='block text-sm ml-2 text-gray-700 dark:text-white'
+              >
                 status:
               </label>
               <div className='flex-grow relative z-20 rounded border border-stroke pr-8 outline-none bg-white transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input'>
@@ -95,8 +103,12 @@ const UsersTable = () => {
                 <select
                   onChange={(e) => {
                     setStatusOptions((prevValue) => {
-                      if (prevValue?.includes(e.target.value as StatusOptions)) {
-                        return prevValue?.filter((val) => val !== e.target.value);
+                      if (
+                        prevValue?.includes(e.target.value as StatusOptions)
+                      ) {
+                        return prevValue?.filter(
+                          (val) => val !== e.target.value
+                        );
                       } else if (!!prevValue) {
                         return [...prevValue, e.target.value as StatusOptions];
                       } else {
@@ -116,7 +128,13 @@ const UsersTable = () => {
                   })}
                 </select>
                 <span className='absolute top-1/2 right-4 z-10 -translate-y-1/2'>
-                  <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                  <svg
+                    width='24'
+                    height='24'
+                    viewBox='0 0 24 24'
+                    fill='none'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
                     <g opacity='0.8'>
                       <path
                         fillRule='evenodd'
@@ -129,7 +147,10 @@ const UsersTable = () => {
                 </span>
               </div>
               <div className='flex items-center gap-2'>
-                <label htmlFor='hasPaid-filter' className='block text-sm ml-2 text-gray-700 dark:text-white'>
+                <label
+                  htmlFor='hasPaid-filter'
+                  className='block text-sm ml-2 text-gray-700 dark:text-white'
+                >
                   hasPaid:
                 </label>
                 <select
@@ -151,7 +172,9 @@ const UsersTable = () => {
             </div>
             {!isLoading && (
               <div className='max-w-60'>
-                <span className='text-md mr-2 text-black dark:text-white'>page</span>
+                <span className='text-md mr-2 text-black dark:text-white'>
+                  page
+                </span>
                 <input
                   type='number'
                   value={page}
@@ -162,7 +185,10 @@ const UsersTable = () => {
                   }}
                   className='rounded-md border-1 border-stroke bg-transparent  px-4 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary'
                 />
-                <span className='text-md text-black dark:text-white'> / {data?.totalPages} </span>
+                <span className='text-md text-black dark:text-white'>
+                  {' '}
+                  / {data?.totalPages}{' '}
+                </span>
               </div>
             )}
           </div>
@@ -181,9 +207,9 @@ const UsersTable = () => {
           <div className='col-span-2 flex items-center'>
             <p className='font-medium'>Stripe ID</p>
           </div>
-          <div className='col-span-1 flex items-center'>
+          {/* <div className='col-span-1 flex items-center'>
             <p className='font-medium'>Has Paid</p>
-          </div>
+          </div> */}
           <div className='col-span-1 flex items-center'>
             <p className='font-medium'></p>
           </div>
@@ -202,25 +228,35 @@ const UsersTable = () => {
             >
               <div className='col-span-3 flex items-center'>
                 <div className='flex flex-col gap-1 '>
-                  <p className='text-sm text-black dark:text-white'>{user.email}</p>
-                  <p className='text-sm text-black dark:text-white'>{user.username}</p>
+                  <p className='text-sm text-black dark:text-white'>
+                    {user.email}
+                  </p>
+                  <p className='text-sm text-black dark:text-white'>
+                    {user.username}
+                  </p>
                 </div>
               </div>
 
               <div className='col-span-3 hidden items-center sm:flex'>
-                <p className='text-sm text-black dark:text-white'>{user.lastActiveTimestamp.toLocaleDateString() + ' ' + user.lastActiveTimestamp.toLocaleTimeString()}</p>
+                <p className='text-sm text-black dark:text-white'>
+                  {user.lastActiveTimestamp.toLocaleDateString() +
+                    ' ' +
+                    user.lastActiveTimestamp.toLocaleTimeString()}
+                </p>
               </div>
               <div className='col-span-2 flex items-center'>
-                <p className='text-sm text-black dark:text-white'>{user.subscriptionStatus}</p>
+                <p className='text-sm text-black dark:text-white'>
+                  {user.subscriptionStatus}
+                </p>
               </div>
               <div className='col-span-2 flex items-center'>
                 <p className='text-sm text-meta-3'>{user.stripeId}</p>
               </div>
-              <div className='col-span-1 flex items-center'>
+              {/* <div className='col-span-1 flex items-center'>
                 <div className='text-sm text-black dark:text-white'>
                   <SwitcherOne user={user} updateUserById={updateUserById} />
                 </div>
-              </div>
+              </div> */}
               <div className='col-span-1 flex items-center'>
                 <DropdownEditDelete />
               </div>

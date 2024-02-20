@@ -38,53 +38,57 @@ export default function ConversationsList({
   return (
     <div data-testid='conversations-wrapper' className='w-full'>
       {conversations.map((conversation, idx) => {
-        const conversationBgColor =
-          conversation.role === 'user' ? 'captn-light-blue' : 'captn-dark-blue';
-        const conversationTextColor =
-          conversation.role === 'user'
-            ? 'captn-dark-blue'
-            : // : 'captn-light-cream';
-              'white';
-        const conversationLogo =
-          conversation.role === 'user' ? (
-            <div
-              style={{
-                alignItems: 'center',
-                background: '#fff',
-                borderRadius: '50%',
-                color: '#444654',
-                display: 'flex',
-                flexBasis: '40px',
-                flexGrow: '0',
-                flexShrink: '0',
-                fontSize: '14px',
-                height: '40px',
-                justifyContent: 'center',
-                padding: '5px',
-                position: 'relative',
-                width: '40px',
-              }}
-              className='flex'
-            >
-              <div>You</div>
-            </div>
-          ) : (
-            <img
-              alt='captn logo'
-              src={logo}
-              className='w-full h-full'
-              style={{ borderRadius: '50%' }}
-            />
-          );
+        const isUserConversation = conversation.role === 'user';
+        const conversationBgColor = isUserConversation
+          ? 'captn-light-blue'
+          : 'captn-dark-blue';
+        const conversationTextColor = isUserConversation
+          ? 'captn-dark-blue'
+          : // : 'captn-light-cream';
+            'white';
+        const conversationLogo = isUserConversation ? (
+          <div
+            style={{
+              alignItems: 'center',
+              background: '#fff',
+              borderRadius: '50%',
+              color: '#444654',
+              display: 'flex',
+              flexBasis: '40px',
+              flexGrow: '0',
+              flexShrink: '0',
+              fontSize: '14px',
+              height: '40px',
+              justifyContent: 'center',
+              padding: '5px',
+              position: 'relative',
+              width: '40px',
+            }}
+            className='flex'
+          >
+            <div>You</div>
+          </div>
+        ) : (
+          <img
+            alt='captn logo'
+            src={logo}
+            className='w-full h-full'
+            style={{ borderRadius: '50%' }}
+          />
+        );
 
         return (
           <div key={idx}>
             <div
               style={{ minHeight: '85px' }}
-              className={`flex items-center px-5 group bg-${conversationBgColor} flex-col`}
+              className={`flex items-center px-5 group bg-${conversationBgColor} flex-col ${
+                isUserConversation
+                  ? 'user-conversation-container'
+                  : 'agent-conversation-container'
+              }`}
             >
               <div
-                style={{ maxWidth: '840px', margin: 'auto' }}
+                style={{ maxWidth: '700px', margin: 'auto' }}
                 className={`relative ml-3 block w-full p-4 pl-10 text-sm text-${conversationTextColor}  border-${conversationBgColor} rounded-lg bg-${conversationBgColor} `}
               >
                 <span
