@@ -1,6 +1,5 @@
 import type { User } from '@wasp/entities';
-import { useLocation } from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation, Redirect } from 'react-router-dom';
 
 import { useQuery } from '@wasp/queries';
 import getChat from '@wasp/queries/getChat';
@@ -13,6 +12,8 @@ import { useSocket, useSocketListener } from '@wasp/webSocket';
 import getConversations from '@wasp/queries/getConversations';
 import ChatLayout from './layout/ChatLayout';
 import ConversationsList from '../components/ConversationList';
+
+import createAuthRequiredChatPage from '../auth/createAuthRequiredChatPage';
 
 const Loader = () => {
   return (
@@ -38,7 +39,6 @@ export function prepareOpenAIRequest(input: Conversation[]): OutputMessage[] {
 }
 
 const ChatPage = ({ user }: { user: User }) => {
-  // Create all api calls required for chat page here
   const { socket } = useSocket();
   const location = useLocation();
   const { pathname } = location;
@@ -196,7 +196,9 @@ const ChatPage = ({ user }: { user: User }) => {
   );
 };
 
-export default ChatPage;
+// export default ChatPage;
+
+export default createAuthRequiredChatPage(ChatPage);
 
 function DefaultMessage() {
   return (

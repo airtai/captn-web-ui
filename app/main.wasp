@@ -258,8 +258,8 @@ page PrivacyPage {
 
 route ChatPageRoute { path: "/chat/:id?", to: ChatPage }
 page ChatPage {
-  authRequired: true,
-  component: import ChatPage from "@client/app/ChatPage"
+  // authRequired: true,
+  component: import createAuthRequiredChatPage from "@client/app/ChatPage"
 }
 
 route PricingPageRoute { path: "/pricing", to: PricingPage }
