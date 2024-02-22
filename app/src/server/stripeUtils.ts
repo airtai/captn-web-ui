@@ -41,10 +41,15 @@ export async function createStripeCheckoutSession({
     mode: 'subscription',
     success_url: `${DOMAIN}/checkout?success=true`,
     cancel_url: `${DOMAIN}/checkout?canceled=true`,
-    // automatic_tax: { enabled: true },
-    // customer_update: {
-    //   address: 'auto',
-    // },
+    automatic_tax: { enabled: true },
+    customer_update: {
+      address: 'auto',
+      name: 'auto',
+    },
+    tax_id_collection: {
+      enabled: true,
+    },
+    billing_address_collection: 'auto',
     customer: customerId,
     subscription_data: {
       trial_settings: {
