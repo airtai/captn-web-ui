@@ -1,13 +1,16 @@
 import Stripe from 'stripe';
 import type { DailyStatsJob } from '@wasp/jobs/dailyStatsJob.js';
-import { getDailyPageViews, getSources } from './plausibleAnalyticsUtils.js';
-// import { getDailyPageViews, getSources } from './googleAnalyticsUtils.js';
+// import { getDailyPageViews, getSources } from './plausibleAnalyticsUtils.js';
+import { getDailyPageViews, getSources } from './googleAnalyticsUtils.js';
 
 const stripe = new Stripe(process.env.STRIPE_KEY!, {
   apiVersion: '2022-11-15', // TODO find out where this is in the Stripe dashboard and document
 });
 
-export const calculateDailyStats: DailyStatsJob<never, void> = async (_args, context) => {
+export const calculateDailyStats: DailyStatsJob<never, void> = async (
+  _args,
+  context
+) => {
   const nowUTC = new Date(Date.now());
   nowUTC.setUTCHours(0, 0, 0, 0);
 
@@ -106,7 +109,7 @@ export const calculateDailyStats: DailyStatsJob<never, void> = async (_args, con
       });
     }
 
-    console.table({ dailyStats })
+    console.table({ dailyStats });
   } catch (error: any) {
     console.error('Error calculating daily stats: ', error);
     await context.entities.Logs.create({
@@ -141,7 +144,8 @@ async function fetchTotalStripeRevenue() {
 
     if (balanceTransactions.has_more) {
       // Set the starting point for the next iteration to the last object fetched
-      params.starting_after = balanceTransactions.data[balanceTransactions.data.length - 1].id;
+      params.starting_after =
+        balanceTransactions.data[balanceTransactions.data.length - 1].id;
     } else {
       hasMore = false;
     }
