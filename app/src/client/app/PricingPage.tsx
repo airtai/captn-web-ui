@@ -175,7 +175,7 @@ const PricingPage = () => {
                       }
                       ${
                         tier.bestDeal
-                          ? 'bg-captn-light-blue text-white hover:text-white shadow-sm hover:bg-yellow-400'
+                          ? 'bg-captn-cta-green text-white hover:text-white shadow-sm hover:bg-captn-cta-green-hover'
                           : 'text-gray-600  ring-1 ring-inset ring-purple-200 hover:ring-purple-400'
                       }
                       ${
@@ -183,13 +183,14 @@ const PricingPage = () => {
                           ? 'cursor-wait'
                           : null
                       }
-                      'mt-8 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-yellow-400'
+                      'mt-8 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-yellow-400 '
                     `}
                 >
                   {tier.id === 'enterprise-tier'
                     ? 'Contact us'
                     : !!user
-                    ? 'Buy plan'
+                    ? // ? 'Buy plan'
+                      'Free trial'
                     : 'Log in to buy plan'}
                 </button>
               )}
