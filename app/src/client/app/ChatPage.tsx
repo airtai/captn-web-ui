@@ -61,6 +61,7 @@ const ChatPage = ({ user }: { user: User }) => {
   );
 
   useSocketListener('newConversationAddedToDB', updateState);
+  useSocketListener('smartSuggestionsAddedToDB', updateState);
 
   function updateState() {
     refetchConversation();
@@ -119,6 +120,13 @@ const ChatPage = ({ user }: { user: User }) => {
             userQuery: response['content'],
             role: 'assistant',
           }));
+
+        // Emit an event to check the smartSuggestion status
+        if (response['content'] && !response['is_exception_occured']) {
+          console.log('emitting socket event to check smart suggestion status');
+          socket.emit('checkSmartSuggestionStatus', activeChatId);
+        }
+
         await updateCurrentChat({
           id: activeChatId,
           data: {

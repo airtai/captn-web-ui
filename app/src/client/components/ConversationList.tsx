@@ -115,7 +115,7 @@ export default function ConversationsList({
       )}
 
       {isSmartSuggestionsAvailable && (
-        <div data-testid='smart-suggestions'>
+        <div data-testid='smart-suggestions' className='fadeIn'>
           {
             // @ts-ignore
             currentChatDetails.smartSuggestions?.type == 'oneOf' ? (
