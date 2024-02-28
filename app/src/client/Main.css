@@ -52,6 +52,31 @@ a {
   list-style: disc;
 }
 
+/*=== FADE IN  ===*/
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+.fadeIn {
+  opacity: 0;
+  animation: 0.25s ease-in 0.25s fadeIn;
+  animation-fill-mode: both;
+}
+
 @layer utilities {
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {

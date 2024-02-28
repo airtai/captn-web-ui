@@ -65,6 +65,18 @@ async function updateConversationsInDb(context, socket, json, chat_id) {
   socket.emit('newConversationAddedToDB');
 }
 
+async function getChat(chatId, context) {
+  return await context.entities.Chat.findFirst({
+    where: {
+      id: chatId,
+    },
+    select: {
+      id: true,
+      smartSuggestions: true,
+    },
+  });
+}
+
 export const checkTeamStatusAndUpdateInDB = (io, context) => {
   // When a new user is connected
   io.on('connection', async (socket) => {
@@ -75,6 +87,24 @@ export const checkTeamStatusAndUpdateInDB = (io, context) => {
 
       socket.on('newConversationAdded', async (chat_id) => {
         await checkTeamStatus(context, socket, chat_id);
+      });
+
+      socket.on('checkSmartSuggestionStatus', async (chatId) => {
+        let isSmartSuggestionEmpty = true;
+        for (let i = 0; i < 10; i++) {
+          const chat = await getChat(chatId, context);
+          const { suggestions } = chat.smartSuggestions;
+          isSmartSuggestionEmpty =
+            suggestions.length === 1 && suggestions[0] === '';
+
+          if (isSmartSuggestionEmpty) {
+            // If smart suggestions are still empty, wait for 1 second and check again
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          } else {
+            socket.emit('smartSuggestionsAddedToDB', chatId);
+            break;
+          }
+        }
       });
     }
   });
