@@ -15,6 +15,9 @@ import ConversationsList from '../components/ConversationList';
 
 import createAuthRequiredChatPage from '../auth/createAuthRequiredChatPage';
 
+const exceptionMessage =
+  "Ahoy, mate! It seems our voyage hit an unexpected squall. Let's trim the sails and set a new course. Cast off once more by clicking the button below.";
+
 const Loader = () => {
   return (
     <div className='absolute top-[38%] left-[45%] -translate-y-2/4 -translate-x-2/4'>
@@ -147,7 +150,22 @@ const ChatPage = ({ user }: { user: User }) => {
         if (err.message === 'No Subscription Found') {
           history.push('/pricing');
         } else {
-          window.alert('Error: Something went wrong. Please try again later.');
+          await createNewConversation({
+            chatId: activeChatId,
+            userQuery: exceptionMessage,
+            role: 'assistant',
+          });
+          await updateCurrentChat({
+            id: activeChatId,
+            data: {
+              showLoader: false,
+              smartSuggestions: {
+                suggestions: ["Let's try again"],
+                type: 'oneOf',
+              },
+              isExceptionOccured: true,
+            },
+          });
         }
       }
     }
