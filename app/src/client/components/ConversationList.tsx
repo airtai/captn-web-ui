@@ -7,6 +7,7 @@ import type { Conversation, Chat } from '@wasp/entities';
 import AgentLoader from './AgentLoader';
 import SmartSuggestionButton from './SmartSuggestionButton';
 import SmartSuggestionCheckbox from './SmartSuggestionCheckbox';
+import LetterByLetterDisplay from './LetterByLetterDisplay';
 import logo from '../static/captn-logo.png';
 
 type ConversationsListProps = {
@@ -35,6 +36,7 @@ export default function ConversationsList({
       // @ts-ignore
       currentChatDetails?.smartSuggestions.suggestions[0] === ''
     );
+  const lastConversationIdx = conversations.length - 1;
   return (
     <div data-testid='conversations-wrapper' className='w-full'>
       {conversations.map((conversation, idx) => {
@@ -102,9 +104,19 @@ export default function ConversationsList({
                 >
                   {conversationLogo}
                 </span>
-                <div className='chat-conversations text-base flex flex-col gap-2'>
-                  <Markdown>{conversation.message}</Markdown>
-                </div>
+                {idx === lastConversationIdx && !isUserConversation && (
+                  <div className='chat-conversations text-base flex flex-col gap-2'>
+                    <LetterByLetterDisplay
+                      sentence={conversation.message}
+                      speed={100}
+                    />
+                  </div>
+                )}
+                {idx !== lastConversationIdx && (
+                  <div className='chat-conversations text-base flex flex-col gap-2'>
+                    <Markdown>{conversation.message}</Markdown>
+                  </div>
+                )}
               </div>
             </div>
           </div>
