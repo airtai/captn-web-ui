@@ -108,10 +108,11 @@ export default function ConversationsList({
                 </span>
                 {idx === lastConversationIdx && !isUserConversation && (
                   <div className='chat-conversations text-base flex flex-col gap-2'>
-                    {currentChatDetails?.streamAgentResponse ? (
+                    {currentChatDetails?.streamAgentResponse &&
+                    !currentChatDetails?.team_id ? (
                       <LetterByLetterDisplay
                         sentence={conversation.message}
-                        speed={20}
+                        speed={5}
                         onStreamAnimationComplete={onStreamAnimationComplete}
                       />
                     ) : (

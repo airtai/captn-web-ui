@@ -139,7 +139,7 @@ const ChatPage = ({ user }: { user: User }) => {
             team_status: response['team_status'],
             smartSuggestions: response['smart_suggestions'],
             isExceptionOccured: response['is_exception_occured'] || false,
-            streamAgentResponse: true,
+            streamAgentResponse: response['team_id'] ? false : true,
           },
         });
       } catch (err: any) {
