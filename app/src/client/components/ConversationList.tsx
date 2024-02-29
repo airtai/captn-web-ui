@@ -74,7 +74,7 @@ export default function ConversationsList({
           </div>
         ) : (
           <img
-            alt='captn logo'
+            alt='Capt’n.ai logo'
             src={logo}
             className='w-full h-full'
             style={{ borderRadius: '50%' }}

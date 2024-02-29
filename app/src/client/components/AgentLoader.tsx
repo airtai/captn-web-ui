@@ -45,7 +45,7 @@ export default function AgentLoader({ logo }: { logo: string }) {
           }}
         >
           <img
-            alt='captn logo'
+            alt='Capt’n.ai logo'
             src={logo}
             className='w-full h-full'
             style={{ borderRadius: '50%' }}

@@ -2,7 +2,7 @@ app CaptnAI {
   wasp: {
     version: "^0.11.8"
   },
-  title: "Capt'n.ai",
+  title: "Capt’n.ai",
   head: [
         "<meta property='og:type' content='website' />",
         "<meta property='og:url' content='https://captn.ai' />", 

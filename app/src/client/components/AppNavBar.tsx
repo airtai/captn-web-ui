@@ -19,9 +19,7 @@ export const navigation = [
   // { name: 'Blog', href: BLOG_URL },
 ];
 
-const NavLogo = () => (
-  <img className='h-8 w-8' src={logo} alt='Your SaaS App' />
-);
+const NavLogo = () => <img className='h-7 w-auto' src={logo} alt='Capt’n.ai' />;
 
 export default function AppNavBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -35,7 +33,7 @@ export default function AppNavBar() {
       >
         <div className='flex lg:flex-1'>
           <a href='/' className='-m-1.5 p-1.5'>
-            <img className='h-8 w-8' src={logo} alt='My SaaS App' />
+            <img className='h-7 w-auto' src={logo} alt='My SaaS App' />
           </a>
         </div>
         <div className='flex lg:hidden'>
