@@ -28,7 +28,7 @@ export default function LandingPage() {
   const { data: user, isLoading: isUserLoading } = useAuth();
 
   const NavLogo = () => (
-    <img className='h-7 w-auto' src={logo} alt='Capt’n.ai' />
+    <img className='h-10 w-auto -ml-2' src={logo} alt='Capt’n.ai' />
   );
 
   const history = useHistory();

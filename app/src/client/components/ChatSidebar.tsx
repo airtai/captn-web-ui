@@ -89,7 +89,7 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen }: ChatSidebarProps) => {
       {/* <!-- SIDEBAR HEADER --> */}
       <div className='flex items-center justify-between gap-2 px-6 py-5.5 lg:py-3.5'>
         <NavLink to='/'>
-          <img src={Logo} alt='Logo' className='h-7 w-auto mt-2 ml-2' />
+          <img src={Logo} alt='Logo' className='h-10 w-auto mt-2' />
         </NavLink>
 
         <button
