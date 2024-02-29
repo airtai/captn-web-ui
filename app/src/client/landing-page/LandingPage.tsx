@@ -28,7 +28,7 @@ export default function LandingPage() {
   const { data: user, isLoading: isUserLoading } = useAuth();
 
   const NavLogo = () => (
-    <img className='h-8 w-8' src={logo} alt='Your SaaS App' />
+    <img className='h-7 w-auto' src={logo} alt='Capt’n.ai' />
   );
 
   const history = useHistory();
@@ -47,9 +47,9 @@ export default function LandingPage() {
               className='no-underline flex items-center -m-1.5 p-1.5 text-gray-900 duration-300 ease-in-out hover:text-captn-light-blue'
             >
               <NavLogo />
-              <span className='ml-2 text-sm font-semibold leading-6 dark:text-white'>
+              {/* <span className='ml-2 text-sm font-semibold leading-6 dark:text-white'>
                 Capt’n.ai
-              </span>
+              </span> */}
             </a>
           </div>
           <div className='flex lg:hidden'>
