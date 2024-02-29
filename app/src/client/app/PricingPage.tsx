@@ -68,17 +68,17 @@ const PricingPage = () => {
       <div className='mx-auto max-w-7xl px-6 lg:px-8'>
         <div id='pricing' className='mx-auto max-w-4xl text-center'>
           <h2 className='mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl dark:text-white'>
-            Try Capt'nAI free for a month.{' '}
+            Try Capt’n.ai free for a month.{' '}
             <span className='text-captn-light-blue'>
               No credit card required!
             </span>
           </h2>
         </div>
         <p className='mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-600 dark:text-white'>
-          To set sail and fully explore Captn's offerings, you'll need an active
-          subscription as your compass. Navigate the complete range of features
-          with our smooth subscription, charting a course with a 30-day free
-          trial and no credit card required.
+          To set sail and fully explore Capt’n.ai's offerings, you'll need an
+          active subscription as your compass. Navigate the complete range of
+          features with our smooth subscription, charting a course with a 30-day
+          free trial and no credit card required.
           {/* {' '}
           <span className='px-2 py-1 bg-gray-100 rounded-md text-gray-500'>
             4242 4242 4242 4242 4242
