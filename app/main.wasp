@@ -163,6 +163,7 @@ entity Chat {=psl
     isExceptionOccured       Boolean         @default(false)
     showLoader  Boolean         @default(false)
     smartSuggestions  Json         @default("{ \"suggestions\": [\"\"], \"type\": \"\"}")
+    streamAgentResponse Boolean         @default(false)
     user        User?    @relation(fields: [userId], references: [id])
     userId      Int?
     name        String?

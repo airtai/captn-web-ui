@@ -139,6 +139,7 @@ const ChatPage = ({ user }: { user: User }) => {
             team_status: response['team_status'],
             smartSuggestions: response['smart_suggestions'],
             isExceptionOccured: response['is_exception_occured'] || false,
+            streamAgentResponse: response['team_id'] ? false : true,
           },
         });
       } catch (err: any) {
@@ -169,6 +170,15 @@ const ChatPage = ({ user }: { user: User }) => {
         }
       }
     }
+  };
+
+  const onStreamAnimationComplete = () => {
+    updateCurrentChat({
+      id: activeChatId,
+      data: {
+        streamAgentResponse: false,
+      },
+    });
   };
 
   let googleRedirectLoginMsg = queryParams.get('msg');
@@ -210,6 +220,7 @@ const ChatPage = ({ user }: { user: User }) => {
                 currentChatDetails={currentChatDetails}
                 handleFormSubmit={handleFormSubmit}
                 userSelectedActionMessage={userSelectedActionMessage}
+                onStreamAnimationComplete={onStreamAnimationComplete}
               />
             )}
             {currentChatDetails?.showLoader && <Loader />}
