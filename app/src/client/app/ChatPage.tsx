@@ -117,18 +117,26 @@ const ChatPage = ({ user }: { user: User }) => {
         if (response.team_status === 'inprogress') {
           socket.emit('newConversationAdded', activeChatId);
         }
+        // Emit an event to check the smartSuggestion status
+        if (response['content'] && !response['is_exception_occured']) {
+          console.log('emitting socket event to check smart suggestion status');
+          socket.emit('checkSmartSuggestionStatus', activeChatId);
+          await updateCurrentChat({
+            id: activeChatId,
+            data: {
+              streamAgentResponse: true,
+              showLoader: false,
+              smartSuggestions: response['smart_suggestions'],
+            },
+          });
+        }
+
         response['content'] &&
           (await createNewConversation({
             chatId: activeChatId,
             userQuery: response['content'],
             role: 'assistant',
           }));
-
-        // Emit an event to check the smartSuggestion status
-        if (response['content'] && !response['is_exception_occured']) {
-          console.log('emitting socket event to check smart suggestion status');
-          socket.emit('checkSmartSuggestionStatus', activeChatId);
-        }
 
         await updateCurrentChat({
           id: activeChatId,
@@ -139,7 +147,6 @@ const ChatPage = ({ user }: { user: User }) => {
             team_status: response['team_status'],
             smartSuggestions: response['smart_suggestions'],
             isExceptionOccured: response['is_exception_occured'] || false,
-            streamAgentResponse: response['team_id'] ? false : true,
           },
         });
       } catch (err: any) {
