@@ -1,4 +1,5 @@
 import HttpError from '@wasp/core/HttpError.js';
+import WebSocket from 'ws';
 
 export const ADS_SERVER_URL =
   process.env.ADS_SERVER_URL || 'http://127.0.0.1:9000';
@@ -77,7 +78,7 @@ async function getChat(chatId, context) {
   });
 }
 
-export const checkTeamStatusAndUpdateInDB = (io, context) => {
+export const socketFn = (io, context) => {
   // When a new user is connected
   io.on('connection', async (socket) => {
     if (socket.data.user) {
@@ -85,9 +86,9 @@ export const checkTeamStatusAndUpdateInDB = (io, context) => {
       console.log('========');
       console.log('a user connected: ', userEmail);
 
-      socket.on('newConversationAdded', async (chat_id) => {
-        await checkTeamStatus(context, socket, chat_id);
-      });
+      // socket.on('newConversationAdded', async (chat_id) => {
+      //   await checkTeamStatus(context, socket, chat_id);
+      // });
 
       socket.on('checkSmartSuggestionStatus', async (chatId) => {
         let isSmartSuggestionEmpty = true;
@@ -105,6 +106,27 @@ export const checkTeamStatusAndUpdateInDB = (io, context) => {
             break;
           }
         }
+      });
+
+      socket.on('sendMessageToTeam', async (userId, chatId, message) => {
+        // await checkTeamStatus(context, socket, chat_id);
+
+        // the below ws should be created only once
+        const ws = new WebSocket(`ws://127.0.0.1:8080/ws`);
+        const data = {
+          conv_id: chatId,
+          user_id: userId,
+          message: message,
+        };
+        ws.onopen = () => {
+          console.log('---------------------');
+          console.log('Sending data to AutoGen');
+          console.log('data: ', JSON.stringify(data));
+          ws.send(JSON.stringify(data));
+        };
+        ws.onmessage = function (event) {
+          socket.emit('newMessageFromTeam', `${event.data}`);
+        };
       });
     }
   });

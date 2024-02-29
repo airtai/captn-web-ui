@@ -14,6 +14,7 @@ import ChatLayout from './layout/ChatLayout';
 import ConversationsList from '../components/ConversationList';
 
 import createAuthRequiredChatPage from '../auth/createAuthRequiredChatPage';
+import { use } from 'chai';
 
 const exceptionMessage =
   "Ahoy, mate! It seems our voyage hit an unexpected squall. Let's trim the sails and set a new course. Cast off once more by clicking the button below.";
@@ -65,6 +66,9 @@ const ChatPage = ({ user }: { user: User }) => {
 
   useSocketListener('newConversationAddedToDB', updateState);
   useSocketListener('smartSuggestionsAddedToDB', updateState);
+  useSocketListener('newMessageFromTeam', (message: any) =>
+    console.log(message)
+  );
 
   function updateState() {
     refetchConversation();
@@ -106,6 +110,7 @@ const ChatPage = ({ user }: { user: User }) => {
             showLoader: true,
           },
         });
+        // if the chat has customerBrief already then directly send required detalils in socket event
         const response = await getAgentResponse({
           chatId: activeChatId,
           messages: messages,
@@ -114,12 +119,19 @@ const ChatPage = ({ user }: { user: User }) => {
           agentChatHistory: currentChatDetails.agentChatHistory,
           proposedUserAction: currentChatDetails.proposedUserAction,
         });
-        if (response.team_status === 'inprogress') {
-          socket.emit('newConversationAdded', activeChatId);
+        // if (response.team_status === 'inprogress') {
+        //   socket.emit('newConversationAdded', activeChatId);
+        // }
+        if (!!response.customer_brief) {
+          socket.emit(
+            'sendMessageToTeam',
+            currentChatDetails.userId,
+            currentChatDetails.id,
+            response.customer_brief
+          );
         }
         // Emit an event to check the smartSuggestion status
         if (response['content'] && !response['is_exception_occured']) {
-          console.log('emitting socket event to check smart suggestion status');
           socket.emit('checkSmartSuggestionStatus', activeChatId);
           await updateCurrentChat({
             id: activeChatId,
@@ -147,6 +159,7 @@ const ChatPage = ({ user }: { user: User }) => {
             team_status: response['team_status'],
             smartSuggestions: response['smart_suggestions'],
             isExceptionOccured: response['is_exception_occured'] || false,
+            customerBrief: response['customer_brief'],
           },
         });
       } catch (err: any) {

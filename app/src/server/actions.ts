@@ -303,6 +303,9 @@ export const getAgentResponse: GetAgentResponse<
       team_status: json['team_status'],
       team_name: json['team_name'],
       team_id: json['team_id'],
+      ...(json['customer_brief'] !== undefined && {
+        customer_brief: json['customer_brief'],
+      }),
       ...(json['is_exception_occured'] !== undefined && {
         is_exception_occured: Boolean(json['is_exception_occured']),
       }),
