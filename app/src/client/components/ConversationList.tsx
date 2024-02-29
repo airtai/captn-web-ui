@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Markdown from 'markdown-to-jsx';
 
@@ -7,6 +7,7 @@ import type { Conversation, Chat } from '@wasp/entities';
 import AgentLoader from './AgentLoader';
 import SmartSuggestionButton from './SmartSuggestionButton';
 import SmartSuggestionCheckbox from './SmartSuggestionCheckbox';
+import LetterByLetterDisplay from './LetterByLetterDisplay';
 import logo from '../static/captn-logo.png';
 
 type ConversationsListProps = {
@@ -14,6 +15,7 @@ type ConversationsListProps = {
   currentChatDetails: Chat;
   handleFormSubmit: any;
   userSelectedActionMessage?: string | null;
+  onStreamAnimationComplete?: () => void;
 };
 
 export default function ConversationsList({
@@ -21,6 +23,7 @@ export default function ConversationsList({
   currentChatDetails,
   handleFormSubmit,
   userSelectedActionMessage,
+  onStreamAnimationComplete,
 }: ConversationsListProps) {
   // @ts-ignore
   const smartSuggestions = currentChatDetails?.smartSuggestions?.suggestions;
@@ -35,6 +38,7 @@ export default function ConversationsList({
       // @ts-ignore
       currentChatDetails?.smartSuggestions.suggestions[0] === ''
     );
+  const lastConversationIdx = conversations.length - 1;
   return (
     <div data-testid='conversations-wrapper' className='w-full'>
       {conversations.map((conversation, idx) => {
@@ -70,7 +74,7 @@ export default function ConversationsList({
           </div>
         ) : (
           <img
-            alt='captn logo'
+            alt='Capt’n.ai logo'
             src={logo}
             className='w-full h-full'
             style={{ borderRadius: '50%' }}
@@ -102,9 +106,26 @@ export default function ConversationsList({
                 >
                   {conversationLogo}
                 </span>
-                <div className='chat-conversations text-base flex flex-col gap-2'>
-                  <Markdown>{conversation.message}</Markdown>
-                </div>
+                {idx === lastConversationIdx && !isUserConversation && (
+                  <div className='chat-conversations text-base flex flex-col gap-2'>
+                    {currentChatDetails?.streamAgentResponse &&
+                    !currentChatDetails?.team_id ? (
+                      <LetterByLetterDisplay
+                        sentence={conversation.message}
+                        speed={5}
+                        onStreamAnimationComplete={onStreamAnimationComplete}
+                      />
+                    ) : (
+                      <Markdown>{conversation.message}</Markdown>
+                    )}
+                  </div>
+                )}
+                {(idx !== lastConversationIdx ||
+                  (idx === lastConversationIdx && isUserConversation)) && (
+                  <div className='chat-conversations text-base flex flex-col gap-2'>
+                    <Markdown>{conversation.message}</Markdown>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -114,29 +135,30 @@ export default function ConversationsList({
         <AgentLoader logo={logo} />
       )}
 
-      {isSmartSuggestionsAvailable && (
-        <div data-testid='smart-suggestions'>
-          {
-            // @ts-ignore
-            currentChatDetails.smartSuggestions?.type == 'oneOf' ? (
-              <SmartSuggestionButton
-                currentChatDetails={currentChatDetails}
-                smartSuggestionOnClick={handleFormSubmit}
-              />
-            ) : (
-              <SmartSuggestionCheckbox
-                suggestions={
-                  // @ts-ignore
-                  currentChatDetails.smartSuggestions.suggestions
-                }
-                smartSuggestionOnClick={handleFormSubmit}
-                chatType={currentChatDetails.chatType}
-                userSelectedActionMessage={userSelectedActionMessage}
-              />
-            )
-          }
-        </div>
-      )}
+      {isSmartSuggestionsAvailable &&
+        !currentChatDetails?.streamAgentResponse && (
+          <div data-testid='smart-suggestions' className='fadeIn'>
+            {
+              // @ts-ignore
+              currentChatDetails.smartSuggestions?.type == 'oneOf' ? (
+                <SmartSuggestionButton
+                  currentChatDetails={currentChatDetails}
+                  smartSuggestionOnClick={handleFormSubmit}
+                />
+              ) : (
+                <SmartSuggestionCheckbox
+                  suggestions={
+                    // @ts-ignore
+                    currentChatDetails.smartSuggestions.suggestions
+                  }
+                  smartSuggestionOnClick={handleFormSubmit}
+                  chatType={currentChatDetails.chatType}
+                  userSelectedActionMessage={userSelectedActionMessage}
+                />
+              )
+            }
+          </div>
+        )}
     </div>
   );
 }

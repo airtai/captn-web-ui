@@ -2,6 +2,7 @@ import {
   CaptnDailyAnalysisWebhook,
   CreateNewChatWebhook,
   DeleteChatWebhook,
+  SmartSuggestionsWebHook,
 } from '@wasp/apis/types';
 
 async function createConversation(
@@ -157,4 +158,27 @@ export const deleteChatWebhook: DeleteChatWebhook = async (
         `Webhook Error: Invalid chat id or user id: chatId = ${chatId}, userId = ${userId}`
       );
   }
+};
+
+export const smartSuggestionsWebHook: SmartSuggestionsWebHook = async (
+  request,
+  response,
+  context
+) => {
+  const smartSuggestions = request.body.smart_suggestions;
+  const chatId = Number(request.body.chat_id);
+  const updatedChat = await context.entities.Chat.update({
+    where: {
+      id: chatId,
+    },
+    data: {
+      smartSuggestions: {
+        suggestions: smartSuggestions.suggestions,
+        type: smartSuggestions.type,
+      },
+    },
+  });
+  response.json({
+    chatId: chatId,
+  });
 };

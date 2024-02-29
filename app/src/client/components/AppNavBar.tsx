@@ -20,7 +20,7 @@ export const navigation = [
 ];
 
 const NavLogo = () => (
-  <img className='h-8 w-8' src={logo} alt='Your SaaS App' />
+  <img className='h-10 w-auto -ml-2' src={logo} alt='Capt’n.ai' />
 );
 
 export default function AppNavBar() {
@@ -35,7 +35,7 @@ export default function AppNavBar() {
       >
         <div className='flex lg:flex-1'>
           <a href='/' className='-m-1.5 p-1.5'>
-            <img className='h-8 w-8' src={logo} alt='My SaaS App' />
+            <img className='h-10 w-auto -ml-2' src={logo} alt='Capt’n.ai' />
           </a>
         </div>
         <div className='flex lg:hidden'>

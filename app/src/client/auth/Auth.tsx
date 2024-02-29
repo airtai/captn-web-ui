@@ -73,7 +73,7 @@ function Auth({
             className='mt-10 mx-auto'
             style={logoStyle}
             src={logo}
-            alt='CaptnAI'
+            alt='Capt’n.ai'
           />
         )}
         {/* <HeaderText>{title}</HeaderText> */}

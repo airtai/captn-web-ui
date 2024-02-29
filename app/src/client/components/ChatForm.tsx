@@ -54,7 +54,7 @@ export default function ChatForm({
             id='userQuery'
             name='search'
             className='block rounded-lg w-full h-12 text-sm text-captn-light-cream bg-captn-dark-blue focus:ring-blue-500 focus:border-blue-500'
-            placeholder='Message CaptnAI...'
+            placeholder='Message Capt’n...'
             required
             ref={formInputRef}
             value={formInputValue}

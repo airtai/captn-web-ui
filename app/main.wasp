@@ -2,13 +2,13 @@ app CaptnAI {
   wasp: {
     version: "^0.11.8"
   },
-  title: "Capt'n.ai",
+  title: "Capt’n.ai",
   head: [
         "<meta property='og:type' content='website' />",
-        "<meta property='og:url' content='https://staging.backend.captn.ai' />", 
+        "<meta property='og:url' content='https://captn.ai' />", 
         "<meta property='og:description' content='Your AI-Powered Digital Marketing First Mate.' />",
-        "<meta property='og:image' content='https://staging.backend.captn.ai/public-banner.png' />",
-        "<meta name='twitter:image' content='https://staging.backend.captn.ai/public-banner.png' />", 
+        "<meta property='og:image' content='https://captn.ai/public-banner.png' />",
+        "<meta name='twitter:image' content='https://captn.ai/public-banner.png' />", 
         "<meta name='twitter:image:width' content='800' />",
         "<meta name='twitter:image:height' content='400' />",
         "<meta name='twitter:card' content='summary_large_image' />",
@@ -163,6 +163,7 @@ entity Chat {=psl
     isExceptionOccured       Boolean         @default(false)
     showLoader  Boolean         @default(false)
     smartSuggestions  Json         @default("{ \"suggestions\": [\"\"], \"type\": \"\"}")
+    streamAgentResponse Boolean         @default(false)
     user        User?    @relation(fields: [userId], references: [id])
     userId      Int?
     name        String?
@@ -258,8 +259,8 @@ page PrivacyPage {
 
 route ChatPageRoute { path: "/chat/:id?", to: ChatPage }
 page ChatPage {
-  authRequired: true,
-  component: import ChatPage from "@client/app/ChatPage"
+  // authRequired: true,
+  component: import createAuthRequiredChatPage from "@client/app/ChatPage"
 }
 
 route PricingPageRoute { path: "/pricing", to: PricingPage }
@@ -440,6 +441,12 @@ api deleteChatWebhook {
   fn: import { deleteChatWebhook } from "@server/webhooks/captn.js",
   entities: [Chat],
   httpRoute: (POST, "/delete-chat-webhook")
+}
+
+api smartSuggestionsWebHook {
+  fn: import { smartSuggestionsWebHook } from "@server/webhooks/captn.js",
+  entities: [Chat],
+  httpRoute: (POST, "/smart-suggestions-webhook")
 }
 
 /* 🕵️‍♂️ These are the Wasp Jobs. Use them to set up recurring tasks and/or queues:

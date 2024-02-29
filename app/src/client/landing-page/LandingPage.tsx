@@ -28,7 +28,7 @@ export default function LandingPage() {
   const { data: user, isLoading: isUserLoading } = useAuth();
 
   const NavLogo = () => (
-    <img className='h-8 w-8' src={logo} alt='Your SaaS App' />
+    <img className='h-10 w-auto -ml-2' src={logo} alt='Capt’n.ai' />
   );
 
   const history = useHistory();
@@ -47,9 +47,9 @@ export default function LandingPage() {
               className='no-underline flex items-center -m-1.5 p-1.5 text-gray-900 duration-300 ease-in-out hover:text-captn-light-blue'
             >
               <NavLogo />
-              <span className='ml-2 text-sm font-semibold leading-6 dark:text-white'>
-                CaptnAI
-              </span>
+              {/* <span className='ml-2 text-sm font-semibold leading-6 dark:text-white'>
+                Capt’n.ai
+              </span> */}
             </a>
           </div>
           <div className='flex lg:hidden'>
@@ -106,7 +106,7 @@ export default function LandingPage() {
           <Dialog.Panel className='fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 dark:bg-boxdark dark:text-white'>
             <div className='flex items-center justify-between'>
               <a href='/' className='-m-1.5 p-1.5'>
-                <span className='sr-only'>CaptnAI</span>
+                <span className='sr-only'>Capt’n.ai</span>
                 <NavLogo />
               </a>
               <button
@@ -179,14 +179,14 @@ export default function LandingPage() {
             <div className='mx-auto max-w-8xl px-6 lg:px-8'>
               <div className='lg:mb-18 mx-auto max-w-3xl text-center'>
                 <h1 className='text-4xl font-bold text-gray-900 sm:text-6xl dark:text-white'>
-                  Capt'n AI: Your <span className='italic'>AI-Powered</span>{' '}
+                  Capt’n.ai: Your <span className='italic'>AI-Powered</span>{' '}
                   Digital Marketing First Mate
                 </h1>
                 {/* <p className='mt-6 mx-auto max-w-2xl text-lg leading-8 text-gray-600 dark:text-white'>
                   Your All-in-One Digital Marketing Solution, Steered by AI
                 </p> */}
                 <p className='mt-6 mx-auto max-w-2xl text-lg leading-8 text-gray-600 dark:text-white'>
-                  Try Capt'n AI free for a month! No credit card required!
+                  Try Capt’n.ai free for a month! No credit card required!
                 </p>
                 <div className='mt-10 flex items-center justify-center gap-x-6'>
                   {!user?.hasPaid ? (

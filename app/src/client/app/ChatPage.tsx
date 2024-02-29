@@ -1,6 +1,5 @@
 import type { User } from '@wasp/entities';
-import { useLocation } from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation, Redirect } from 'react-router-dom';
 
 import { useQuery } from '@wasp/queries';
 import getChat from '@wasp/queries/getChat';
@@ -13,6 +12,11 @@ import { useSocket, useSocketListener } from '@wasp/webSocket';
 import getConversations from '@wasp/queries/getConversations';
 import ChatLayout from './layout/ChatLayout';
 import ConversationsList from '../components/ConversationList';
+
+import createAuthRequiredChatPage from '../auth/createAuthRequiredChatPage';
+
+const exceptionMessage =
+  "Ahoy, mate! It seems our voyage hit an unexpected squall. Let's trim the sails and set a new course. Cast off once more by clicking the button below.";
 
 const Loader = () => {
   return (
@@ -38,7 +42,6 @@ export function prepareOpenAIRequest(input: Conversation[]): OutputMessage[] {
 }
 
 const ChatPage = ({ user }: { user: User }) => {
-  // Create all api calls required for chat page here
   const { socket } = useSocket();
   const location = useLocation();
   const { pathname } = location;
@@ -61,6 +64,7 @@ const ChatPage = ({ user }: { user: User }) => {
   );
 
   useSocketListener('newConversationAddedToDB', updateState);
+  useSocketListener('smartSuggestionsAddedToDB', updateState);
 
   function updateState() {
     refetchConversation();
@@ -113,12 +117,27 @@ const ChatPage = ({ user }: { user: User }) => {
         if (response.team_status === 'inprogress') {
           socket.emit('newConversationAdded', activeChatId);
         }
+        // Emit an event to check the smartSuggestion status
+        if (response['content'] && !response['is_exception_occured']) {
+          console.log('emitting socket event to check smart suggestion status');
+          socket.emit('checkSmartSuggestionStatus', activeChatId);
+          await updateCurrentChat({
+            id: activeChatId,
+            data: {
+              streamAgentResponse: true,
+              showLoader: false,
+              smartSuggestions: response['smart_suggestions'],
+            },
+          });
+        }
+
         response['content'] &&
           (await createNewConversation({
             chatId: activeChatId,
             userQuery: response['content'],
             role: 'assistant',
           }));
+
         await updateCurrentChat({
           id: activeChatId,
           data: {
@@ -139,10 +158,34 @@ const ChatPage = ({ user }: { user: User }) => {
         if (err.message === 'No Subscription Found') {
           history.push('/pricing');
         } else {
-          window.alert('Error: Something went wrong. Please try again later.');
+          await createNewConversation({
+            chatId: activeChatId,
+            userQuery: exceptionMessage,
+            role: 'assistant',
+          });
+          await updateCurrentChat({
+            id: activeChatId,
+            data: {
+              showLoader: false,
+              smartSuggestions: {
+                suggestions: ["Let's try again"],
+                type: 'oneOf',
+              },
+              isExceptionOccured: true,
+            },
+          });
         }
       }
     }
+  };
+
+  const onStreamAnimationComplete = () => {
+    updateCurrentChat({
+      id: activeChatId,
+      data: {
+        streamAgentResponse: false,
+      },
+    });
   };
 
   let googleRedirectLoginMsg = queryParams.get('msg');
@@ -184,6 +227,7 @@ const ChatPage = ({ user }: { user: User }) => {
                 currentChatDetails={currentChatDetails}
                 handleFormSubmit={handleFormSubmit}
                 userSelectedActionMessage={userSelectedActionMessage}
+                onStreamAnimationComplete={onStreamAnimationComplete}
               />
             )}
             {currentChatDetails?.showLoader && <Loader />}
@@ -196,7 +240,9 @@ const ChatPage = ({ user }: { user: User }) => {
   );
 };
 
-export default ChatPage;
+// export default ChatPage;
+
+export default createAuthRequiredChatPage(ChatPage);
 
 function DefaultMessage() {
   return (
