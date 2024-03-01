@@ -179,6 +179,7 @@ entity Conversation {=psl
     updatedAt                   DateTime        @updatedAt
     message                     String
     role                        String
+    agentConversationHistory    String?
     chat                        Chat?           @relation(fields: [chatId], references: [id])
     chatId                      Int?
     user                        User?           @relation(fields: [userId], references: [id])

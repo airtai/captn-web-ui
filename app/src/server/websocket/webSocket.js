@@ -4,6 +4,8 @@ import WebSocket from 'ws';
 export const ADS_SERVER_URL =
   process.env.ADS_SERVER_URL || 'http://127.0.0.1:9000';
 
+const WS_URL = `ws://${ADS_SERVER_URL.split('//')[1].split(':')[0]}:8080/ws`;
+
 async function checkTeamStatus(context, socket, chat_id) {
   let json;
   try {
@@ -78,6 +80,23 @@ async function getChat(chatId, context) {
   });
 }
 
+async function createConversation(
+  context,
+  chatId,
+  message,
+  agentConversationHistory
+) {
+  await context.entities.Conversation.create({
+    data: {
+      chat: { connect: { id: chatId } },
+      user: { connect: { id: context.user.id } },
+      message: message,
+      role: 'assistant',
+      agentConversationHistory,
+    },
+  });
+}
+
 export const socketFn = (io, context) => {
   // When a new user is connected
   io.on('connection', async (socket) => {
@@ -109,15 +128,14 @@ export const socketFn = (io, context) => {
       });
 
       socket.on('sendMessageToTeam', async (userId, chatId, message) => {
-        // await checkTeamStatus(context, socket, chat_id);
-
         // the below ws should be created only once
-        const ws = new WebSocket(`ws://127.0.0.1:8080/ws`);
+        const ws = new WebSocket(WS_URL);
         const data = {
           conv_id: chatId,
           user_id: userId,
           message: message,
         };
+        let agentConversationHistory = null;
         ws.onopen = () => {
           console.log('---------------------');
           console.log('Sending data to AutoGen');
@@ -125,7 +143,17 @@ export const socketFn = (io, context) => {
           ws.send(JSON.stringify(data));
         };
         ws.onmessage = function (event) {
-          socket.emit('newMessageFromTeam', `${event.data}`);
+          agentConversationHistory = event.data;
+          socket.emit('newMessageFromTeam', event.data);
+        };
+        ws.onstreamcomplete = async function (event) {
+          await createConversation(
+            context,
+            chatId,
+            event.data,
+            agentConversationHistory
+          );
+          socket.emit('streamFromTeamFinished');
         };
       });
     }

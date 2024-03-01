@@ -66,9 +66,6 @@ const ChatPage = ({ user }: { user: User }) => {
 
   useSocketListener('newConversationAddedToDB', updateState);
   useSocketListener('smartSuggestionsAddedToDB', updateState);
-  useSocketListener('newMessageFromTeam', (message: any) =>
-    console.log(message)
-  );
 
   function updateState() {
     refetchConversation();
@@ -111,57 +108,74 @@ const ChatPage = ({ user }: { user: User }) => {
           },
         });
         // if the chat has customerBrief already then directly send required detalils in socket event
-        const response = await getAgentResponse({
-          chatId: activeChatId,
-          messages: messages,
-          team_id: currentChatDetails.team_id,
-          chatType: currentChatDetails.chatType,
-          agentChatHistory: currentChatDetails.agentChatHistory,
-          proposedUserAction: currentChatDetails.proposedUserAction,
-        });
-        // if (response.team_status === 'inprogress') {
-        //   socket.emit('newConversationAdded', activeChatId);
-        // }
-        if (!!response.customer_brief) {
+        if (currentChatDetails.customerBrief) {
+          console.log('Sending message to the same socket');
           socket.emit(
             'sendMessageToTeam',
             currentChatDetails.userId,
             currentChatDetails.id,
-            response.customer_brief
+            userQuery
           );
-        }
-        // Emit an event to check the smartSuggestion status
-        if (response['content'] && !response['is_exception_occured']) {
-          socket.emit('checkSmartSuggestionStatus', activeChatId);
           await updateCurrentChat({
             id: activeChatId,
             data: {
-              streamAgentResponse: true,
               showLoader: false,
+              team_status: 'inprogress',
+            },
+          });
+        } else {
+          const response = await getAgentResponse({
+            chatId: activeChatId,
+            messages: messages,
+            team_id: currentChatDetails.team_id,
+            chatType: currentChatDetails.chatType,
+            agentChatHistory: currentChatDetails.agentChatHistory,
+            proposedUserAction: currentChatDetails.proposedUserAction,
+          });
+          // if (response.team_status === 'inprogress') {
+          //   socket.emit('newConversationAdded', activeChatId);
+          // }
+          if (!!response.customer_brief) {
+            socket.emit(
+              'sendMessageToTeam',
+              currentChatDetails.userId,
+              currentChatDetails.id,
+              response.customer_brief
+            );
+          }
+          // Emit an event to check the smartSuggestion status
+          if (response['content'] && !response['is_exception_occured']) {
+            socket.emit('checkSmartSuggestionStatus', activeChatId);
+            await updateCurrentChat({
+              id: activeChatId,
+              data: {
+                streamAgentResponse: true,
+                showLoader: false,
+                smartSuggestions: response['smart_suggestions'],
+              },
+            });
+          }
+
+          response['content'] &&
+            (await createNewConversation({
+              chatId: activeChatId,
+              userQuery: response['content'],
+              role: 'assistant',
+            }));
+
+          await updateCurrentChat({
+            id: activeChatId,
+            data: {
+              showLoader: false,
+              team_id: response['team_id'],
+              team_name: response['team_name'],
+              team_status: response['team_status'],
               smartSuggestions: response['smart_suggestions'],
+              isExceptionOccured: response['is_exception_occured'] || false,
+              customerBrief: response['customer_brief'],
             },
           });
         }
-
-        response['content'] &&
-          (await createNewConversation({
-            chatId: activeChatId,
-            userQuery: response['content'],
-            role: 'assistant',
-          }));
-
-        await updateCurrentChat({
-          id: activeChatId,
-          data: {
-            showLoader: false,
-            team_id: response['team_id'],
-            team_name: response['team_name'],
-            team_status: response['team_status'],
-            smartSuggestions: response['smart_suggestions'],
-            isExceptionOccured: response['is_exception_occured'] || false,
-            customerBrief: response['customer_brief'],
-          },
-        });
       } catch (err: any) {
         await updateCurrentChat({
           id: activeChatId,

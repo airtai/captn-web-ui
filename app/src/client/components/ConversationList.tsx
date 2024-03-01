@@ -2,12 +2,15 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 
 import Markdown from 'markdown-to-jsx';
-
 import type { Conversation, Chat } from '@wasp/entities';
+import { useSocketListener } from '@wasp/webSocket';
+import createNewConversation from '@wasp/actions/createNewConversation';
+
 import AgentLoader from './AgentLoader';
 import SmartSuggestionButton from './SmartSuggestionButton';
 import SmartSuggestionCheckbox from './SmartSuggestionCheckbox';
 import LetterByLetterDisplay from './LetterByLetterDisplay';
+import TerminalDisplay from './TerminalDisplay';
 import logo from '../static/captn-logo.png';
 
 type ConversationsListProps = {
@@ -25,6 +28,10 @@ export default function ConversationsList({
   userSelectedActionMessage,
   onStreamAnimationComplete,
 }: ConversationsListProps) {
+  // const [streamingAgentResponse, setStreamingAgentResponse] = useState(
+  //   "null[32m[0m [35m >>>>>>>> EXECUTING FUNCTION get_info_from_the_web_page...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION list_accessible_customers...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m the accounts the232412727 we campaigns Campaign Search, ENABLE ID358](https:///ampaigncampaign20721 Campaign3-up-up::207618](https.google/ccampaign=62:, ENABLE:67adsaw?7834 Campaign:,.comcampaign799 , one: -search ID505.googleampaignId) No campaigns customer4329 we access4922 it enabled on of we and ad copy elements be current. proceeding any recommendations which customer account. look optimizing41272787119's particular you interested in please us.[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION reply_to_client...[0m null[32m[0m [35m >>>>>>>> EXECUTING FUNCTION get_info_from_the_web_page...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION list_accessible_customers...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m the accounts the232412727 we campaigns Campaign Search, ENABLE ID358](https:///ampaigncampaign20721 Campaign3-up-up::207618](https.google/ccampaign=62:, ENABLE:67adsaw?7834 Campaign:,.comcampaign799 , one: -search ID505.googleampaignId) No campaigns customer4329 we access4922 it enabled on of we and ad copy elements be current. proceeding any recommendations which customer account. look optimizing41272787119's particular you interested in please us.[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION reply_to_client...[0m null[32m[0m [35m >>>>>>>> EXECUTING FUNCTION get_info_from_the_web_page...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION list_accessible_customers...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m the accounts the232412727 we campaigns Campaign Search, ENABLE ID358](https:///ampaigncampaign20721 Campaign3-up-up::207618](https.google/ccampaign=62:, ENABLE:67adsaw?7834 Campaign:,.comcampaign799 , one: -search ID505.googleampaignId) No campaigns customer4329 we access4922 it enabled on of we and ad copy elements be current. proceeding any recommendations which customer account. look optimizing41272787119's particular you interested in please us.[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION reply_to_client...[0m null[32m[0m [35m >>>>>>>> EXECUTING FUNCTION get_info_from_the_web_page...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION list_accessible_customers...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION execute_query...[0m [32m the accounts the232412727 we campaigns Campaign Search, ENABLE ID358](https:///ampaigncampaign20721 Campaign3-up-up::207618](https.google/ccampaign=62:, ENABLE:67adsaw?7834 Campaign:,.comcampaign799 , one: -search ID505.googleampaignId) No campaigns customer4329 we access4922 it enabled on of we and ad copy elements be current. proceeding any recommendations which customer account. look optimizing41272787119's particular you interested in please us.[0m [32m[0m [35m >>>>>>>> EXECUTING FUNCTION reply_to_client...[0m"
+  // );
+  const [streamingAgentResponse, setStreamingAgentResponse] = useState(null);
   // @ts-ignore
   const smartSuggestions = currentChatDetails?.smartSuggestions?.suggestions;
   // @ts-ignore
@@ -39,6 +46,15 @@ export default function ConversationsList({
       currentChatDetails?.smartSuggestions.suggestions[0] === ''
     );
   const lastConversationIdx = conversations.length - 1;
+
+  useSocketListener('newMessageFromTeam', (message: any) =>
+    setStreamingAgentResponse(streamingAgentResponse + message)
+  );
+
+  useSocketListener('streamFromTeamFinished', () =>
+    setStreamingAgentResponse(null)
+  );
+
   return (
     <div data-testid='conversations-wrapper' className='w-full'>
       {conversations.map((conversation, idx) => {
@@ -133,6 +149,16 @@ export default function ConversationsList({
       })}
       {currentChatDetails?.team_status === 'inprogress' && (
         <AgentLoader logo={logo} />
+      )}
+      {streamingAgentResponse && (
+        <div className='relative block w-full text-sm text-captn-light-cream bg-captn-dark-blue'>
+          <div style={{ maxWidth: '700px', margin: 'auto', minHeight: '85px' }}>
+            <TerminalDisplay
+              messages={streamingAgentResponse}
+              maxHeight={400}
+            />
+          </div>
+        </div>
       )}
 
       {isSmartSuggestionsAvailable &&
