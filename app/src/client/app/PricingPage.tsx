@@ -190,7 +190,7 @@ const PricingPage = () => {
                     ? 'Contact us'
                     : !!user
                     ? // ? 'Buy plan'
-                      'Free trial'
+                      'Start free trial'
                     : 'Log in to buy plan'}
                 </button>
               )}
