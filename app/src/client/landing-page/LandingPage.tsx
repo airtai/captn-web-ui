@@ -177,16 +177,19 @@ export default function LandingPage() {
           </div>
           <div className='py-24 sm:py-32'>
             <div className='mx-auto max-w-8xl px-6 lg:px-8'>
-              <div className='lg:mb-18 mx-auto max-w-3xl text-center'>
+              <div className='lg:mb-18 mx-auto max-w-4xl text-center'>
                 <h1 className='text-4xl font-bold text-gray-900 sm:text-6xl dark:text-white'>
-                  Capt’n.ai: Your <span className='italic'>AI-Powered</span>{' '}
-                  Digital Marketing First Mate
+                  Meet Capt’n.ai: Your{' '}
+                  <span className='italic'>AI-Powered</span> Digital Marketing
+                  Crew
                 </h1>
                 {/* <p className='mt-6 mx-auto max-w-2xl text-lg leading-8 text-gray-600 dark:text-white'>
                   Your All-in-One Digital Marketing Solution, Steered by AI
                 </p> */}
                 <p className='mt-6 mx-auto max-w-2xl text-lg leading-8 text-gray-600 dark:text-white'>
-                  Try Capt’n.ai free for a month! No credit card required!
+                  Unleash the full potential of your advertising efforts with
+                  personalized, AI-driven strategies that evolve with your
+                  business. 30 days free trial, no credit card required!
                 </p>
                 <div className='mt-10 flex items-center justify-center gap-x-6'>
                   {!user?.hasPaid ? (

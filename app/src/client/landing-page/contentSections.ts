@@ -10,31 +10,31 @@ export const navigation = [
 ];
 export const features = [
   {
-    name: 'AI-Powered Assistance',
+    name: 'Intelligent Strategy Customization',
     description:
-      'Capt’n.ai understands your business and manages your digital marketing needs autonomously.',
+      'Capt’n, your AI marketing agent, learns your business goals to craft campaigns that speak directly to your audience.',
     icon: '🤖', //'🤝',
     href: '',
   },
   {
-    name: 'Daily Updates & Recommendations:',
+    name: '360° Campaign Management',
     description:
-      'Stay informed and ahead of the competition with actionable insights delivered straight to your inbox.',
-    icon: '🤝', //'🔐',
+      'From keyword selection to budget optimization, our specialized AI agents handle it all, ensuring your campaigns are always on the forefront of efficiency.',
+    icon: '👍', //'🔐',
+    href: '',
+  },
+  {
+    name: 'Data Privacy First',
+    description:
+      'Your data stays yours. With on-the-fly processing and optional chat history storage, we guarantee the utmost privacy and security for your business information.',
+    icon: '🔐',
     href: '',
   },
   {
     name: 'Seamless Integration',
     description:
-      'Connect with ease to your Google Ads account and watch Capt’n.ai work its magic.',
-    icon: '🤝',
-    href: '',
-  },
-  {
-    name: 'Secure Data Handling',
-    description:
-      'Your data is processed on-the-fly, ensuring privacy and security every step of the way.',
-    icon: '🔐', //'💸',
+      'Capt’n.ai ensures smooth integration with your existing workflows, starting with Google Ads and rapidly expanding to accommodate more platforms.',
+    icon: '🤝', //'💸',
     href: '',
   },
 ];
@@ -88,7 +88,7 @@ export const faqs = [
     id: 4,
     question: 'Is my data secure?',
     answer:
-      'We process data on-the-fly and do not store any data in databases, except for chat history (if you chat directly on out website) to enhance your user experience. You can delete this chat history at any time. This ensures your data stays where it belongs—with you. When you use the chat directly on our website, your data is shared only with our privately deployed OpenAI models hosted on Microsoft Azure or our our in-house AI algorithms, meaning that we don’t share your data with OpenAI directly. You can find more information in our Privacy Policy section.',
+      'We process data on the fly and do not store any data in databases, except for chat history (if you chat directly on our website) to enhance your user experience. You can delete this chat history at any time. This ensures your data stays where it belongs—with you. When you use the chat directly on our website, your data is shared only with our privately deployed OpenAI models hosted on Microsoft Azure or our in-house AI algorithms, meaning that we don’t share your data with OpenAI directly. You can find more information in our Privacy Policy section.',
     href: '',
   },
   {
