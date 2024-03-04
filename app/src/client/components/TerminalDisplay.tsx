@@ -37,7 +37,7 @@ const TerminalDisplay: React.FC<TerminalDisplayProps> = ({
     <div
       ref={containerRef}
       onScroll={handleUserScroll}
-      className='scroll-container bg-black p-4 text-white font-mono text-sm overflow-y-auto'
+      className='scroll-container bg-black p-4 text-white font-mono text-xs overflow-y-auto'
       style={{ maxHeight: `${maxHeight}px` }}
       dangerouslySetInnerHTML={{ __html: convertAnsiToHtml(messages) }}
     />

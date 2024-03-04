@@ -4,13 +4,14 @@ import { useState, useEffect } from 'react';
 import Markdown from 'markdown-to-jsx';
 import type { Conversation, Chat } from '@wasp/entities';
 import { useSocketListener } from '@wasp/webSocket';
-import createNewConversation from '@wasp/actions/createNewConversation';
+// import createNewConversation from '@wasp/actions/createNewConversation';
 
 import AgentLoader from './AgentLoader';
 import SmartSuggestionButton from './SmartSuggestionButton';
 import SmartSuggestionCheckbox from './SmartSuggestionCheckbox';
 import LetterByLetterDisplay from './LetterByLetterDisplay';
-import TerminalDisplay from './TerminalDisplay';
+// import TerminalDisplay from './TerminalDisplay';
+import AgentConversationHistory from './AgentConversationHistory';
 import logo from '../static/captn-logo.png';
 
 type ConversationsListProps = {
@@ -142,23 +143,23 @@ export default function ConversationsList({
                     <Markdown>{conversation.message}</Markdown>
                   </div>
                 )}
+                {conversation.agentConversationHistory && (
+                  <AgentConversationHistory
+                    agentConversationHistory={
+                      conversation.agentConversationHistory
+                    }
+                  />
+                )}
               </div>
             </div>
           </div>
         );
       })}
       {currentChatDetails?.team_status === 'inprogress' && (
-        <AgentLoader logo={logo} />
-      )}
-      {streamingAgentResponse && (
-        <div className='relative block w-full text-sm text-captn-light-cream bg-captn-dark-blue'>
-          <div style={{ maxWidth: '700px', margin: 'auto', minHeight: '85px' }}>
-            <TerminalDisplay
-              messages={streamingAgentResponse}
-              maxHeight={400}
-            />
-          </div>
-        </div>
+        <AgentLoader
+          logo={logo}
+          streamingAgentResponse={streamingAgentResponse}
+        />
       )}
 
       {isSmartSuggestionsAvailable &&
