@@ -32,15 +32,21 @@ const ChatLayout: FC<Props> = ({
   }, [user, history]);
 
   useEffect(() => {
-    if (scrollRef.current) {
-      setTimeout(() => {
-        scrollRef.current?.scrollTo({
-          top: scrollRef.current?.scrollHeight,
+    const observer = new MutationObserver(() => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollTo({
+          top: scrollRef.current.scrollHeight,
           behavior: 'smooth',
         });
-      }, 100); // Add a delay of 500 milliseconds before scrolling
+      }
+    });
+
+    if (scrollRef.current) {
+      observer.observe(scrollRef.current, { childList: true, subtree: true });
     }
-  }, [children]);
+
+    return () => observer.disconnect();
+  }, []);
   // make call to api -> from action file access conversation entity and pass it to openai
   // get response from openai and save it against the conversation
 
