@@ -1,27 +1,36 @@
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
+import useAuth from '@wasp/auth/useAuth';
 import stripePayment from '@wasp/actions/stripePayment';
 import { TierIds, STRIPE_CUSTOMER_PORTAL_LINK } from '@wasp/shared/constants';
 
 export default function FreeTrialButton() {
+  const history = useHistory();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { data: user } = useAuth();
 
   async function handleClick(tierId: string) {
-    try {
-      // setIsStripePaymentLoading(tierId);
-      setIsLoading(true);
-      let stripeResults = await stripePayment(tierId);
+    if (!user) {
+      history.push('/login');
+    } else {
+      try {
+        // setIsStripePaymentLoading(tierId);
+        setIsLoading(true);
+        let stripeResults = await stripePayment(tierId);
 
-      if (stripeResults?.sessionUrl) {
-        window.open(stripeResults.sessionUrl, '_self');
+        if (stripeResults?.sessionUrl) {
+          window.open(stripeResults.sessionUrl, '_self');
+        }
+      } catch (error: any) {
+        console.error(error?.message ?? 'Something went wrong.');
+      } finally {
+        // setIsStripePaymentLoading(false);
+        setIsLoading(false);
       }
-    } catch (error: any) {
-      console.error(error?.message ?? 'Something went wrong.');
-    } finally {
-      // setIsStripePaymentLoading(false);
-      setIsLoading(false);
     }
   }
+
   return (
     <a
       onClick={(e) => {
