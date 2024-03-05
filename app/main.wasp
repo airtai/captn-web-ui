@@ -88,10 +88,11 @@ app CaptnAI {
     ("prettier", "3.1.1"),
     ("prettier-plugin-tailwindcss", "0.5.11"),
     ("zod", "3.22.4"),
-    ("markdown-to-jsx", "7.3.2")
+    ("markdown-to-jsx", "7.3.2"),
+    ("ws", "^8.16.0"),
   ],
   webSocket: {
-    fn: import { checkTeamStatusAndUpdateInDB } from "@server/websocket/webSocket.js"
+    fn: import { socketFn } from "@server/websocket/webSocket.js"
   },
 }
 
@@ -164,6 +165,7 @@ entity Chat {=psl
     showLoader  Boolean         @default(false)
     smartSuggestions  Json         @default("{ \"suggestions\": [\"\"], \"type\": \"\"}")
     streamAgentResponse Boolean         @default(false)
+    customerBrief       String?
     user        User?    @relation(fields: [userId], references: [id])
     userId      Int?
     name        String?
@@ -177,6 +179,7 @@ entity Conversation {=psl
     updatedAt                   DateTime        @updatedAt
     message                     String
     role                        String
+    agentConversationHistory    String?
     chat                        Chat?           @relation(fields: [chatId], references: [id])
     chatId                      Int?
     user                        User?           @relation(fields: [userId], references: [id])

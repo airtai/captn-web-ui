@@ -2,12 +2,16 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 
 import Markdown from 'markdown-to-jsx';
-
 import type { Conversation, Chat } from '@wasp/entities';
+import { useSocketListener } from '@wasp/webSocket';
+// import createNewConversation from '@wasp/actions/createNewConversation';
+
 import AgentLoader from './AgentLoader';
 import SmartSuggestionButton from './SmartSuggestionButton';
 import SmartSuggestionCheckbox from './SmartSuggestionCheckbox';
 import LetterByLetterDisplay from './LetterByLetterDisplay';
+// import TerminalDisplay from './TerminalDisplay';
+import AgentConversationHistory from './AgentConversationHistory';
 import logo from '../static/captn-logo.png';
 
 type ConversationsListProps = {
@@ -25,6 +29,7 @@ export default function ConversationsList({
   userSelectedActionMessage,
   onStreamAnimationComplete,
 }: ConversationsListProps) {
+  const [streamingAgentResponse, setStreamingAgentResponse] = useState(null);
   // @ts-ignore
   const smartSuggestions = currentChatDetails?.smartSuggestions?.suggestions;
   // @ts-ignore
@@ -39,6 +44,15 @@ export default function ConversationsList({
       currentChatDetails?.smartSuggestions.suggestions[0] === ''
     );
   const lastConversationIdx = conversations.length - 1;
+
+  useSocketListener('newMessageFromTeam', (message: any) =>
+    setStreamingAgentResponse(streamingAgentResponse + message)
+  );
+
+  useSocketListener('streamFromTeamFinished', () =>
+    setStreamingAgentResponse(null)
+  );
+
   return (
     <div data-testid='conversations-wrapper' className='w-full'>
       {conversations.map((conversation, idx) => {
@@ -126,13 +140,23 @@ export default function ConversationsList({
                     <Markdown>{conversation.message}</Markdown>
                   </div>
                 )}
+                {conversation.agentConversationHistory && (
+                  <AgentConversationHistory
+                    agentConversationHistory={
+                      conversation.agentConversationHistory
+                    }
+                  />
+                )}
               </div>
             </div>
           </div>
         );
       })}
       {currentChatDetails?.team_status === 'inprogress' && (
-        <AgentLoader logo={logo} />
+        <AgentLoader
+          logo={logo}
+          streamingAgentResponse={streamingAgentResponse}
+        />
       )}
 
       {isSmartSuggestionsAvailable &&
