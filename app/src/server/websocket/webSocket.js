@@ -4,7 +4,10 @@ import WebSocket from 'ws';
 export const ADS_SERVER_URL =
   process.env.ADS_SERVER_URL || 'http://127.0.0.1:9000';
 
-const WS_URL = `ws://${ADS_SERVER_URL.split('//')[1].split(':')[0]}:8080`;
+const protocol = ADS_SERVER_URL === 'http://127.0.0.1:9000' ? 'ws' : 'wss';
+const WS_URL = `${protocol}://${
+  ADS_SERVER_URL.split('//')[1].split(':')[0]
+}:8080`;
 
 async function checkTeamStatus(context, socket, chat_id) {
   let json;
