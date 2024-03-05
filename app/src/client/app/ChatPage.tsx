@@ -66,6 +66,7 @@ const ChatPage = ({ user }: { user: User }) => {
 
   useSocketListener('newConversationAddedToDB', updateState);
   useSocketListener('smartSuggestionsAddedToDB', updateState);
+  useSocketListener('streamFromTeamFinished', updateState);
 
   function updateState() {
     refetchConversation();
