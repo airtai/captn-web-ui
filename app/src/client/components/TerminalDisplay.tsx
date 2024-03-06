@@ -3,13 +3,15 @@ import React, { useEffect, useRef, useState } from 'react';
 interface TerminalDisplayProps {
   messages: string;
   maxHeight: number; // Maximum height in pixels
+  isOpenOnLoad?: boolean; // Whether the terminal is open on load
 }
 
 const TerminalDisplay: React.FC<TerminalDisplayProps> = ({
   messages,
   maxHeight,
+  isOpenOnLoad,
 }) => {
-  const [isMinimized, setIsMinimized] = useState(false); // Track if terminal is minimized
+  const [isMinimized, setIsMinimized] = useState(isOpenOnLoad ? false : true); // Track if terminal is minimized
   const containerRef = useRef<HTMLDivElement | null>(null); // Reference to the scroll container
   const [isAutoScroll, setIsAutoScroll] = useState(true); // Track if auto-scroll is enabled
 
@@ -71,7 +73,7 @@ const TerminalDisplay: React.FC<TerminalDisplayProps> = ({
               height='16'
             >
               <path
-                fill-rule='evenodd'
+                fillRule='evenodd'
                 d='M1.646 11.854a.5.5 0 0 0 .708 0L8 6.207l5.646 5.647a.5.5 0 0 0 .708-.708l-6-6a.5.5 0 0 0-.708 0l-6 6a.5.5 0 0 0 0 .708z'
               />
             </svg>
@@ -84,7 +86,7 @@ const TerminalDisplay: React.FC<TerminalDisplayProps> = ({
               height='16'
             >
               <path
-                fill-rule='evenodd'
+                fillRule='evenodd'
                 d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.793l5.646-5.647a.5.5 0 0 1 .708 .708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'
               />
             </svg>

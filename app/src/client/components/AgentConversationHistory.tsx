@@ -31,7 +31,11 @@ const AgentConversationHistory: React.FC<AgentConversationHistoryProps> = ({
         }}
         className={`relative block w-full`}
       >
-        <TerminalDisplay messages={agentConversationHistory} maxHeight={400} />
+        <TerminalDisplay
+          messages={agentConversationHistory}
+          maxHeight={400}
+          isOpenOnLoad={isAgentWindow}
+        />
       </div>
     </div>
   );
