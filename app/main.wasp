@@ -380,8 +380,18 @@ action updateCurrentChat {
   entities: [Chat]
 }
 
+action updateCurrentConversation {
+  fn: import { updateCurrentConversation } from "@server/actions.js",
+  entities: [Conversation]
+}
+
 action createNewAndReturnAllConversations {
   fn: import { createNewAndReturnAllConversations } from "@server/actions.js",
+  entities: [Conversation]
+}
+
+action createNewAndReturnLastConversation {
+  fn: import { createNewAndReturnLastConversation } from "@server/actions.js",
   entities: [Conversation]
 }
 

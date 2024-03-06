@@ -12,6 +12,7 @@ import SmartSuggestionCheckbox from './SmartSuggestionCheckbox';
 import LetterByLetterDisplay from './LetterByLetterDisplay';
 // import TerminalDisplay from './TerminalDisplay';
 import AgentConversationHistory from './AgentConversationHistory';
+import AnimatedCharacterLoader from './AnimatedCharacterLoader';
 import logo from '../static/captn-logo.png';
 
 type ConversationsListProps = {
@@ -96,58 +97,62 @@ export default function ConversationsList({
 
         return (
           <div key={idx}>
-            <div
-              style={{ minHeight: '85px' }}
-              className={`flex items-center px-5 group bg-${conversationBgColor} flex-col ${
-                isUserConversation
-                  ? 'user-conversation-container'
-                  : 'agent-conversation-container'
-              }`}
-            >
+            {conversation.isLoading ? (
+              <AnimatedCharacterLoader />
+            ) : (
               <div
-                style={{ maxWidth: '700px', margin: 'auto' }}
-                className={`relative ml-3 block w-full p-4 pl-10 text-sm text-${conversationTextColor}  border-${conversationBgColor} rounded-lg bg-${conversationBgColor} `}
+                style={{ minHeight: '85px' }}
+                className={`flex items-center px-5 group bg-${conversationBgColor} flex-col ${
+                  isUserConversation
+                    ? 'user-conversation-container'
+                    : 'agent-conversation-container'
+                }`}
               >
-                <span
-                  className='absolute inline-block'
-                  style={{
-                    left: '-15px',
-                    top: '6px',
-                    height: ' 45px',
-                    width: '45px',
-                  }}
+                <div
+                  style={{ maxWidth: '700px', margin: 'auto' }}
+                  className={`relative ml-3 block w-full p-4 pl-10 text-sm text-${conversationTextColor}  border-${conversationBgColor} rounded-lg bg-${conversationBgColor} `}
                 >
-                  {conversationLogo}
-                </span>
-                {idx === lastConversationIdx && !isUserConversation && (
-                  <div className='chat-conversations text-base flex flex-col gap-2'>
-                    {currentChatDetails?.streamAgentResponse &&
-                    !currentChatDetails?.team_id ? (
-                      <LetterByLetterDisplay
-                        sentence={conversation.message}
-                        speed={5}
-                        onStreamAnimationComplete={onStreamAnimationComplete}
-                      />
-                    ) : (
+                  <span
+                    className='absolute inline-block'
+                    style={{
+                      left: '-15px',
+                      top: '6px',
+                      height: ' 45px',
+                      width: '45px',
+                    }}
+                  >
+                    {conversationLogo}
+                  </span>
+                  {idx === lastConversationIdx && !isUserConversation && (
+                    <div className='chat-conversations text-base flex flex-col gap-2'>
+                      {currentChatDetails?.streamAgentResponse &&
+                      !currentChatDetails?.team_id ? (
+                        <LetterByLetterDisplay
+                          sentence={conversation.message}
+                          speed={5}
+                          onStreamAnimationComplete={onStreamAnimationComplete}
+                        />
+                      ) : (
+                        <Markdown>{conversation.message}</Markdown>
+                      )}
+                    </div>
+                  )}
+                  {(idx !== lastConversationIdx ||
+                    (idx === lastConversationIdx && isUserConversation)) && (
+                    <div className='chat-conversations text-base flex flex-col gap-2'>
                       <Markdown>{conversation.message}</Markdown>
-                    )}
-                  </div>
-                )}
-                {(idx !== lastConversationIdx ||
-                  (idx === lastConversationIdx && isUserConversation)) && (
-                  <div className='chat-conversations text-base flex flex-col gap-2'>
-                    <Markdown>{conversation.message}</Markdown>
-                  </div>
-                )}
-                {conversation.agentConversationHistory && (
-                  <AgentConversationHistory
-                    agentConversationHistory={
-                      conversation.agentConversationHistory
-                    }
-                  />
-                )}
+                    </div>
+                  )}
+                  {conversation.agentConversationHistory && (
+                    <AgentConversationHistory
+                      agentConversationHistory={
+                        conversation.agentConversationHistory
+                      }
+                    />
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         );
       })}

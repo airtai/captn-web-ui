@@ -5,14 +5,15 @@ import { useQuery } from '@wasp/queries';
 import getChat from '@wasp/queries/getChat';
 import getAgentResponse from '@wasp/actions/getAgentResponse';
 import createNewAndReturnAllConversations from '@wasp/actions/createNewAndReturnAllConversations';
+import createNewAndReturnLastConversation from '@wasp/actions/createNewAndReturnLastConversation';
 import updateCurrentChat from '@wasp/actions/updateCurrentChat';
+import updateCurrentConversation from '@wasp/actions/updateCurrentConversation';
 import type { Conversation } from '@wasp/entities';
 import { useSocket, useSocketListener } from '@wasp/webSocket';
 
 import getConversations from '@wasp/queries/getConversations';
 import ChatLayout from './layout/ChatLayout';
 import ConversationsList from '../components/ConversationList';
-import AnimatedCharacterLoader from '../components/AnimatedCharacterLoader';
 
 import createAuthRequiredChatPage from '../auth/createAuthRequiredChatPage';
 import { use } from 'chai';
@@ -109,6 +110,12 @@ const ChatPage = ({ user }: { user: User }) => {
             showLoader: true,
           },
         });
+        const lastConversation = await createNewAndReturnLastConversation({
+          chatId: activeChatId,
+          userQuery,
+          role: 'assistant',
+          isLoading: true,
+        });
         // if the chat has customerBrief already then directly send required detalils in socket event
         if (currentChatDetails.customerBrief) {
           console.log('Sending message to the same socket');
@@ -159,10 +166,12 @@ const ChatPage = ({ user }: { user: User }) => {
           }
 
           response['content'] &&
-            (await createNewAndReturnAllConversations({
-              chatId: activeChatId,
-              userQuery: response['content'],
-              role: 'assistant',
+            (await updateCurrentConversation({
+              id: lastConversation.id,
+              data: {
+                isLoading: false,
+                message: response['content'],
+              },
             }));
 
           await updateCurrentChat({
@@ -255,7 +264,6 @@ const ChatPage = ({ user }: { user: User }) => {
                 onStreamAnimationComplete={onStreamAnimationComplete}
               />
             )}
-            {currentChatDetails?.showLoader && <AnimatedCharacterLoader />}
           </div>
         ) : (
           <DefaultMessage />
