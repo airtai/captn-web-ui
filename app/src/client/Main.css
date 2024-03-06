@@ -52,6 +52,39 @@ a {
   list-style: disc;
 }
 
+/* Accordion.css */
+
+.accordion-wrapper {
+  border-radius: 5px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.accordion-title {
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+/* .accordion-title.open {
+  background: #ddd;
+} */
+
+.accordion-item {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.accordion-item.collapsed {
+  max-height: 100vh;
+}
+
+.accordion-content {
+  padding: 10px 15px;
+  /* background: #fff;
+  border-bottom: 1px solid #ddd; */
+}
+
 /*=== FADE IN  ===*/
 @-webkit-keyframes fadeIn {
   from {
@@ -75,6 +108,60 @@ a {
   opacity: 0;
   animation: 0.25s ease-in 0.25s fadeIn;
   animation-fill-mode: both;
+}
+
+.chat-bubble {
+  background-color:#eae4d9;
+  padding:16px 28px;
+  -webkit-border-radius: 20px;
+  -webkit-border-bottom-left-radius: 2px;
+  -moz-border-radius: 20px;
+  -moz-border-radius-bottomleft: 2px;
+  border-radius: 20px;
+  border-bottom-left-radius: 2px;
+  display:inline-block;
+}
+.typing {
+  align-items: center;
+  display: flex;
+  height: 17px;
+}
+.typing .dot {
+  animation: mercuryTypingAnimation 1.8s infinite ease-in-out;
+  background-color: #6faabc ;
+  border-radius: 50%;
+  height: 7px;
+  margin-right: 4px;
+  vertical-align: middle;
+  width: 7px;
+  display: inline-block;
+}
+.typing .dot:nth-child(1) {
+  animation-delay: 200ms;
+}
+.typing .dot:nth-child(2) {
+  animation-delay: 300ms;
+}
+.typing .dot:nth-child(3) {
+  animation-delay: 400ms;
+}
+.typing .dot:last-child {
+  margin-right: 0;
+}
+
+@keyframes mercuryTypingAnimation {
+  0% {
+    transform: translateY(0px);
+    background-color:#6faabc; 
+  }
+  28% {
+    transform: translateY(-7px);
+    background-color:#94b3bc; 
+  }
+  44% {
+    transform: translateY(0px);
+    background-color: #b8d4dc; 
+  }
 }
 
 @layer utilities {

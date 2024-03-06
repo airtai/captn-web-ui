@@ -1,7 +1,13 @@
 import HttpError from '@wasp/core/HttpError.js';
+import WebSocket from 'ws';
 
 export const ADS_SERVER_URL =
   process.env.ADS_SERVER_URL || 'http://127.0.0.1:9000';
+
+const protocol = ADS_SERVER_URL === 'http://127.0.0.1:9000' ? 'ws' : 'wss';
+const WS_URL = `${protocol}://${
+  ADS_SERVER_URL.split('//')[1].split(':')[0]
+}:8080`;
 
 async function checkTeamStatus(context, socket, chat_id) {
   let json;
@@ -77,7 +83,81 @@ async function getChat(chatId, context) {
   });
 }
 
-export const checkTeamStatusAndUpdateInDB = (io, context) => {
+async function updateDB(
+  context,
+  chatId,
+  message,
+  conversationId,
+  agentConversationHistory
+) {
+  let jsonString = message.replace(/True/g, true).replace(/False/g, false);
+  let obj = JSON.parse(jsonString);
+  await context.entities.Conversation.update({
+    where: {
+      id: conversationId,
+    },
+    data: {
+      isLoading: false,
+      message: obj.message,
+      agentConversationHistory,
+    },
+  });
+
+  await context.entities.Chat.update({
+    where: {
+      id: chatId,
+    },
+    data: {
+      team_status: 'completed',
+      smartSuggestions: obj.smart_suggestions,
+    },
+  });
+}
+
+function wsConnection(
+  socket,
+  context,
+  chatId,
+  userId,
+  conversationId,
+  message
+) {
+  const ws = new WebSocket(WS_URL);
+  const data = {
+    conv_id: chatId,
+    user_id: userId,
+    message: message,
+  };
+  let agentConversationHistory = '';
+  let lastMessage = null;
+  ws.onopen = () => {
+    ws.send(JSON.stringify(data));
+  };
+  ws.onmessage = function (event) {
+    agentConversationHistory = agentConversationHistory + event.data;
+    lastMessage = event.data;
+    socket.emit('newMessageFromTeam', agentConversationHistory);
+  };
+  ws.onerror = function (event) {
+    console.error('WebSocket error observed: ', event);
+  };
+  ws.onclose = async function (event) {
+    if (event.code === 1000) {
+      await updateDB(
+        context,
+        chatId,
+        lastMessage,
+        conversationId,
+        agentConversationHistory
+      );
+      socket.emit('streamFromTeamFinished');
+    }
+    console.log('WebSocket is closed now.');
+    console.log('Close event code: ', event.code);
+  };
+}
+
+export const socketFn = (io, context) => {
   // When a new user is connected
   io.on('connection', async (socket) => {
     if (socket.data.user) {
@@ -85,9 +165,9 @@ export const checkTeamStatusAndUpdateInDB = (io, context) => {
       console.log('========');
       console.log('a user connected: ', userEmail);
 
-      socket.on('newConversationAdded', async (chat_id) => {
-        await checkTeamStatus(context, socket, chat_id);
-      });
+      // socket.on('newConversationAdded', async (chat_id) => {
+      //   await checkTeamStatus(context, socket, chat_id);
+      // });
 
       socket.on('checkSmartSuggestionStatus', async (chatId) => {
         let isSmartSuggestionEmpty = true;
@@ -106,6 +186,20 @@ export const checkTeamStatusAndUpdateInDB = (io, context) => {
           }
         }
       });
+
+      socket.on(
+        'sendMessageToTeam',
+        async (userId, chatId, conversationId, message) => {
+          wsConnection(
+            socket,
+            context,
+            chatId,
+            userId,
+            conversationId,
+            message
+          );
+        }
+      );
     }
   });
 };

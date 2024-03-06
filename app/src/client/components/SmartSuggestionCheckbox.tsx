@@ -51,7 +51,7 @@ export default function SmartSuggestionCheckbox({
   return (
     <div className='pb-4 flex items-center group bg-captn-dark-blue'>
       <div
-        style={{ maxWidth: '700px', margin: 'auto' }}
+        style={{ maxWidth: '800px', margin: 'auto' }}
         className={`fade-in  relative ml-3 block w-full px-4 rounded-lg bg-captn-light-green `}
       >
         {chatType === 'daily_analysis' && (

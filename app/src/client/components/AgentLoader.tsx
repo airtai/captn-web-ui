@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Markdown from 'markdown-to-jsx';
 
-export default function AgentLoader({ logo }: { logo: string }) {
+import AgentConversationHistory from './AgentConversationHistory';
+
+export default function AgentLoader({
+  logo,
+  streamingAgentResponse,
+}: {
+  logo: string;
+  streamingAgentResponse?: string;
+}) {
   const responseContentOptions = [
     "<span>I'm currently setting sail through the uncharted waters of your request.<br/>Kindly stay anchored, and I promise not to send you adrift; I'll return with the treasure trove of information soon!</span>",
     "<span>I'm presently charting a course through the mystic waters of your inquiry.<br/>Please stay anchored, and I'll navigate through the data waves to reach you swiftly like a nimble pirate searching for treasure.</span>",
@@ -28,12 +36,12 @@ export default function AgentLoader({ logo }: { logo: string }) {
   return (
     <div
       data-testid='agent-loader'
-      className={`flex items-center px-5 py-2 group  flex-col animate-pulse bg-captn-dark-blue`}
+      className={`flex items-center px-5 py-2 group  flex-col bg-captn-dark-blue`}
       style={{ minHeight: '85px' }}
     >
       <div
         className='relative ml-3 block w-full p-4 pl-10 text-sm text-captn-light-cream  rounded-lg '
-        style={{ maxWidth: '700px', margin: 'auto' }}
+        style={{ maxWidth: '800px', margin: 'auto' }}
       >
         <span
           className='absolute inline-block'
@@ -52,7 +60,23 @@ export default function AgentLoader({ logo }: { logo: string }) {
           />
         </span>
         <div className='chat-conversations text-base flex flex-col gap-2'>
-          <Markdown>{waitingForResponseContent}</Markdown>
+          {/* <Markdown> */}
+          <div className='w-64 ml-2 -mt-2'>
+            <div className='chat-bubble'>
+              <div className='typing'>
+                <div className='dot'></div>
+                <div className='dot'></div>
+                <div className='dot'></div>
+              </div>
+            </div>
+          </div>
+          {/* </Markdown> */}
+          {streamingAgentResponse && (
+            <AgentConversationHistory
+              agentConversationHistory={streamingAgentResponse}
+              initialState={true}
+            />
+          )}
         </div>
       </div>
     </div>

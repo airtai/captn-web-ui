@@ -2,12 +2,17 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 
 import Markdown from 'markdown-to-jsx';
-
 import type { Conversation, Chat } from '@wasp/entities';
+import { useSocketListener } from '@wasp/webSocket';
+// import createNewAndReturnAllConversations from '@wasp/actions/createNewAndReturnAllConversations';
+
 import AgentLoader from './AgentLoader';
 import SmartSuggestionButton from './SmartSuggestionButton';
 import SmartSuggestionCheckbox from './SmartSuggestionCheckbox';
 import LetterByLetterDisplay from './LetterByLetterDisplay';
+// import TerminalDisplay from './TerminalDisplay';
+import AgentConversationHistory from './AgentConversationHistory';
+import AnimatedCharacterLoader from './AnimatedCharacterLoader';
 import logo from '../static/captn-logo.png';
 
 type ConversationsListProps = {
@@ -25,6 +30,7 @@ export default function ConversationsList({
   userSelectedActionMessage,
   onStreamAnimationComplete,
 }: ConversationsListProps) {
+  const [streamingAgentResponse, setStreamingAgentResponse] = useState('');
   // @ts-ignore
   const smartSuggestions = currentChatDetails?.smartSuggestions?.suggestions;
   // @ts-ignore
@@ -39,6 +45,15 @@ export default function ConversationsList({
       currentChatDetails?.smartSuggestions.suggestions[0] === ''
     );
   const lastConversationIdx = conversations.length - 1;
+
+  useSocketListener('newMessageFromTeam', (message: any) =>
+    setStreamingAgentResponse(message)
+  );
+
+  useSocketListener('streamFromTeamFinished', () =>
+    setStreamingAgentResponse('')
+  );
+
   return (
     <div data-testid='conversations-wrapper' className='w-full'>
       {conversations.map((conversation, idx) => {
@@ -48,13 +63,12 @@ export default function ConversationsList({
           : 'captn-dark-blue';
         const conversationTextColor = isUserConversation
           ? 'captn-dark-blue'
-          : // : 'captn-light-cream';
-            'white';
+          : 'captn-light-cream';
         const conversationLogo = isUserConversation ? (
           <div
             style={{
               alignItems: 'center',
-              background: '#fff',
+              background: '#eae4d9',
               borderRadius: '50%',
               color: '#444654',
               display: 'flex',
@@ -83,57 +97,79 @@ export default function ConversationsList({
 
         return (
           <div key={idx}>
-            <div
-              style={{ minHeight: '85px' }}
-              className={`flex items-center px-5 group bg-${conversationBgColor} flex-col ${
-                isUserConversation
-                  ? 'user-conversation-container'
-                  : 'agent-conversation-container'
-              }`}
-            >
+            {conversation.isLoading ? (
+              <AnimatedCharacterLoader
+                loadingMessage={`${
+                  currentChatDetails.customerBrief
+                    ? 'The team is currently working on the task. You can monitor their discussions in the window below as they progress...'
+                    : 'Loading...'
+                }`}
+              />
+            ) : (
               <div
-                style={{ maxWidth: '700px', margin: 'auto' }}
-                className={`relative ml-3 block w-full p-4 pl-10 text-sm text-${conversationTextColor}  border-${conversationBgColor} rounded-lg bg-${conversationBgColor} `}
+                style={{ minHeight: '85px' }}
+                className={`flex items-center px-5 group bg-${conversationBgColor} flex-col ${
+                  isUserConversation
+                    ? 'user-conversation-container'
+                    : 'agent-conversation-container'
+                }`}
               >
-                <span
-                  className='absolute inline-block'
-                  style={{
-                    left: '-15px',
-                    top: '6px',
-                    height: ' 45px',
-                    width: '45px',
-                  }}
+                <div
+                  style={{ maxWidth: '800px', margin: 'auto' }}
+                  className={`relative ml-3 block w-full p-4 pl-10 text-sm text-${conversationTextColor}  border-${conversationBgColor} rounded-lg bg-${conversationBgColor} `}
                 >
-                  {conversationLogo}
-                </span>
-                {idx === lastConversationIdx && !isUserConversation && (
-                  <div className='chat-conversations text-base flex flex-col gap-2'>
-                    {currentChatDetails?.streamAgentResponse &&
-                    !currentChatDetails?.team_id ? (
-                      <LetterByLetterDisplay
-                        sentence={conversation.message}
-                        speed={5}
-                        onStreamAnimationComplete={onStreamAnimationComplete}
-                      />
-                    ) : (
+                  <span
+                    className='absolute inline-block'
+                    style={{
+                      left: '-15px',
+                      top: '6px',
+                      height: ' 45px',
+                      width: '45px',
+                    }}
+                  >
+                    {conversationLogo}
+                  </span>
+                  {idx === lastConversationIdx && !isUserConversation && (
+                    <div className='chat-conversations text-base flex flex-col gap-2'>
+                      {currentChatDetails?.streamAgentResponse &&
+                      !currentChatDetails?.team_id ? (
+                        <LetterByLetterDisplay
+                          sentence={conversation.message}
+                          speed={5}
+                          onStreamAnimationComplete={onStreamAnimationComplete}
+                        />
+                      ) : (
+                        <Markdown>{conversation.message}</Markdown>
+                      )}
+                    </div>
+                  )}
+                  {(idx !== lastConversationIdx ||
+                    (idx === lastConversationIdx && isUserConversation)) && (
+                    <div className='chat-conversations text-base flex flex-col gap-2'>
                       <Markdown>{conversation.message}</Markdown>
-                    )}
-                  </div>
-                )}
-                {(idx !== lastConversationIdx ||
-                  (idx === lastConversationIdx && isUserConversation)) && (
-                  <div className='chat-conversations text-base flex flex-col gap-2'>
-                    <Markdown>{conversation.message}</Markdown>
-                  </div>
-                )}
+                    </div>
+                  )}
+                  {conversation.agentConversationHistory && (
+                    <AgentConversationHistory
+                      agentConversationHistory={
+                        conversation.agentConversationHistory
+                      }
+                    />
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         );
       })}
-      {currentChatDetails?.team_status === 'inprogress' && (
-        <AgentLoader logo={logo} />
-      )}
+      {currentChatDetails?.team_status === 'inprogress' &&
+        streamingAgentResponse && (
+          <AgentConversationHistory
+            agentConversationHistory={streamingAgentResponse}
+            initialState={true}
+            isAgentWindow={true}
+          />
+        )}
 
       {isSmartSuggestionsAvailable &&
         !currentChatDetails?.streamAgentResponse && (
