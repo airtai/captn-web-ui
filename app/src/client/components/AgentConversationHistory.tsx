@@ -18,23 +18,32 @@ const AgentConversationHistory: React.FC<AgentConversationHistoryProps> = ({
 
   return (
     <div
-      style={{ maxWidth: '700px', margin: 'auto' }}
-      className={`relative block w-full`}
+      data-testid='agent-loader'
+      className={`flex items-center -mt-2 pl-8 group  flex-col bg-captn-dark-blue`}
+      style={{ minHeight: '85px' }}
     >
-      <span
-        onClick={toggleHistory}
-        className={`relative inline-block mt-2 mb-1 underline text-captn-light-blue hover:cursor-pointer`}
-      >
-        {showHistory
-          ? 'Collapse agents conversation'
-          : 'Expand agents conversation'}
-      </span>
       <div
-        className={`transform origin-top transition-transform ease-in-out duration-500 min-h-5 ${
-          showHistory ? 'scale-y-100 block' : 'scale-y-0 hidden'
-        }`}
+        style={{ maxWidth: '700px', margin: '0 auto 20' }}
+        className={`relative block w-full`}
       >
-        <TerminalDisplay messages={agentConversationHistory} maxHeight={400} />
+        <span
+          onClick={toggleHistory}
+          className={`relative inline-block mt-2 mb-1 underline text-captn-light-blue hover:cursor-pointer`}
+        >
+          {showHistory
+            ? 'Collapse agents conversation'
+            : 'Expand agents conversation'}
+        </span>
+        <div
+          className={`transform origin-top transition-transform ease-in-out duration-500 min-h-5 ${
+            showHistory ? 'scale-y-100 block' : 'scale-y-0 hidden'
+          }`}
+        >
+          <TerminalDisplay
+            messages={agentConversationHistory}
+            maxHeight={400}
+          />
+        </div>
       </div>
     </div>
   );

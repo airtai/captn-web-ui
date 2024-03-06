@@ -89,6 +89,7 @@ const ChatPage = ({ user }: { user: User }) => {
     if (currentChatDetails.userId !== user.id) {
       window.alert('Error: This chat does not belong to you.');
     } else {
+      let inProgressConversation;
       try {
         isUserRespondedWithNextAction && removeQueryParameters();
         await updateCurrentChat({
@@ -110,7 +111,7 @@ const ChatPage = ({ user }: { user: User }) => {
             showLoader: true,
           },
         });
-        const lastConversation = await createNewAndReturnLastConversation({
+        inProgressConversation = await createNewAndReturnLastConversation({
           chatId: activeChatId,
           userQuery,
           role: 'assistant',
@@ -167,7 +168,7 @@ const ChatPage = ({ user }: { user: User }) => {
 
           response['content'] &&
             (await updateCurrentConversation({
-              id: lastConversation.id,
+              id: inProgressConversation.id,
               data: {
                 isLoading: false,
                 message: response['content'],
@@ -196,10 +197,12 @@ const ChatPage = ({ user }: { user: User }) => {
         if (err.message === 'No Subscription Found') {
           history.push('/pricing');
         } else {
-          await createNewAndReturnAllConversations({
-            chatId: activeChatId,
-            userQuery: exceptionMessage,
-            role: 'assistant',
+          await updateCurrentConversation({
+            id: inProgressConversation.id,
+            data: {
+              isLoading: false,
+              message: exceptionMessage,
+            },
           });
           await updateCurrentChat({
             id: activeChatId,

@@ -156,12 +156,13 @@ export default function ConversationsList({
           </div>
         );
       })}
-      {currentChatDetails?.team_status === 'inprogress' && (
-        <AgentLoader
-          logo={logo}
-          streamingAgentResponse={streamingAgentResponse}
-        />
-      )}
+      {currentChatDetails?.team_status === 'inprogress' &&
+        streamingAgentResponse && (
+          <AgentConversationHistory
+            agentConversationHistory={streamingAgentResponse}
+            initialState={true}
+          />
+        )}
 
       {isSmartSuggestionsAvailable &&
         !currentChatDetails?.streamAgentResponse && (
