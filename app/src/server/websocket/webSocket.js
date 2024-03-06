@@ -121,7 +121,7 @@ function wsConnection(socket, context, chatId, userId, message) {
   ws.onmessage = function (event) {
     agentConversationHistory = agentConversationHistory + event.data;
     lastMessage = event.data;
-    socket.emit('newMessageFromTeam', lastMessage);
+    socket.emit('newMessageFromTeam', agentConversationHistory);
   };
   ws.onerror = function (event) {
     console.error('WebSocket error observed: ', event);
