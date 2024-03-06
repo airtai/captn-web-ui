@@ -48,17 +48,54 @@ const TerminalDisplay: React.FC<TerminalDisplayProps> = ({
     <div
       className={`accordion-wrapper terminal ${isMinimized ? 'minimized' : ''}`}
     >
-      <div className='terminal-header text-white p-1 text-right bg-captn-light-blue'>
+      <div
+        className={`relative terminal-header ${
+          isMinimized ? 'rounded-lg' : 'rounded-t-lg'
+        } text-white p-1 text-right bg-captn-light-blue `}
+        onClick={() => setIsMinimized(!isMinimized)}
+      >
+        <p className='accordion-title text-sm text-left text-captn-dark-blue'>
+          Agent conversations
+        </p>
         <button
-          onClick={() => setIsMinimized(!isMinimized)}
-          className={`accordion-title ${
+          className={`absolute right-4 top-4 ${
             isMinimized ? '' : 'open'
-          } text-sm text-captn-light-cream `}
+          } text-sm text-captn-dark-blue `}
         >
-          {isMinimized ? '▲' : '▼'}
+          {isMinimized ? (
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              fill='currentColor'
+              className='bi bi-chevron-up'
+              viewBox='0 0 16 16'
+              height='16'
+            >
+              <path
+                fill-rule='evenodd'
+                d='M1.646 11.854a.5.5 0 0 0 .708 0L8 6.207l5.646 5.647a.5.5 0 0 0 .708-.708l-6-6a.5.5 0 0 0-.708 0l-6 6a.5.5 0 0 0 0 .708z'
+              />
+            </svg>
+          ) : (
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              fill='currentColor'
+              className='bi bi-chevron-down'
+              viewBox='0 0 16 16'
+              height='16'
+            >
+              <path
+                fill-rule='evenodd'
+                d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.793l5.646-5.647a.5.5 0 0 1 .708 .708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'
+              />
+            </svg>
+          )}
         </button>
       </div>
-      <div className={`accordion-item ${isMinimized ? '' : 'collapsed'}`}>
+      <div
+        className={`accordion-item rounded-b-lg ${
+          isMinimized ? '' : 'collapsed'
+        }`}
+      >
         <div
           ref={containerRef}
           onScroll={handleUserScroll}
@@ -69,11 +106,6 @@ const TerminalDisplay: React.FC<TerminalDisplayProps> = ({
           dangerouslySetInnerHTML={{ __html: convertAnsiToHtml(messages) }}
         />
       </div>
-      {/* <Accordion title='Accordion Title'>
-        <p>
-          This is the content that will be hidden until the accordion is opened.
-        </p>
-      </Accordion> */}
     </div>
   );
 };

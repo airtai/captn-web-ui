@@ -4,11 +4,13 @@ import TerminalDisplay from './TerminalDisplay';
 interface AgentConversationHistoryProps {
   agentConversationHistory: string;
   initialState?: boolean;
+  isAgentWindow?: boolean;
 }
 
 const AgentConversationHistory: React.FC<AgentConversationHistoryProps> = ({
   agentConversationHistory,
   initialState = false,
+  isAgentWindow = false,
 }) => {
   const [showHistory, setShowHistory] = useState(initialState);
 
@@ -22,7 +24,11 @@ const AgentConversationHistory: React.FC<AgentConversationHistoryProps> = ({
       className={`flex items-center group  flex-col bg-captn-dark-blue`}
     >
       <div
-        style={{ maxWidth: '800px', margin: '0 auto 20' }}
+        style={{
+          maxWidth: `${isAgentWindow ? '745px' : '800px'}`,
+          left: `${isAgentWindow ? '15px' : '0px'}`,
+          margin: '0 auto 20',
+        }}
         className={`relative block w-full`}
       >
         <TerminalDisplay messages={agentConversationHistory} maxHeight={400} />

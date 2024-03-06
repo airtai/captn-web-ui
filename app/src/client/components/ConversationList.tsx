@@ -98,7 +98,13 @@ export default function ConversationsList({
         return (
           <div key={idx}>
             {conversation.isLoading ? (
-              <AnimatedCharacterLoader />
+              <AnimatedCharacterLoader
+                loadingMessage={`${
+                  currentChatDetails.customerBrief
+                    ? 'The team is currently working on the task. You can monitor their discussions in the window below as they progress...'
+                    : 'Loading...'
+                }`}
+              />
             ) : (
               <div
                 style={{ minHeight: '85px' }}
@@ -161,6 +167,7 @@ export default function ConversationsList({
           <AgentConversationHistory
             agentConversationHistory={streamingAgentResponse}
             initialState={true}
+            isAgentWindow={true}
           />
         )}
 
