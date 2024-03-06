@@ -28,7 +28,7 @@ const AnimatedCharacterLoader: React.FC<AnimatedCharacterLoaderProps> = ({
       className={`flex items-center px-5 group bg-captn-dark-blue flex-col agent-conversation-container`}
     >
       <div
-        style={{ maxWidth: '700px', margin: 'auto' }}
+        style={{ maxWidth: '800px', margin: 'auto' }}
         className={`relative ml-3 block w-full p-4 pl-10 text-sm text-captn-light-cream  border-captn-dark-blue rounded-lg bg-captn-dark-blue `}
       >
         <span

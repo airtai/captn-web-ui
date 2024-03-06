@@ -19,14 +19,14 @@ const TerminalDisplay: React.FC<TerminalDisplayProps> = ({
       .replace(/\[0m/g, '</span>') // Reset / Normal
       .replace(/\[1m/g, '<span style="font-weight: bold;">') // Bold or increased intensity
       .replace(/\[4m/g, '<span style="text-decoration: underline;">') // Underline
-      .replace(/\[30m/g, '<span style="color: black;">') // Black
-      .replace(/\[31m/g, '<span style="color: red;">') // Red
-      .replace(/\[32m/g, '<span style="color: green;">') // Green
-      .replace(/\[33m/g, '<span style="color: yellow;">') // Yellow
-      .replace(/\[34m/g, '<span style="color: blue;">') // Blue
-      .replace(/\[35m/g, '<span style="color: magenta;">') // Magenta
-      .replace(/\[36m/g, '<span style="color: cyan;">') // Cyan
-      .replace(/\[37m/g, '<span style="color: white;">') // White
+      .replace(/\[30m/g, '<span style="color: #003851;">') // Black
+      .replace(/\[31m/g, '<span style="color: #c22828;">') // Red
+      .replace(/\[32m/g, '<span style="color: #71ad3d;">') // Green
+      .replace(/\[33m/g, '<span style="color: #6800a8;">') // Yellow
+      .replace(/\[34m/g, '<span style="color: #6e7cbb;">') // Blue
+      .replace(/\[35m/g, '<span style="color: #6800a8;">') // Magenta
+      .replace(/\[36m/g, '<span style="color: #6faabc;">') // Cyan
+      .replace(/\[37m/g, '<span style="color: #eae4d9;">') // White
       .replace(/\n/g, '<br/>'); // Convert newlines to <br/>
     return text;
   };
@@ -45,24 +45,35 @@ const TerminalDisplay: React.FC<TerminalDisplayProps> = ({
   }, [messages, isAutoScroll]);
 
   return (
-    <div className={`terminal ${isMinimized ? 'minimized' : ''}`}>
-      <div className='terminal-header bg-gray-800 text-white p-1 text-right'>
+    <div
+      className={`accordion-wrapper terminal ${isMinimized ? 'minimized' : ''}`}
+    >
+      <div className='terminal-header text-white p-1 text-right bg-captn-light-blue'>
         <button
           onClick={() => setIsMinimized(!isMinimized)}
-          className='text-sm'
+          className={`accordion-title ${
+            isMinimized ? '' : 'open'
+          } text-sm text-captn-light-cream `}
         >
           {isMinimized ? '▲' : '▼'}
         </button>
       </div>
-      <div
-        ref={containerRef}
-        onScroll={handleUserScroll}
-        className={`scroll-container bg-black p-4 text-white font-mono text-xs overflow-y-auto overflow-x-hidden ${
-          isMinimized ? 'hidden' : ''
-        }`}
-        style={{ maxHeight: `${maxHeight}px` }}
-        dangerouslySetInnerHTML={{ __html: convertAnsiToHtml(messages) }}
-      />
+      <div className={`accordion-item ${isMinimized ? '' : 'collapsed'}`}>
+        <div
+          ref={containerRef}
+          onScroll={handleUserScroll}
+          className={`accordion-content scroll-container bg-captn-light-cream p-4 text-captn-dark-blue font-mono text-xs overflow-y-auto overflow-x-hidden ${
+            isMinimized ? 'hidden' : ''
+          }`}
+          style={{ maxHeight: `${maxHeight}px` }}
+          dangerouslySetInnerHTML={{ __html: convertAnsiToHtml(messages) }}
+        />
+      </div>
+      {/* <Accordion title='Accordion Title'>
+        <p>
+          This is the content that will be hidden until the accordion is opened.
+        </p>
+      </Accordion> */}
     </div>
   );
 };

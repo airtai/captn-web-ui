@@ -109,7 +109,7 @@ export default function ConversationsList({
                 }`}
               >
                 <div
-                  style={{ maxWidth: '700px', margin: 'auto' }}
+                  style={{ maxWidth: '800px', margin: 'auto' }}
                   className={`relative ml-3 block w-full p-4 pl-10 text-sm text-${conversationTextColor}  border-${conversationBgColor} rounded-lg bg-${conversationBgColor} `}
                 >
                   <span
