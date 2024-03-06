@@ -62,13 +62,12 @@ export default function ConversationsList({
           : 'captn-dark-blue';
         const conversationTextColor = isUserConversation
           ? 'captn-dark-blue'
-          : // : 'captn-light-cream';
-            'white';
+          : 'captn-light-cream';
         const conversationLogo = isUserConversation ? (
           <div
             style={{
               alignItems: 'center',
-              background: '#fff',
+              background: '#eae4d9',
               borderRadius: '50%',
               color: '#444654',
               display: 'flex',

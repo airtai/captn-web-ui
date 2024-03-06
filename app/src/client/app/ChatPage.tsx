@@ -12,6 +12,7 @@ import { useSocket, useSocketListener } from '@wasp/webSocket';
 import getConversations from '@wasp/queries/getConversations';
 import ChatLayout from './layout/ChatLayout';
 import ConversationsList from '../components/ConversationList';
+import AnimatedCharacterLoader from '../components/AnimatedCharacterLoader';
 
 import createAuthRequiredChatPage from '../auth/createAuthRequiredChatPage';
 import { use } from 'chai';
@@ -244,11 +245,7 @@ const ChatPage = ({ user }: { user: User }) => {
     >
       <div className='flex h-full flex-col'>
         {currentChatDetails ? (
-          <div
-            className={`flex-1 overflow-hidden ${
-              currentChatDetails?.showLoader ? 'opacity-60' : 'opacity-100'
-            }`}
-          >
+          <div className='flex-1 overflow-hidden'>
             {conversations && (
               <ConversationsList
                 conversations={conversations}
@@ -258,7 +255,7 @@ const ChatPage = ({ user }: { user: User }) => {
                 onStreamAnimationComplete={onStreamAnimationComplete}
               />
             )}
-            {currentChatDetails?.showLoader && <Loader />}
+            {currentChatDetails?.showLoader && <AnimatedCharacterLoader />}
           </div>
         ) : (
           <DefaultMessage />
