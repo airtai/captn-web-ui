@@ -19,8 +19,7 @@ const AgentConversationHistory: React.FC<AgentConversationHistoryProps> = ({
   return (
     <div
       data-testid='agent-loader'
-      className={`flex items-center -mt-2 pl-8 group  flex-col bg-captn-dark-blue`}
-      style={{ minHeight: '85px' }}
+      className={`flex items-center group  flex-col bg-captn-dark-blue`}
     >
       <div
         style={{ maxWidth: '700px', margin: '0 auto 20' }}

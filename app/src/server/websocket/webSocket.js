@@ -83,14 +83,22 @@ async function getChat(chatId, context) {
   });
 }
 
-async function updateDB(context, chatId, message, agentConversationHistory) {
+async function updateDB(
+  context,
+  chatId,
+  message,
+  conversationId,
+  agentConversationHistory
+) {
   let jsonString = message.replace(/True/g, true).replace(/False/g, false);
   let obj = JSON.parse(jsonString);
-  await context.entities.Conversation.create({
+  await context.entities.Conversation.update({
+    where: {
+      id: conversationId,
+    },
     data: {
-      chat: { connect: { id: chatId } },
+      isLoading: false,
       message: obj.message,
-      role: 'assistant',
       agentConversationHistory,
     },
   });
@@ -106,7 +114,14 @@ async function updateDB(context, chatId, message, agentConversationHistory) {
   });
 }
 
-function wsConnection(socket, context, chatId, userId, message) {
+function wsConnection(
+  socket,
+  context,
+  chatId,
+  userId,
+  conversationId,
+  message
+) {
   const ws = new WebSocket(WS_URL);
   const data = {
     conv_id: chatId,
@@ -128,7 +143,13 @@ function wsConnection(socket, context, chatId, userId, message) {
   };
   ws.onclose = async function (event) {
     if (event.code === 1000) {
-      await updateDB(context, chatId, lastMessage, agentConversationHistory);
+      await updateDB(
+        context,
+        chatId,
+        lastMessage,
+        conversationId,
+        agentConversationHistory
+      );
       socket.emit('streamFromTeamFinished');
     }
     console.log('WebSocket is closed now.');
@@ -166,9 +187,19 @@ export const socketFn = (io, context) => {
         }
       });
 
-      socket.on('sendMessageToTeam', async (userId, chatId, message) => {
-        wsConnection(socket, context, chatId, userId, message);
-      });
+      socket.on(
+        'sendMessageToTeam',
+        async (userId, chatId, conversationId, message) => {
+          wsConnection(
+            socket,
+            context,
+            chatId,
+            userId,
+            conversationId,
+            message
+          );
+        }
+      );
     }
   });
 };

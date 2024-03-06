@@ -124,6 +124,7 @@ const ChatPage = ({ user }: { user: User }) => {
             'sendMessageToTeam',
             currentChatDetails.userId,
             currentChatDetails.id,
+            inProgressConversation.id,
             userQuery
           );
           await updateCurrentChat({
@@ -150,6 +151,7 @@ const ChatPage = ({ user }: { user: User }) => {
               'sendMessageToTeam',
               currentChatDetails.userId,
               currentChatDetails.id,
+              inProgressConversation.id,
               response.customer_brief
             );
           }

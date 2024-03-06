@@ -1,34 +1,26 @@
 import React, { useState, useEffect } from 'react';
 
-import Markdown from 'markdown-to-jsx';
 import logo from '../static/captn-logo.png';
 
 interface AnimatedCharacterLoaderProps {
-  loadInterval?: number; // Optional prop with a default value
-  loadingMessage?: string; // Optional prop with a default value
+  loadingMessage?: string; // Optional prop for customizing the loading message
 }
 
 const AnimatedCharacterLoader: React.FC<AnimatedCharacterLoaderProps> = ({
-  loadInterval = 60,
-  loadingMessage = 'Loading...',
+  loadingMessage = 'Loading...', // Default loading message
 }) => {
-  const [frameIndex, setFrameIndex] = useState<number>(0); // Explicitly type the state variable
-  const loadingAnimation: string[] = ['—', '\\', '|', '/']; // Explicitly type the array
+  const [frameIndex, setFrameIndex] = useState(0); // State to track the current frame of the animation
+  const loadingAnimation = ['—', '\\', '|', '/']; // Characters used for the loading animation
 
   useEffect(() => {
+    // Set up an interval to cycle through the animation characters
     const interval = setInterval(() => {
-      setFrameIndex((prevIndex) => (prevIndex + 1) % loadingAnimation.length);
-    }, 250);
+      setFrameIndex((prevIndex) => (prevIndex + 1) % loadingAnimation.length); // Cycle through indices in a loop
+    }, 250); // Animation frame update interval in milliseconds
 
-    const timeout = setTimeout(() => {
-      clearInterval(interval);
-    }, loadInterval * 1000);
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(timeout);
-    };
-  }, [loadInterval, loadingAnimation.length]);
+    // Cleanup function to clear the interval on component unmount
+    return () => clearInterval(interval);
+  }, [loadingAnimation.length]); // Dependence on the length is constant, but included for completeness
 
   return (
     <div
