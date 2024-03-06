@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Markdown from 'markdown-to-jsx';
 import type { Conversation, Chat } from '@wasp/entities';
 import { useSocketListener } from '@wasp/webSocket';
-// import createNewConversation from '@wasp/actions/createNewConversation';
+// import createNewAndReturnAllConversations from '@wasp/actions/createNewAndReturnAllConversations';
 
 import AgentLoader from './AgentLoader';
 import SmartSuggestionButton from './SmartSuggestionButton';

@@ -9,7 +9,7 @@ import {
   UpdateUserById,
   CreateNewChat,
   CreateNewDailyAnalysisChat,
-  CreateNewConversation,
+  CreateNewAndReturnAllConversations,
   UpdateCurrentChat,
   GetAgentResponse,
 } from '@wasp/actions/types';
@@ -207,7 +207,7 @@ export const updateCurrentChat: UpdateCurrentChat<
   return chat;
 };
 
-export const createNewConversation: CreateNewConversation<
+export const createNewAndReturnAllConversations: CreateNewAndReturnAllConversations<
   { chatId: number; userQuery: string; role: 'user' | 'assistant' },
   Conversation[]
 > = async ({ chatId, userQuery, role }, context) => {

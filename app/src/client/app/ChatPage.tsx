@@ -4,7 +4,7 @@ import { useHistory, useLocation, Redirect } from 'react-router-dom';
 import { useQuery } from '@wasp/queries';
 import getChat from '@wasp/queries/getChat';
 import getAgentResponse from '@wasp/actions/getAgentResponse';
-import createNewConversation from '@wasp/actions/createNewConversation';
+import createNewAndReturnAllConversations from '@wasp/actions/createNewAndReturnAllConversations';
 import updateCurrentChat from '@wasp/actions/updateCurrentChat';
 import type { Conversation } from '@wasp/entities';
 import { useSocket, useSocketListener } from '@wasp/webSocket';
@@ -97,7 +97,7 @@ const ChatPage = ({ user }: { user: User }) => {
             userRespondedWithNextAction: isUserRespondedWithNextAction,
           },
         });
-        const allConversations = await createNewConversation({
+        const allConversations = await createNewAndReturnAllConversations({
           chatId: activeChatId,
           userQuery,
           role: 'user',
@@ -159,7 +159,7 @@ const ChatPage = ({ user }: { user: User }) => {
           }
 
           response['content'] &&
-            (await createNewConversation({
+            (await createNewAndReturnAllConversations({
               chatId: activeChatId,
               userQuery: response['content'],
               role: 'assistant',
@@ -187,7 +187,7 @@ const ChatPage = ({ user }: { user: User }) => {
         if (err.message === 'No Subscription Found') {
           history.push('/pricing');
         } else {
-          await createNewConversation({
+          await createNewAndReturnAllConversations({
             chatId: activeChatId,
             userQuery: exceptionMessage,
             role: 'assistant',
