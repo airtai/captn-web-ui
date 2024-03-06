@@ -29,7 +29,7 @@ export default function ConversationsList({
   userSelectedActionMessage,
   onStreamAnimationComplete,
 }: ConversationsListProps) {
-  const [streamingAgentResponse, setStreamingAgentResponse] = useState(null);
+  const [streamingAgentResponse, setStreamingAgentResponse] = useState('');
   // @ts-ignore
   const smartSuggestions = currentChatDetails?.smartSuggestions?.suggestions;
   // @ts-ignore
@@ -46,11 +46,11 @@ export default function ConversationsList({
   const lastConversationIdx = conversations.length - 1;
 
   useSocketListener('newMessageFromTeam', (message: any) =>
-    setStreamingAgentResponse(streamingAgentResponse + message)
+    setStreamingAgentResponse(message)
   );
 
   useSocketListener('streamFromTeamFinished', () =>
-    setStreamingAgentResponse(null)
+    setStreamingAgentResponse('')
   );
 
   return (
