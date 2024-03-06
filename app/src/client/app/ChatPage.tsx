@@ -4,8 +4,10 @@ import { useHistory, useLocation, Redirect } from 'react-router-dom';
 import { useQuery } from '@wasp/queries';
 import getChat from '@wasp/queries/getChat';
 import getAgentResponse from '@wasp/actions/getAgentResponse';
-import createNewConversation from '@wasp/actions/createNewConversation';
+import createNewAndReturnAllConversations from '@wasp/actions/createNewAndReturnAllConversations';
+import createNewAndReturnLastConversation from '@wasp/actions/createNewAndReturnLastConversation';
 import updateCurrentChat from '@wasp/actions/updateCurrentChat';
+import updateCurrentConversation from '@wasp/actions/updateCurrentConversation';
 import type { Conversation } from '@wasp/entities';
 import { useSocket, useSocketListener } from '@wasp/webSocket';
 
@@ -87,6 +89,7 @@ const ChatPage = ({ user }: { user: User }) => {
     if (currentChatDetails.userId !== user.id) {
       window.alert('Error: This chat does not belong to you.');
     } else {
+      let inProgressConversation;
       try {
         isUserRespondedWithNextAction && removeQueryParameters();
         await updateCurrentChat({
@@ -96,7 +99,7 @@ const ChatPage = ({ user }: { user: User }) => {
             userRespondedWithNextAction: isUserRespondedWithNextAction,
           },
         });
-        const allConversations = await createNewConversation({
+        const allConversations = await createNewAndReturnAllConversations({
           chatId: activeChatId,
           userQuery,
           role: 'user',
@@ -108,6 +111,12 @@ const ChatPage = ({ user }: { user: User }) => {
             showLoader: true,
           },
         });
+        inProgressConversation = await createNewAndReturnLastConversation({
+          chatId: activeChatId,
+          userQuery,
+          role: 'assistant',
+          isLoading: true,
+        });
         // if the chat has customerBrief already then directly send required detalils in socket event
         if (currentChatDetails.customerBrief) {
           console.log('Sending message to the same socket');
@@ -115,6 +124,7 @@ const ChatPage = ({ user }: { user: User }) => {
             'sendMessageToTeam',
             currentChatDetails.userId,
             currentChatDetails.id,
+            inProgressConversation.id,
             userQuery
           );
           await updateCurrentChat({
@@ -141,6 +151,7 @@ const ChatPage = ({ user }: { user: User }) => {
               'sendMessageToTeam',
               currentChatDetails.userId,
               currentChatDetails.id,
+              inProgressConversation.id,
               response.customer_brief
             );
           }
@@ -158,10 +169,12 @@ const ChatPage = ({ user }: { user: User }) => {
           }
 
           response['content'] &&
-            (await createNewConversation({
-              chatId: activeChatId,
-              userQuery: response['content'],
-              role: 'assistant',
+            (await updateCurrentConversation({
+              id: inProgressConversation.id,
+              data: {
+                isLoading: false,
+                message: response['content'],
+              },
             }));
 
           await updateCurrentChat({
@@ -186,10 +199,12 @@ const ChatPage = ({ user }: { user: User }) => {
         if (err.message === 'No Subscription Found') {
           history.push('/pricing');
         } else {
-          await createNewConversation({
-            chatId: activeChatId,
-            userQuery: exceptionMessage,
-            role: 'assistant',
+          await updateCurrentConversation({
+            id: inProgressConversation.id,
+            data: {
+              isLoading: false,
+              message: exceptionMessage,
+            },
           });
           await updateCurrentChat({
             id: activeChatId,
@@ -244,11 +259,7 @@ const ChatPage = ({ user }: { user: User }) => {
     >
       <div className='flex h-full flex-col'>
         {currentChatDetails ? (
-          <div
-            className={`flex-1 overflow-hidden ${
-              currentChatDetails?.showLoader ? 'opacity-60' : 'opacity-100'
-            }`}
-          >
+          <div className='flex-1 overflow-hidden'>
             {conversations && (
               <ConversationsList
                 conversations={conversations}
@@ -258,7 +269,6 @@ const ChatPage = ({ user }: { user: User }) => {
                 onStreamAnimationComplete={onStreamAnimationComplete}
               />
             )}
-            {currentChatDetails?.showLoader && <Loader />}
           </div>
         ) : (
           <DefaultMessage />

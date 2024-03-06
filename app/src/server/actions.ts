@@ -9,8 +9,10 @@ import {
   UpdateUserById,
   CreateNewChat,
   CreateNewDailyAnalysisChat,
-  CreateNewConversation,
+  CreateNewAndReturnAllConversations,
+  CreateNewAndReturnLastConversation,
   UpdateCurrentChat,
+  UpdateCurrentConversation,
   GetAgentResponse,
 } from '@wasp/actions/types';
 import {
@@ -207,7 +209,25 @@ export const updateCurrentChat: UpdateCurrentChat<
   return chat;
 };
 
-export const createNewConversation: CreateNewConversation<
+export const updateCurrentConversation: UpdateCurrentConversation<
+  { id: number; data: Partial<Conversation> },
+  Conversation
+> = async ({ id, data }, context) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+
+  const conversation = await context.entities.Conversation.update({
+    where: {
+      id: id,
+    },
+    data,
+  });
+
+  return conversation;
+};
+
+export const createNewAndReturnAllConversations: CreateNewAndReturnAllConversations<
   { chatId: number; userQuery: string; role: 'user' | 'assistant' },
   Conversation[]
 > = async ({ chatId, userQuery, role }, context) => {
@@ -231,6 +251,34 @@ export const createNewConversation: CreateNewConversation<
   return context.entities.Conversation.findMany({
     where: { chatId: chatId, userId: context.user.id },
     orderBy: { id: 'asc' },
+  });
+};
+
+export const createNewAndReturnLastConversation: CreateNewAndReturnLastConversation<
+  {
+    chatId: number;
+    userQuery: string;
+    role: 'user' | 'assistant';
+    isLoading: boolean;
+  },
+  Conversation
+> = async ({ chatId, userQuery, role, isLoading }, context) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+
+  if (!context.user.hasPaid) {
+    throw new HttpError(500, 'No Subscription Found');
+  }
+
+  return await context.entities.Conversation.create({
+    data: {
+      chat: { connect: { id: chatId } },
+      user: { connect: { id: context.user.id } },
+      message: userQuery,
+      role,
+      isLoading,
+    },
   });
 };
 

@@ -117,7 +117,7 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen }: ChatSidebarProps) => {
       <div>
         <Link
           to='#'
-          className='no-underline mt-7 my-1 mx-4 mb-10 flex items-center justify-left gap-2.5 rounded-md bg-captn-cta-green py-4 px-4 text-center font-medium text-white hover:bg-opacity-90'
+          className='no-underline mt-7 my-1 mx-4 mb-10 flex items-center justify-left gap-2.5 rounded-md bg-captn-cta-green py-4 px-4 text-center font-medium text-captn-light-cream hover:bg-opacity-90'
           onClick={handleCreateNewChat}
         >
           <span>
@@ -165,7 +165,7 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen }: ChatSidebarProps) => {
                       } ${
                         chat.id === activeChat
                           ? 'bg-captn-light-cream text-captn-dark-blue hover:bg-captn-light-blue hover:text-captn-dark-blue'
-                          : 'text-white hover:bg-captn-light-blue hover:text-captn-dark-blue'
+                          : 'text-captn-light-cream hover:bg-captn-light-blue hover:text-captn-dark-blue'
                       }`}
                     >
                       <svg

@@ -9,7 +9,7 @@ const Header = (props: {
   user?: Partial<User>;
 }) => {
   return (
-    <header className='sticky top-0 z-999 flex w-full bg-white dark:bg-boxdark dark:drop-shadow-none'>
+    <header className='sticky top-0 z-999 flex w-full bg-captn-light-cream dark:bg-boxdark dark:drop-shadow-none'>
       <div className='flex flex-grow items-center justify-between sm:justify-end sm:gap-5 px-8 py-5 shadow '>
         <div className='flex items-center gap-2 sm:gap-4 lg:hidden'>
           {/* <!-- Hamburger Toggle BTN --> */}
@@ -20,7 +20,7 @@ const Header = (props: {
               e.stopPropagation();
               props.setSidebarOpen(!props.sidebarOpen);
             }}
-            className='z-99999 block rounded-sm border border-stroke bg-white p-1.5 shadow-sm dark:border-strokedark dark:bg-boxdark lg:hidden'
+            className='z-99999 block rounded-sm border border-stroke bg-captn-light-cream p-1.5 shadow-sm dark:border-strokedark dark:bg-boxdark lg:hidden'
           >
             <span className='relative block h-5.5 w-5.5 cursor-pointer'>
               <span className='du-block absolute right-0 h-full w-full'>

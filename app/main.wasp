@@ -180,6 +180,7 @@ entity Conversation {=psl
     message                     String
     role                        String
     agentConversationHistory    String?
+    isLoading                   Boolean         @default(false)
     chat                        Chat?           @relation(fields: [chatId], references: [id])
     chatId                      Int?
     user                        User?           @relation(fields: [userId], references: [id])
@@ -379,8 +380,18 @@ action updateCurrentChat {
   entities: [Chat]
 }
 
-action createNewConversation {
-  fn: import { createNewConversation } from "@server/actions.js",
+action updateCurrentConversation {
+  fn: import { updateCurrentConversation } from "@server/actions.js",
+  entities: [Conversation]
+}
+
+action createNewAndReturnAllConversations {
+  fn: import { createNewAndReturnAllConversations } from "@server/actions.js",
+  entities: [Conversation]
+}
+
+action createNewAndReturnLastConversation {
+  fn: import { createNewAndReturnLastConversation } from "@server/actions.js",
   entities: [Conversation]
 }
 
