@@ -44,7 +44,7 @@ export default function ChatForm({
       <form onSubmit={handleSubmit} className=''>
         <label
           htmlFor='search'
-          className='mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white'
+          className='mb-2 text-sm font-medium text-captn-dark-blue sr-only dark:text-captn-light-cream'
         >
           Search
         </label>
@@ -62,7 +62,7 @@ export default function ChatForm({
           />
           <button
             type='submit'
-            className={`text-white bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 absolute right-2 font-medium rounded-lg text-sm px-1.5 py-1.5`}
+            className={`text-captn-light-cream bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 absolute right-2 font-medium rounded-lg text-sm px-1.5 py-1.5`}
           >
             <span className=''>
               <svg

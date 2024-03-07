@@ -38,7 +38,7 @@ export default function FreeTrialButton() {
         handleClick(TierIds.PRO);
       }}
       href='/chat'
-      className='no-underline rounded-md px-3.5 py-2.5 text-sm text-white ring-1 ring-inset ring-gray-200 hover:bg-captn-cta-green-hover shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:text-white bg-captn-cta-green'
+      className='no-underline rounded-md px-3.5 py-2.5 text-sm text-captn-light-cream ring-1 ring-inset ring-gray-200 hover:bg-captn-cta-green-hover shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:text-captn-light-cream bg-captn-cta-green'
     >
       {!isLoading ? 'Free Trial' : 'Loading...'}
     </a>

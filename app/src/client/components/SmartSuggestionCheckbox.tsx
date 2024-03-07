@@ -59,7 +59,7 @@ export default function SmartSuggestionCheckbox({
         )}
         {chatType === 'daily_analysis' && (
           <p
-            className='block text-bold text-white'
+            className='block text-bold text-captn-light-cream'
             style={{ margin: '20px 0' }}
           >
             <b>
@@ -93,7 +93,7 @@ export default function SmartSuggestionCheckbox({
             selectedItems.length > 0
               ? ''
               : 'bg-gray-400 cursor-not-allowed hover:bg-gray-500'
-          }  ml-6 mt-3 bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 m-1 text-white`}
+          }  ml-6 mt-3 bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 m-1 text-captn-light-cream`}
         >
           Send
         </button>

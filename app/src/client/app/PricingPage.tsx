@@ -67,14 +67,14 @@ const PricingPage = () => {
     <div className='py-10 lg:mt-10'>
       <div className='mx-auto max-w-7xl px-6 lg:px-8'>
         <div id='pricing' className='mx-auto max-w-4xl text-center'>
-          <h2 className='mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl dark:text-white'>
+          <h2 className='mt-2 text-4xl font-bold tracking-tight text-captn-dark-blue sm:text-5xl dark:text-captn-light-cream'>
             Try Capt’n.ai free for a month.{' '}
             <span className='text-captn-light-blue'>
               No credit card required!
             </span>
           </h2>
         </div>
-        <p className='mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-600 dark:text-white'>
+        <p className='mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-captn-dark-blue dark:text-captn-light-cream'>
           To set sail and fully explore Capt’n.ai's offerings, you'll need an
           active subscription as your compass. Navigate the complete range of
           features with our smooth subscription, charting a course with a 30-day
@@ -95,11 +95,11 @@ const PricingPage = () => {
             >
               {tier.bestDeal && (
                 <div
-                  className='absolute top-0 right-0 -z-10 w-full h-full transform-gpu blur-3xl'
+                  className='absolute top-0 right-0 -z-10 w-full h-full '
                   aria-hidden='true'
                 >
                   <div
-                    className='absolute w-full h-full bg-gradient-to-br from-amber-400 to-purple-300 opacity-30 dark:opacity-50'
+                    className='absolute w-full h-full bg-captn-dark-blue'
                     style={{
                       clipPath: 'circle(670% at 50% 50%)',
                     }}
@@ -110,25 +110,25 @@ const PricingPage = () => {
                 <div className='flex items-center justify-between gap-x-4'>
                   <h3
                     id={tier.id}
-                    className='text-gray-900 text-lg font-semibold leading-8 dark:text-white'
+                    className='text-captn-light-cream text-lg font-semibold leading-8 dark:text-captn-light-cream'
                   >
                     {tier.name}
                   </h3>
                 </div>
-                <p className='mt-4 text-sm leading-6 text-gray-600 dark:text-white'>
+                <p className='mt-4 text-sm leading-6 text-captn-light-cream dark:text-captn-light-cream'>
                   {tier.description}
                 </p>
-                <p className='mt-6 flex items-baseline gap-x-1 dark:text-white'>
-                  <span className='text-4xl font-bold tracking-tight text-gray-900 dark:text-white'>
+                <p className='mt-6 flex items-baseline gap-x-1 dark:text-captn-light-cream'>
+                  <span className='text-4xl font-bold tracking-tight text-captn-light-cream dark:text-captn-light-cream'>
                     {tier.priceMonthly}
                   </span>
-                  <span className='text-sm font-semibold leading-6 text-gray-600 dark:text-white'>
+                  <span className='text-sm font-semibold leading-6 text-captn-light-cream dark:text-captn-light-cream'>
                     /month
                   </span>
                 </p>
                 <ul
                   role='list'
-                  className='mt-8 space-y-3 text-sm leading-6 text-gray-600 dark:text-white'
+                  className='mt-8 space-y-3 text-sm leading-6 text-captn-light-cream dark:text-captn-light-cream'
                 >
                   {tier.features.map((feature) => (
                     <li key={feature} className='flex gap-x-3'>
@@ -153,8 +153,8 @@ const PricingPage = () => {
                       }
                       ${
                         tier.bestDeal
-                          ? 'no-underline bg-captn-cta-green text-white hover:text-white shadow-sm hover:bg-captn-cta-green-hover'
-                          : 'text-gray-600  ring-1 ring-inset ring-purple-200 hover:ring-purple-400'
+                          ? 'no-underline bg-captn-cta-green text-captn-light-cream hover:text-captn-light-cream shadow-sm hover:bg-captn-cta-green-hover'
+                          : 'text-captn-dark-blue  ring-1 ring-inset ring-purple-200 hover:ring-purple-400'
                       }
                       'mt-8 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-captn-light-blue'
                     `}
@@ -167,7 +167,7 @@ const PricingPage = () => {
                 <button
                   onClick={() => handleBuyNowClick(tier.id)}
                   aria-describedby={tier.id}
-                  className={`dark:text-white
+                  className={`dark:text-captn-light-cream
                       ${
                         tier.id === 'enterprise-tier'
                           ? 'opacity-50 cursor-not-allowed'
@@ -175,8 +175,8 @@ const PricingPage = () => {
                       }
                       ${
                         tier.bestDeal
-                          ? 'bg-captn-cta-green text-white hover:text-white shadow-sm hover:bg-captn-cta-green-hover'
-                          : 'text-gray-600  ring-1 ring-inset ring-purple-200 hover:ring-purple-400'
+                          ? 'bg-captn-cta-green text-captn-light-cream hover:text-captn-light-cream shadow-sm hover:bg-captn-cta-green-hover'
+                          : 'text-captn-dark-blue  ring-1 ring-inset ring-purple-200 hover:ring-purple-400'
                       }
                       ${
                         isStripePaymentLoading === tier.id

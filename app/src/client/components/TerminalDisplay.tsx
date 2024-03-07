@@ -53,7 +53,7 @@ const TerminalDisplay: React.FC<TerminalDisplayProps> = ({
       <div
         className={`relative terminal-header ${
           isMinimized ? 'rounded-lg' : 'rounded-t-lg'
-        } text-white p-1 text-right bg-captn-light-blue `}
+        } text-captn-light-cream p-1 text-right bg-captn-light-blue `}
         onClick={() => setIsMinimized(!isMinimized)}
       >
         <p className='accordion-title text-sm text-left text-captn-dark-blue'>

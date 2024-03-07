@@ -7,7 +7,7 @@
 //     <AuthWrapper>
 //       <ResetPasswordForm />
 //       <br />
-//       <span className='text-sm font-medium text-gray-900'>
+//       <span className='text-sm font-medium text-captn-dark-blue'>
 //         If everything is okay, <Link to='/login'>go to login</Link>
 //       </span>
 //     </AuthWrapper>

@@ -39,7 +39,7 @@ export const UserMenuItems = ({
           <Link
             to='/account'
             onClick={handleMobileMenuClick}
-            className='no-underline flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-captn-light-blue'
+            className='no-underline flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out text-captn-light-cream hover:text-captn-light-blue'
           >
             <svg
               className='fill-current'
@@ -72,7 +72,7 @@ export const UserMenuItems = ({
             <Link
               to='/admin'
               onClick={handleMobileMenuClick}
-              className='no-underline  flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-captn-light-blue'
+              className='no-underline  flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out text-captn-light-cream hover:text-captn-light-blue'
             >
               <TfiDashboard size='1.1rem' />
               Admin Dashboard

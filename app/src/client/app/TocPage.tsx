@@ -4,7 +4,9 @@ export default function TocPage() {
       <div className='mx-auto max-w-2xl pl-10 pr-10 pt-10 pb-24 sm:pb-32 lg:gap-x-8 lg:py-5 lg:px-8'>
         <div className='container mx-auto py-8'>
           <h1 className='text-3xl font-semibold mb-4'>Terms & Conditions</h1>
-          <p className='text-gray-600 mb-4'>Last updated January 29, 2024</p>
+          <p className='text-captn-dark-blue mb-4'>
+            Last updated January 29, 2024
+          </p>
 
           <section className='mb-8'>
             <p>

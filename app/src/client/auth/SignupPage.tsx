@@ -7,7 +7,7 @@ export function Signup() {
     <AuthWrapper>
       <SignupForm />
       <br />
-      <span className='text-sm font-medium text-gray-900'>
+      <span className='text-sm font-medium text-captn-dark-blue'>
         I already have an account (
         <Link to='/login' className='underline'>
           go to login

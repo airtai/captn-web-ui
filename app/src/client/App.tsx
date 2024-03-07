@@ -51,7 +51,7 @@ export default function App({ children }: { children: ReactNode }) {
 
   return (
     <>
-      <div className='min-h-screen dark:text-white dark:bg-boxdark-2'>
+      <div className='min-h-screen dark:text-captn-light-cream dark:bg-boxdark-2 bg-captn-light-cream text-captn-dark-blue'>
         {isAdminDashboard || isChatPage ? (
           <>{children}</>
         ) : (

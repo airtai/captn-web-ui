@@ -52,6 +52,34 @@ a {
   list-style: disc;
 }
 
+.custom-auth-wrapper input[type='checkbox'] {
+  display: none;
+}
+
+.custom-auth-wrapper input[type='checkbox'] + label {
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+}
+
+.custom-auth-wrapper input[type='checkbox'] + label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 15px;
+  height: 15px;
+  background: #eae4d9;
+}
+
+.custom-auth-wrapper input[type='checkbox']:checked + label:before {
+  background: #6faabc;
+}
+
+.custom-auth-wrapper div>a {
+  background: #eae4d9;
+}
+
 /* Accordion.css */
 
 .accordion-wrapper {
@@ -249,7 +277,7 @@ a {
   @apply dark:!text-bodydark;
 }
 .flatpickr-months .flatpickr-prev-month, .flatpickr-months .flatpickr-next-month {
-  @apply !top-7 dark:!text-white dark:!fill-white;
+  @apply !top-7 dark:!text-captn-light-cream dark:!fill-white;
 }
 .flatpickr-months .flatpickr-prev-month.flatpickr-prev-month, .flatpickr-months .flatpickr-next-month.flatpickr-prev-month {
   @apply !left-7
@@ -259,18 +287,18 @@ a {
 }
 span.flatpickr-weekday,
 .flatpickr-months .flatpickr-month {
-  @apply dark:!text-white dark:!fill-white;
+  @apply dark:!text-captn-light-cream dark:!fill-white;
 }
 .flatpickr-day.inRange {
   @apply dark:!bg-meta-4 dark:!border-meta-4 dark:!shadow-7;
 }
 .flatpickr-day.selected, .flatpickr-day.startRange,
 .flatpickr-day.selected, .flatpickr-day.endRange {
-  @apply dark:!text-white;
+  @apply dark:!text-captn-light-cream;
 }
 
 .map-btn .jvm-zoom-btn {
-  @apply flex items-center justify-center w-7.5 h-7.5 rounded border border-stroke dark:border-strokedark hover:border-primary dark:hover:border-primary bg-white hover:bg-primary text-body hover:text-white dark:text-bodydark dark:hover:text-white text-2xl leading-none px-0 pt-0 pb-0.5;
+  @apply flex items-center justify-center w-7.5 h-7.5 rounded border border-stroke dark:border-strokedark hover:border-primary dark:hover:border-primary bg-white hover:bg-primary text-body hover:text-captn-light-cream dark:text-bodydark dark:hover:text-captn-light-cream text-2xl leading-none px-0 pt-0 pb-0.5;
 }
 .mapOne .jvm-zoom-btn {
   @apply left-auto top-auto bottom-0;

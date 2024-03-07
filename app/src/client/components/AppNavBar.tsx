@@ -28,7 +28,7 @@ export default function AppNavBar() {
 
   const { data: user, isLoading: isUserLoading } = useAuth();
   return (
-    <header className='absolute inset-x-0 top-0 z-50 shadow sticky bg-white bg-opacity-50 backdrop-blur-lg backdrop-filter dark:border-strokedark dark:bg-boxdark-2'>
+    <header className='absolute inset-x-0 top-0 z-50 shadow sticky bg-captn-light-cream bg-opacity-50 backdrop-blur-lg backdrop-filter dark:border-strokedark dark:bg-boxdark-2'>
       <nav
         className='flex items-center justify-between p-6 lg:px-8'
         aria-label='Global'
@@ -42,14 +42,14 @@ export default function AppNavBar() {
               alt='Capt’n.ai'
             />
           </a>
-          <span className='mt-2 text-sm font-semibold leading-6 dark:text-white'>
+          <span className='mt-2 text-sm font-semibold leading-6 dark:text-captn-light-cream'>
             <sup className='text-base text-captn-dark-blue'>βeta</sup>
           </span>
         </div>
         <div className='flex lg:hidden'>
           <button
             type='button'
-            className='-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-white'
+            className='-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-captn-light-cream'
             onClick={() => setMobileMenuOpen(true)}
           >
             <span className='sr-only'>Open main menu</span>
@@ -61,7 +61,7 @@ export default function AppNavBar() {
             <a
               key={item.name}
               href={item.href}
-              className='no-underline text-sm leading-6 text-gray-900 duration-300 ease-in-out hover:text-captn-light-blue dark:text-white'
+              className='no-underline text-sm leading-6 text-captn-dark-blue duration-300 ease-in-out hover:text-captn-light-blue dark:text-captn-light-cream'
             >
               {item.name}
             </a>
@@ -78,7 +78,7 @@ export default function AppNavBar() {
               href={!user ? '/login' : '/account'}
               className='text-sm font-semibold leading-6 ml-4'
             >
-              <div className='flex items-center duration-300 ease-in-out text-gray-900 hover:text-captn-light-blue dark:text-white'>
+              <div className='flex items-center duration-300 ease-in-out text-captn-dark-blue hover:text-captn-light-blue dark:text-captn-light-cream'>
                 Log in <BiLogIn size='1.1rem' className='ml-1 mt-[0.1rem]' />
               </div>
             </a>
@@ -96,7 +96,7 @@ export default function AppNavBar() {
         onClose={setMobileMenuOpen}
       >
         <div className='fixed inset-0 z-50' />
-        <Dialog.Panel className='fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white dark:text-white dark:bg-boxdark px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
+        <Dialog.Panel className='fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white dark:text-captn-light-cream dark:bg-boxdark px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
           <div className='flex items-center justify-between'>
             <a href='/' className='-m-1.5 p-1.5'>
               <span className='sr-only'>Your SaaS</span>
@@ -119,7 +119,7 @@ export default function AppNavBar() {
                     key={item.name}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className='-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-white hover:dark:bg-boxdark-2'
+                    className='-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-captn-dark-blue hover:bg-gray-50 dark:text-captn-light-cream hover:dark:bg-boxdark-2'
                   >
                     {item.name}
                   </a>
@@ -128,7 +128,7 @@ export default function AppNavBar() {
               <div className='py-6'>
                 {isUserLoading ? null : !user ? (
                   <Link to='/login'>
-                    <div className='flex justify-end items-center duration-300 ease-in-out text-gray-900 hover:text-captn-light-blue dark:text-white'>
+                    <div className='flex justify-end items-center duration-300 ease-in-out text-captn-dark-blue hover:text-captn-light-blue dark:text-captn-light-cream'>
                       Log in <BiLogIn size='1.1rem' className='ml-1' />
                     </div>
                   </Link>

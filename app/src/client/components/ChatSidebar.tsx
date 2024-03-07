@@ -92,7 +92,7 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen }: ChatSidebarProps) => {
           <NavLink to='/'>
             <img src={Logo} alt='Logo' className='h-10 w-auto mt-2' />
           </NavLink>
-          <span className='mt-2 text-sm font-semibold leading-6 dark:text-white'>
+          <span className='mt-2 text-sm font-semibold leading-6 dark:text-captn-light-cream'>
             <sup className='text-base text-captn-light-blue'>βeta</sup>
           </span>
         </>
