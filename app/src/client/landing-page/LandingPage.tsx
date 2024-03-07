@@ -399,7 +399,7 @@ export default function LandingPage() {
       <div className='mx-auto mt-6 max-w-7xl px-6 lg:px-8 dark:bg-boxdark-2'>
         <footer
           aria-labelledby='footer-heading'
-          className='relative border-t border-gray-900/10 dark:border-gray-200/10 py-24 sm:mt-5'
+          className='relative border-t border-gray-900/10 dark:border-gray-200/10 py-5 sm:mt-5'
         >
           <h2 id='footer-heading' className='sr-only'>
             Footer
@@ -431,7 +431,7 @@ export default function LandingPage() {
                   <li key={item.name}>
                     <a
                       href={item.href}
-                      className='text-sm leading-6 text-captn-dark-blue hover:text-captn-dark-blue dark:text-captn-light-cream'
+                      className='text-sm leading-6 text-captn-dark-blue hover:text-captn-light-blue dark:text-captn-light-cream'
                       target={`${item.name === 'About' ? '_blank' : '_self'}`}
                     >
                       {item.name}

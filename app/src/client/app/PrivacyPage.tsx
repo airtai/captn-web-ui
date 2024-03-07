@@ -144,7 +144,7 @@ export default function PrivacyPage() {
                 // href="https://myaccount.google.com/permissions‍"
                 href='https://myaccount.google.com/connections'
                 target='_black'
-                className='text-captn-light-blue'
+                className='no-underline hover:underline text-captn-light-blue'
               >
                 https://myaccount.google.com/permissions‍
               </a>
@@ -164,7 +164,7 @@ export default function PrivacyPage() {
               <a
                 href='https://developers.google.com/terms/api-services-user-data-policy'
                 target='_blank'
-                className='text-captn-light-blue'
+                className='no-underline hover:underline text-captn-light-blue'
               >
                 Google API Services User Data Policy
               </a>
@@ -189,7 +189,7 @@ export default function PrivacyPage() {
                 <a
                   href='https://developers.google.com/analytics/devguides/config/admin/v1'
                   target='_blank'
-                  className='text-captn-light-blue'
+                  className='no-underline hover:underline text-captn-light-blue'
                 >
                   https://developers.google.com/analytics/devguides/config/admin/v1
                 </a>{' '}
@@ -202,7 +202,7 @@ export default function PrivacyPage() {
                 <a
                   href='https://developers.google.com/google-ads/api/docs/oauth/internals'
                   target='_blank'
-                  className='text-captn-light-blue'
+                  className='no-underline hover:underline text-captn-light-blue'
                 >
                   https://developers.google.com/google-ads/api/docs/oauth/internals
                 </a>{' '}
@@ -214,7 +214,7 @@ export default function PrivacyPage() {
                 <a
                   href='https://developers.google.com/webmaster-tools/v1/sites/get'
                   target='_blank'
-                  className='text-captn-light-blue'
+                  className='no-underline hover:underline text-captn-light-blue'
                 >
                   https://developers.google.com/webmaster-tools/v1/sites/get
                 </a>{' '}
@@ -322,7 +322,7 @@ export default function PrivacyPage() {
               <a
                 href='https://learn.microsoft.com/en-us/azure/compliance/'
                 target='_blank'
-                className='text-captn-light-blue'
+                className='no-underline hover:underline text-captn-light-blue'
               >
                 https://learn.microsoft.com/en-us/azure/compliance/
               </a>
@@ -477,7 +477,7 @@ export default function PrivacyPage() {
               please contact us at:{' '}
               <a
                 href='mailto:support@captn.ai'
-                className='text-captn-light-blue'
+                className='no-underline hover:underline text-captn-light-blue'
               >
                 support@captn.ai
               </a>

@@ -94,7 +94,7 @@ export default function TocPage() {
               these terms, please reach out to us at{' '}
               <a
                 href='mailto:support@captn.ai'
-                className='text-captn-light-blue'
+                className='no-underline hover:underline text-captn-light-blue'
               >
                 support@captn.ai
               </a>
@@ -241,7 +241,7 @@ export default function TocPage() {
               please contact us at:{' '}
               <a
                 href='mailto:support@captn.ai'
-                className='text-captn-light-blue'
+                className='no-underline hover:underline text-captn-light-blue'
               >
                 support@captn.ai
               </a>

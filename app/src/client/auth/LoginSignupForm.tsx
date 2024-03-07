@@ -204,11 +204,19 @@ export const LoginSignupForm = ({
         />
         <label className='text-sm ml-2' htmlFor='toc'>
           I agree to the{' '}
-          <Link to='/toc' className='underline' target='_blank'>
+          <Link
+            to='/toc'
+            className='no-underline hover:underline'
+            target='_blank'
+          >
             Terms & Conditions
           </Link>{' '}
           and{' '}
-          <Link to='/privacy' className='underline' target='_blank'>
+          <Link
+            to='/privacy'
+            className='no-underline hover:underline'
+            target='_blank'
+          >
             Privacy Policy
           </Link>
         </label>
