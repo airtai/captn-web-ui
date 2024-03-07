@@ -5,7 +5,7 @@ import { HiBars3 } from 'react-icons/hi2';
 import { BiLogIn } from 'react-icons/bi';
 import { Link } from '@wasp/router';
 import logo from '../static/logo.png';
-import openSaasBanner from '../static/open-saas-banner.png';
+import openSaasBanner from '../static/agent-chat.png';
 import { useHistory } from 'react-router-dom';
 
 import {
@@ -168,12 +168,12 @@ export default function LandingPage() {
             className='absolute inset-x-0 top-[calc(100%-40rem)] sm:top-[calc(100%-65rem)] -z-10 transform-gpu overflow-hidden blur-3xl'
             aria-hidden='true'
           >
-            <div
+            {/* <div
               className='relative aspect-[1020/880] sm:-left-3/4 sm:translate-x-1/4 dark:hidden bg-gradient-to-br from-amber-400 to-purple-300  opacity-50 w-[72.1875rem]'
               style={{
                 clipPath: 'ellipse(80% 30% at 80% 50%)',
               }}
-            />
+            /> */}
           </div>
           <div className='py-24 sm:py-32'>
             <div className='mx-auto max-w-8xl px-6 lg:px-8'>
