@@ -90,8 +90,13 @@ async function updateDB(
   conversationId,
   agentConversationHistory
 ) {
-  let jsonString = message.replace(/True/g, true).replace(/False/g, false);
-  let obj = JSON.parse(jsonString);
+  let obj = {};
+  try {
+    const jsonString = message.replace(/True/g, true).replace(/False/g, false);
+    obj = JSON.parse(jsonString);
+  } catch (error) {
+    obj = { message: message, smart_suggestions: [] };
+  }
   await context.entities.Conversation.update({
     where: {
       id: conversationId,
@@ -142,18 +147,22 @@ function wsConnection(
     console.error('WebSocket error observed: ', event);
   };
   ws.onclose = async function (event) {
+    let message;
     if (event.code === 1000) {
-      await updateDB(
-        context,
-        chatId,
-        lastMessage,
-        conversationId,
-        agentConversationHistory
-      );
-      socket.emit('streamFromTeamFinished');
+      message = lastMessage;
+    } else {
+      message =
+        'We are sorry, but we are unable to continue the conversation at the moment. Please try again later.';
+      console.log('WebSocket is closed with the event code:', event.code);
     }
-    console.log('WebSocket is closed now.');
-    console.log('Close event code: ', event.code);
+    await updateDB(
+      context,
+      chatId,
+      message,
+      conversationId,
+      agentConversationHistory
+    );
+    socket.emit('streamFromTeamFinished');
   };
 }
 
