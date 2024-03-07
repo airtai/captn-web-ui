@@ -47,9 +47,9 @@ export default function LandingPage() {
               className='no-underline flex items-center -m-1.5 p-1.5 text-gray-900 duration-300 ease-in-out hover:text-captn-light-blue'
             >
               <NavLogo />
-              {/* <span className='ml-2 text-sm font-semibold leading-6 dark:text-white'>
-                Capt’n.ai
-              </span> */}
+              <span className='ml-2 text-sm font-semibold leading-6 dark:text-white'>
+                <sup className='text-base text-captn-dark-blue'>βeta</sup>
+              </span>
             </a>
           </div>
           <div className='flex lg:hidden'>

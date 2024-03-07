@@ -104,7 +104,7 @@ const TerminalDisplay: React.FC<TerminalDisplayProps> = ({
           className={`accordion-content scroll-container bg-captn-light-cream p-4 text-captn-dark-blue font-mono text-xs overflow-y-auto overflow-x-hidden ${
             isMinimized ? 'hidden' : ''
           }`}
-          style={{ maxHeight: `${maxHeight}px` }}
+          style={{ maxHeight: `${maxHeight}px`, wordWrap: 'break-word' }}
           dangerouslySetInnerHTML={{ __html: convertAnsiToHtml(messages) }}
         />
       </div>

@@ -35,8 +35,16 @@ export default function AppNavBar() {
       >
         <div className='flex lg:flex-1'>
           <a href='/' className='-m-1.5 p-1.5'>
-            <img className='h-10 w-auto -ml-2' src={logo} alt='Capt’n.ai' />
+            <img
+              className='h-10 w-auto -ml-2'
+              style={{ width: '178px' }}
+              src={logo}
+              alt='Capt’n.ai'
+            />
           </a>
+          <span className='mt-2 text-sm font-semibold leading-6 dark:text-white'>
+            <sup className='text-base text-captn-dark-blue'>βeta</sup>
+          </span>
         </div>
         <div className='flex lg:hidden'>
           <button
