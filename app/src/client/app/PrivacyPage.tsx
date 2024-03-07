@@ -4,7 +4,9 @@ export default function PrivacyPage() {
       <div className='mx-auto max-w-2xl pl-10 pr-10 pt-10 pb-24 sm:pb-32 lg:gap-x-8 lg:py-5 lg:px-8'>
         <div className='container mx-auto py-8'>
           <h1 className='text-3xl font-semibold mb-4'>Privacy Policy</h1>
-          <p className='text-gray-600 mb-4'>Last updated January 29, 2024</p>
+          <p className='text-captn-dark-blue mb-4'>
+            Last updated January 29, 2024
+          </p>
 
           <section className='mb-8'>
             <p>
@@ -142,7 +144,7 @@ export default function PrivacyPage() {
                 // href="https://myaccount.google.com/permissions‍"
                 href='https://myaccount.google.com/connections'
                 target='_black'
-                className='text-captn-light-blue'
+                className='no-underline hover:underline text-captn-light-blue'
               >
                 https://myaccount.google.com/permissions‍
               </a>
@@ -162,7 +164,7 @@ export default function PrivacyPage() {
               <a
                 href='https://developers.google.com/terms/api-services-user-data-policy'
                 target='_blank'
-                className='text-captn-light-blue'
+                className='no-underline hover:underline text-captn-light-blue'
               >
                 Google API Services User Data Policy
               </a>
@@ -187,7 +189,7 @@ export default function PrivacyPage() {
                 <a
                   href='https://developers.google.com/analytics/devguides/config/admin/v1'
                   target='_blank'
-                  className='text-captn-light-blue'
+                  className='no-underline hover:underline text-captn-light-blue'
                 >
                   https://developers.google.com/analytics/devguides/config/admin/v1
                 </a>{' '}
@@ -200,7 +202,7 @@ export default function PrivacyPage() {
                 <a
                   href='https://developers.google.com/google-ads/api/docs/oauth/internals'
                   target='_blank'
-                  className='text-captn-light-blue'
+                  className='no-underline hover:underline text-captn-light-blue'
                 >
                   https://developers.google.com/google-ads/api/docs/oauth/internals
                 </a>{' '}
@@ -212,7 +214,7 @@ export default function PrivacyPage() {
                 <a
                   href='https://developers.google.com/webmaster-tools/v1/sites/get'
                   target='_blank'
-                  className='text-captn-light-blue'
+                  className='no-underline hover:underline text-captn-light-blue'
                 >
                   https://developers.google.com/webmaster-tools/v1/sites/get
                 </a>{' '}
@@ -320,7 +322,7 @@ export default function PrivacyPage() {
               <a
                 href='https://learn.microsoft.com/en-us/azure/compliance/'
                 target='_blank'
-                className='text-captn-light-blue'
+                className='no-underline hover:underline text-captn-light-blue'
               >
                 https://learn.microsoft.com/en-us/azure/compliance/
               </a>
@@ -475,7 +477,7 @@ export default function PrivacyPage() {
               please contact us at:{' '}
               <a
                 href='mailto:support@captn.ai'
-                className='text-captn-light-blue'
+                className='no-underline hover:underline text-captn-light-blue'
               >
                 support@captn.ai
               </a>

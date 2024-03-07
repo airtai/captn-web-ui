@@ -42,14 +42,17 @@ const DropdownUser = ({ user }: { user: Partial<User> }) => {
       <button
         ref={trigger}
         onClick={toggleDropdown}
-        className='flex items-center gap-4 duration-300 ease-in-out text-gray-900 hover:text-captn-light-blue'
+        className='flex items-center gap-4 duration-300 ease-in-out text-captn-dark-blue hover:text-captn-light-blue'
       >
         <span className='hidden text-right lg:block'>
-          <span className='block text-sm font-medium dark:text-white'>
+          <span className='block text-sm font-medium dark:text-captn-light-cream'>
             {user.username}
           </span>
         </span>
-        <CgProfile size='1.1rem' className='ml-1 mt-[0.1rem] dark:text-white' />
+        <CgProfile
+          size='1.1rem'
+          className='ml-1 mt-[0.1rem] dark:text-captn-light-cream'
+        />
         <svg
           className={`hidden fill-current dark:fill-white sm:block ${
             dropdownOpen ? 'rotate-180' : ''
@@ -72,7 +75,7 @@ const DropdownUser = ({ user }: { user: Partial<User> }) => {
       {/* <!-- Dropdown --> */}
       <div
         ref={dropdown}
-        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark dark:text-white ${
+        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-captn-dark-blue shadow-default dark:border-strokedark dark:bg-boxdark text-captn-light-cream ${
           dropdownOpen === true ? 'block' : 'hidden'
         }`}
       >

@@ -23,11 +23,23 @@ import * as SocialIcons from '@wasp/auth/forms/internal/social/SocialIcons';
 import { SocialButton } from '@wasp/auth/forms/internal/social/SocialButton';
 import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import {
-  MessageError,
-  MessageSuccess,
-} from '@wasp/auth/forms/internal/Message';
+// import {
+//   MessageError,
+//   MessageSuccess,
+// } from '@wasp/auth/forms/internal/Message';
 // import { useUsernameAndPassword } from '../usernameAndPassword/useUsernameAndPassword'
+
+export const Message = styled('div', {
+  padding: '0.5rem 0.75rem',
+  borderRadius: '0.375rem',
+  marginTop: '1rem',
+  background: '$gray400',
+});
+
+export const MessageError = styled(Message, {
+  background: '#eae4d9',
+  color: '#003851',
+});
 
 const OrContinueWith = styled('div', {
   position: 'relative',
@@ -192,11 +204,19 @@ export const LoginSignupForm = ({
         />
         <label className='text-sm ml-2' htmlFor='toc'>
           I agree to the{' '}
-          <Link to='/toc' className='underline' target='_blank'>
+          <Link
+            to='/toc'
+            className='no-underline hover:underline'
+            target='_blank'
+          >
             Terms & Conditions
           </Link>{' '}
           and{' '}
-          <Link to='/privacy' className='underline' target='_blank'>
+          <Link
+            to='/privacy'
+            className='no-underline hover:underline'
+            target='_blank'
+          >
             Privacy Policy
           </Link>
         </label>
