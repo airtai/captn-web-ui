@@ -152,7 +152,7 @@ function wsConnection(
       message = lastMessage;
     } else {
       message =
-        'We are sorry, but we are unable to continue the conversation at the moment. Please try again later.';
+        'We are sorry, but we are unable to continue the conversation. Please create a new chat in a few minutes to continue.';
       console.log('WebSocket is closed with the event code:', event.code);
     }
     await updateDB(
