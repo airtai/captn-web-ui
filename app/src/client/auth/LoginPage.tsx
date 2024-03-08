@@ -23,7 +23,7 @@ export default function Login() {
     <AuthWrapper>
       <LoginForm logo={imgUrl} />
       {/* <br />
-      <span className='text-sm font-medium text-gray-900 dark:text-gray-900'>
+      <span className='text-sm font-medium text-captn-dark-blue dark:text-captn-dark-blue'>
         Don't have an account yet?{' '}
         <Link to='/signup' className='underline'>
           go to signup
@@ -31,7 +31,7 @@ export default function Login() {
         .
       </span>
       <br />
-      <span className='text-sm font-medium text-gray-900'>
+      <span className='text-sm font-medium text-captn-dark-blue'>
         Forgot your password?{' '}
         <Link to='/request-password-reset' className='underline'>
           reset it

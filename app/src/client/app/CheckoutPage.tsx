@@ -10,28 +10,26 @@ export default function CheckoutPage() {
   useEffect(() => {
     function delayedRedirect() {
       return setTimeout(() => {
-        history.push('/account');
+        history.push('/chat');
       }, 4000);
     }
 
     const queryParams = new URLSearchParams(location.search);
-    const isSuccess = queryParams.get('success')
-    const isCanceled = queryParams.get('canceled')
+    const isSuccess = queryParams.get('success');
+    const isCanceled = queryParams.get('canceled');
 
     if (isCanceled) {
       setPaymentStatus('canceled');
     } else if (isSuccess) {
       setPaymentStatus('paid');
     } else {
-      history.push('/account');
+      history.push('/chat');
     }
     delayedRedirect();
     return () => {
       clearTimeout(delayedRedirect());
     };
   }, [location]);
-
-
 
   return (
     <div className='flex min-h-full flex-col justify-center mt-10 sm:px-6 lg:px-8'>
@@ -46,7 +44,7 @@ export default function CheckoutPage() {
           </h1>
           {paymentStatus !== 'loading' && (
             <span className='text-center'>
-              You are being redirected to your account page... <br />
+              You are being redirected to your chat page... <br />
             </span>
           )}
         </div>

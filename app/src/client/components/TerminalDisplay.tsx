@@ -53,7 +53,7 @@ const TerminalDisplay: React.FC<TerminalDisplayProps> = ({
       <div
         className={`relative terminal-header ${
           isMinimized ? 'rounded-lg' : 'rounded-t-lg'
-        } text-white p-1 text-right bg-captn-light-blue `}
+        } text-captn-light-cream p-1 text-right bg-captn-light-blue `}
         onClick={() => setIsMinimized(!isMinimized)}
       >
         <p className='accordion-title text-sm text-left text-captn-dark-blue'>
@@ -104,7 +104,7 @@ const TerminalDisplay: React.FC<TerminalDisplayProps> = ({
           className={`accordion-content scroll-container bg-captn-light-cream p-4 text-captn-dark-blue font-mono text-xs overflow-y-auto overflow-x-hidden ${
             isMinimized ? 'hidden' : ''
           }`}
-          style={{ maxHeight: `${maxHeight}px` }}
+          style={{ maxHeight: `${maxHeight}px`, wordWrap: 'break-word' }}
           dangerouslySetInnerHTML={{ __html: convertAnsiToHtml(messages) }}
         />
       </div>

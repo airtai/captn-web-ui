@@ -49,7 +49,7 @@ export default function SmartSuggestionButton({
             {suggestions.map((suggestion, index) => (
               <button
                 key={index}
-                className=' bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 m-1 text-white'
+                className=' bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 m-1 text-captn-light-cream'
                 onClick={() =>
                   handleSuggestionClick(suggestion, smartSuggestionOnClick)
                 }
