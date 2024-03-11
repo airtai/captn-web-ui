@@ -100,7 +100,8 @@ export default function ConversationsList({
             {conversation.isLoading ? (
               <AnimatedCharacterLoader
                 loadingMessage={`${
-                  currentChatDetails.customerBrief
+                  currentChatDetails.customerBrief ||
+                  currentChatDetails.chatType === 'daily_analysis'
                     ? 'The team is currently working on the task. You can monitor their discussions in the window below as they progress...'
                     : 'Loading...'
                 }`}
