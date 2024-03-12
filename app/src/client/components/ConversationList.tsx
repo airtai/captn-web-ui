@@ -6,7 +6,6 @@ import type { Conversation, Chat } from '@wasp/entities';
 import { useSocketListener } from '@wasp/webSocket';
 // import createNewAndReturnAllConversations from '@wasp/actions/createNewAndReturnAllConversations';
 
-import AgentLoader from './AgentLoader';
 import SmartSuggestionButton from './SmartSuggestionButton';
 import SmartSuggestionCheckbox from './SmartSuggestionCheckbox';
 import LetterByLetterDisplay from './LetterByLetterDisplay';
