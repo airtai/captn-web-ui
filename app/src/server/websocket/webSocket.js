@@ -75,13 +75,14 @@ function wsConnection(
       currentChatDetails.chatType === 'daily_analysis' &&
       !!currentChatDetails.team_status,
   };
-  let socketConversationHistory = '';
+  let socketConversationHistory = {};
   let lastSocketMessage = null;
   ws.onopen = () => {
     ws.send(JSON.stringify(data));
   };
   ws.onmessage = function (event) {
-    socketConversationHistory = socketConversationHistory + event.data;
+    socketConversationHistory[`${currentChatDetails.id}`] =
+      socketConversationHistory[`${currentChatDetails.id}`] + event.data;
     lastSocketMessage = event.data;
     socket.emit('newMessageFromTeam', socketConversationHistory);
   };
@@ -102,9 +103,10 @@ function wsConnection(
       currentChatDetails.id,
       message,
       conversationId,
-      socketConversationHistory
+      socketConversationHistory[`${currentChatDetails.id}`]
     );
-    socket.emit('streamFromTeamFinished');
+    socketConversationHistory[`${currentChatDetails.id}`] = '';
+    socket.emit('streamFromTeamFinished', socketConversationHistory);
   };
 }
 

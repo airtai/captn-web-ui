@@ -29,7 +29,7 @@ export default function ConversationsList({
   userSelectedActionMessage,
   onStreamAnimationComplete,
 }: ConversationsListProps) {
-  const [streamingAgentResponse, setStreamingAgentResponse] = useState('');
+  const [streamingAgentResponse, setStreamingAgentResponse] = useState({});
   // @ts-ignore
   const smartSuggestions = currentChatDetails?.smartSuggestions?.suggestions;
   // @ts-ignore
@@ -45,12 +45,12 @@ export default function ConversationsList({
     );
   const lastConversationIdx = conversations.length - 1;
 
-  useSocketListener('newMessageFromTeam', (message: any) =>
-    setStreamingAgentResponse(message)
+  useSocketListener('newMessageFromTeam', (message_dict: any) =>
+    setStreamingAgentResponse(message_dict)
   );
 
-  useSocketListener('streamFromTeamFinished', () =>
-    setStreamingAgentResponse('')
+  useSocketListener('streamFromTeamFinished', (message_dict: any) =>
+    setStreamingAgentResponse(message_dict)
   );
 
   return (
@@ -162,10 +162,14 @@ export default function ConversationsList({
           </div>
         );
       })}
+      {console.log(`currentChatDetails?.id: ${currentChatDetails?.id}`)}
+      {console.log(streamingAgentResponse)}
       {currentChatDetails?.team_status === 'inprogress' &&
-        streamingAgentResponse && (
+        !!streamingAgentResponse[`${currentChatDetails?.id}`] && (
           <AgentConversationHistory
-            agentConversationHistory={streamingAgentResponse}
+            agentConversationHistory={
+              streamingAgentResponse[`${currentChatDetails?.id}`]
+            }
             initialState={true}
             isAgentWindow={true}
           />
