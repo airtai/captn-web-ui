@@ -1,12 +1,19 @@
-// More info on auth config: https://wasp-lang.dev/docs/language/features#social-login-providers-oauth-20
+import type { GetUserFieldsFn } from '@wasp/types';
+import { generateAvailableUsername } from '@wasp/core/auth.js';
 
-export async function getUserFields(_context: unknown, args: any) {
-  const email = args.profile.emails[0].value
-  const username = args.profile.displayName
-  const adminEmails = process.env.ADMIN_EMAILS?.split(',') || []
-  const isAdmin = adminEmails.includes(email)
+export const getUserFields: GetUserFieldsFn = async (
+  _context: any,
+  args: any
+) => {
+  const email = args.profile.emails[0].value;
+  const username = await generateAvailableUsername(
+    args.profile.displayName.split(' '),
+    { separator: '.' }
+  );
+  const adminEmails = process.env.ADMIN_EMAILS?.split(',') || [];
+  const isAdmin = adminEmails.includes(email);
   return { email, username, isAdmin };
-}
+};
 
 export function config() {
   const clientID = process.env.GOOGLE_CLIENT_ID;
