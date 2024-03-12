@@ -285,10 +285,6 @@ export const createNewAndReturnLastConversation: CreateNewAndReturnLastConversat
 type AgentPayload = {
   chatId: number;
   messages: any;
-  team_id: number | null | undefined;
-  chatType: string | null | undefined;
-  agentChatHistory: string | null | undefined;
-  proposedUserAction: string[] | null | undefined;
 };
 
 export const getAgentResponse: GetAgentResponse<
@@ -298,17 +294,9 @@ export const getAgentResponse: GetAgentResponse<
   {
     chatId,
     messages,
-    team_id,
-    chatType,
-    agentChatHistory,
-    proposedUserAction,
   }: {
     chatId: number;
     messages: any;
-    team_id: number | null | undefined;
-    chatType: string | null | undefined;
-    agentChatHistory: string | null | undefined;
-    proposedUserAction: string[] | null | undefined;
   },
   context: any
 ) => {
@@ -320,10 +308,6 @@ export const getAgentResponse: GetAgentResponse<
     chat_id: chatId,
     message: messages,
     user_id: context.user.id,
-    team_id: team_id,
-    chat_type: chatType,
-    agent_chat_history: agentChatHistory,
-    proposed_user_action: proposedUserAction,
   };
   console.log('===========');
   console.log('Payload to Python server');

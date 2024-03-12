@@ -6,7 +6,6 @@ import type { Conversation, Chat } from '@wasp/entities';
 import { useSocketListener } from '@wasp/webSocket';
 // import createNewAndReturnAllConversations from '@wasp/actions/createNewAndReturnAllConversations';
 
-import AgentLoader from './AgentLoader';
 import SmartSuggestionButton from './SmartSuggestionButton';
 import SmartSuggestionCheckbox from './SmartSuggestionCheckbox';
 import LetterByLetterDisplay from './LetterByLetterDisplay';
@@ -100,7 +99,8 @@ export default function ConversationsList({
             {conversation.isLoading ? (
               <AnimatedCharacterLoader
                 loadingMessage={`${
-                  currentChatDetails.customerBrief
+                  currentChatDetails.customerBrief ||
+                  currentChatDetails.chatType === 'daily_analysis'
                     ? 'The team is currently working on the task. You can monitor their discussions in the window below as they progress...'
                     : 'Loading...'
                 }`}

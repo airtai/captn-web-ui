@@ -1,4 +1,3 @@
-import HttpError from '@wasp/core/HttpError.js';
 import WebSocket from 'ws';
 
 export const ADS_SERVER_URL =
@@ -8,68 +7,6 @@ const protocol = ADS_SERVER_URL === 'http://127.0.0.1:9000' ? 'ws' : 'wss';
 const WS_URL = `${protocol}://${
   ADS_SERVER_URL.split('//')[1].split(':')[0]
 }:8080`;
-
-async function checkTeamStatus(context, socket, chat_id) {
-  let json;
-  try {
-    while (true) {
-      // Infinite loop, adjust the exit condition as needed
-      const payload = {
-        team_id: chat_id,
-      };
-      const response = await fetch(`${ADS_SERVER_URL}/openai/get-team-status`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        const errorMsg = `HTTP error with status code ${response.status}`;
-        console.error('Server Error:', errorMsg);
-      } else {
-        json = await response.json();
-        const team_status = json['team_status'];
-
-        if (team_status === 'completed' || team_status === 'pause') {
-          // Exit the loop when the desired condition is met
-          break;
-        }
-      }
-      // Add a 1-second delay before the next iteration
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    }
-    // Call another function after breaking the loop
-    await updateConversationsInDb(context, socket, json, chat_id);
-  } catch (error) {
-    console.log(`Error while fetching record`);
-    console.log(error);
-  }
-}
-
-async function updateConversationsInDb(context, socket, json, chat_id) {
-  await context.entities.Chat.update({
-    where: {
-      // userId: socket.data.user.id,
-      id: chat_id,
-    },
-    data: {
-      team_status: null,
-      smartSuggestions: json['smart_suggestions'],
-      isExceptionOccured: json['is_exception_occured'],
-    },
-  });
-
-  await context.entities.Conversation.create({
-    data: {
-      message: json['msg'],
-      role: 'assistant',
-      chat: { connect: { id: chat_id } },
-      user: { connect: { id: socket.data.user.id } },
-    },
-  });
-
-  socket.emit('newConversationAddedToDB');
-}
 
 async function getChat(chatId, context) {
   return await context.entities.Chat.findFirst({
@@ -88,7 +25,7 @@ async function updateDB(
   chatId,
   message,
   conversationId,
-  agentConversationHistory
+  socketConversationHistory
 ) {
   let obj = {};
   try {
@@ -104,7 +41,7 @@ async function updateDB(
     data: {
       isLoading: false,
       message: obj.message,
-      agentConversationHistory,
+      agentConversationHistory: socketConversationHistory,
     },
   });
 
@@ -122,26 +59,31 @@ async function updateDB(
 function wsConnection(
   socket,
   context,
-  chatId,
-  userId,
+  currentChatDetails,
   conversationId,
-  message
+  lastMessage,
+  allMessages
 ) {
   const ws = new WebSocket(WS_URL);
   const data = {
-    conv_id: chatId,
-    user_id: userId,
-    message: message,
+    conv_id: currentChatDetails.id,
+    user_id: currentChatDetails.userId,
+    message: lastMessage,
+    agent_chat_history: currentChatDetails.agentChatHistory,
+    all_messages: allMessages,
+    is_continue_daily_analysis:
+      currentChatDetails.chatType === 'daily_analysis' &&
+      !!currentChatDetails.team_status,
   };
-  let agentConversationHistory = '';
-  let lastMessage = null;
+  let socketConversationHistory = '';
+  let lastSocketMessage = null;
   ws.onopen = () => {
     ws.send(JSON.stringify(data));
   };
   ws.onmessage = function (event) {
-    agentConversationHistory = agentConversationHistory + event.data;
-    lastMessage = event.data;
-    socket.emit('newMessageFromTeam', agentConversationHistory);
+    socketConversationHistory = socketConversationHistory + event.data;
+    lastSocketMessage = event.data;
+    socket.emit('newMessageFromTeam', socketConversationHistory);
   };
   ws.onerror = function (event) {
     console.error('WebSocket error observed: ', event);
@@ -149,7 +91,7 @@ function wsConnection(
   ws.onclose = async function (event) {
     let message;
     if (event.code === 1000) {
-      message = lastMessage;
+      message = lastSocketMessage;
     } else {
       message =
         'We are sorry, but we are unable to continue the conversation. Please create a new chat in a few minutes to continue.';
@@ -157,10 +99,10 @@ function wsConnection(
     }
     await updateDB(
       context,
-      chatId,
+      currentChatDetails.id,
       message,
       conversationId,
-      agentConversationHistory
+      socketConversationHistory
     );
     socket.emit('streamFromTeamFinished');
   };
@@ -173,10 +115,6 @@ export const socketFn = (io, context) => {
       const userEmail = socket.data.user.email;
       console.log('========');
       console.log('a user connected: ', userEmail);
-
-      // socket.on('newConversationAdded', async (chat_id) => {
-      //   await checkTeamStatus(context, socket, chat_id);
-      // });
 
       socket.on('checkSmartSuggestionStatus', async (chatId) => {
         let isSmartSuggestionEmpty = true;
@@ -198,14 +136,19 @@ export const socketFn = (io, context) => {
 
       socket.on(
         'sendMessageToTeam',
-        async (userId, chatId, conversationId, message) => {
+        async (
+          currentChatDetails,
+          conversationId,
+          lastMessage,
+          allMessages
+        ) => {
           wsConnection(
             socket,
             context,
-            chatId,
-            userId,
+            currentChatDetails,
             conversationId,
-            message
+            lastMessage,
+            allMessages
           );
         }
       );
