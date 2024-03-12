@@ -2,6 +2,20 @@ import React, { useState, useEffect } from 'react';
 import Markdown from 'markdown-to-jsx';
 import { use } from 'chai';
 
+export const handlePrintSelected = (
+  selectedItems: string[],
+  smartSuggestionOnClick: CallableFunction
+) => {
+  if (selectedItems.length > 0) {
+    if (selectedItems.length > 0) {
+      const msg = `Let's proceed with the following ${
+        selectedItems.length > 1 ? 'choices' : 'choice'
+      }:\n- ${selectedItems.join('\n- ')}`;
+      smartSuggestionOnClick(msg);
+    }
+  }
+};
+
 export default function SmartSuggestionCheckbox({
   suggestions,
   smartSuggestionOnClick,
@@ -24,20 +38,6 @@ export default function SmartSuggestionCheckbox({
       setSelectedItems(
         selectedItems.filter((selected) => selected !== suggestion)
       );
-    }
-  };
-
-  const handlePrintSelected = () => {
-    if (selectedItems.length > 0) {
-      const msg =
-        selectedItems.length > 1
-          ? `I want to ${
-              selectedItems.slice(0, -1).join(', ') +
-              ' and ' +
-              selectedItems[selectedItems.length - 1]
-            }`
-          : `I want to ${selectedItems[0]}`;
-      smartSuggestionOnClick(msg);
     }
   };
 
@@ -88,7 +88,10 @@ export default function SmartSuggestionCheckbox({
           ))}
         </div>
         <button
-          onClick={handlePrintSelected}
+          onClick={(event) => {
+            event.preventDefault();
+            handlePrintSelected(selectedItems, smartSuggestionOnClick);
+          }}
           className={`${
             selectedItems.length > 0
               ? ''

@@ -66,7 +66,6 @@ const ChatPage = ({ user }: { user: User }) => {
     { enabled: !!activeChatId }
   );
 
-  useSocketListener('newConversationAddedToDB', updateState);
   useSocketListener('smartSuggestionsAddedToDB', updateState);
   useSocketListener('streamFromTeamFinished', updateState);
 
@@ -118,14 +117,16 @@ const ChatPage = ({ user }: { user: User }) => {
           isLoading: true,
         });
         // if the chat has customerBrief already then directly send required detalils in socket event
-        if (currentChatDetails.customerBrief) {
-          console.log('Sending message to the same socket');
+        if (
+          currentChatDetails.customerBrief ||
+          currentChatDetails.chatType === 'daily_analysis'
+        ) {
           socket.emit(
             'sendMessageToTeam',
-            currentChatDetails.userId,
-            currentChatDetails.id,
+            currentChatDetails,
             inProgressConversation.id,
-            userQuery
+            userQuery,
+            messages
           );
           await updateCurrentChat({
             id: activeChatId,
@@ -138,21 +139,14 @@ const ChatPage = ({ user }: { user: User }) => {
           const response = await getAgentResponse({
             chatId: activeChatId,
             messages: messages,
-            team_id: currentChatDetails.team_id,
-            chatType: currentChatDetails.chatType,
-            agentChatHistory: currentChatDetails.agentChatHistory,
-            proposedUserAction: currentChatDetails.proposedUserAction,
           });
-          // if (response.team_status === 'inprogress') {
-          //   socket.emit('newConversationAdded', activeChatId);
-          // }
           if (!!response.customer_brief) {
             socket.emit(
               'sendMessageToTeam',
-              currentChatDetails.userId,
-              currentChatDetails.id,
+              currentChatDetails,
               inProgressConversation.id,
-              response.customer_brief
+              response.customer_brief,
+              messages
             );
           }
           // Emit an event to check the smartSuggestion status
