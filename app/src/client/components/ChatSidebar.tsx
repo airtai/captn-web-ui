@@ -1,12 +1,10 @@
+import { type Chat } from "wasp/entities";
+import { createNewChat, useQuery, getChats } from "wasp/client/operations";
 import React, { useEffect, useRef, useState, MouseEventHandler } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { NavLink, useLocation } from 'react-router-dom';
 import Logo from '../static/logo-for-dark-bg.png';
 import SidebarLinkGroup from '../admin/components/SidebarLinkGroup';
-import createNewChat from '@wasp/actions/createNewChat';
-import { useQuery } from '@wasp/queries';
-import getChats from '@wasp/queries/getChats';
-import type { Chat } from '@wasp/entities';
 
 interface ChatSidebarProps {
   sidebarOpen: boolean;

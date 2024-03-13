@@ -1,13 +1,9 @@
+import { type CustomizationOptions } from "wasp/client/auth";
 import { useState, createContext } from 'react';
 import { createTheme } from '@stitches/react';
 import { styled } from '@wasp/stitches.config';
 
-import {
-  type State,
-  type CustomizationOptions,
-  type ErrorMessage,
-  type AdditionalSignupFields,
-} from '@wasp/auth/forms/types';
+import { type State, type ErrorMessage, type AdditionalSignupFields } from '@wasp/auth/forms/types';
 import { LoginSignupForm } from './LoginSignupForm';
 import {
   MessageError,

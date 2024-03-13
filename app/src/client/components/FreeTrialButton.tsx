@@ -1,8 +1,8 @@
+import { useAuth } from "wasp/client/auth";
+import { stripePayment } from "wasp/client/operations";
+
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-
-import useAuth from '@wasp/auth/useAuth';
-import stripePayment from '@wasp/actions/stripePayment';
 import { TierIds, STRIPE_CUSTOMER_PORTAL_LINK } from '@wasp/shared/constants';
 
 export default function FreeTrialButton() {

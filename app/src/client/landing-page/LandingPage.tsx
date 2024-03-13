@@ -1,13 +1,14 @@
+import { Link } from "wasp/client/router";
+import { useAuth } from "wasp/client/auth";
 import { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { HiBars3 } from 'react-icons/hi2';
 import { BiLogIn } from 'react-icons/bi';
-import { Link } from '@wasp/router';
 import logo from '../static/logo.png';
 import openSaasBanner from '../static/agent-chat.png';
-import { useHistory } from 'react-router-dom';
 
+import { useHistory } from 'react-router-dom';
 import {
   features,
   navigation,
@@ -18,7 +19,6 @@ import {
 import DropdownUser from '../components/DropdownUser';
 import { DOCS_URL } from '@wasp/shared/constants';
 import { UserMenuItems } from '../components/UserMenuItems';
-import useAuth from '@wasp/auth/useAuth';
 import DarkModeSwitcher from '../admin/components/DarkModeSwitcher';
 import FreeTrialButton from '../components/FreeTrialButton';
 

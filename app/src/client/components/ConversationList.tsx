@@ -1,9 +1,9 @@
+import { useSocketListener } from "wasp/client/webSocket";
+import { type Conversation, type Chat } from "wasp/entities";
+
 import React from 'react';
 import { useState, useEffect } from 'react';
-
 import Markdown from 'markdown-to-jsx';
-import type { Conversation, Chat } from '@wasp/entities';
-import { useSocketListener } from '@wasp/webSocket';
 // import createNewAndReturnAllConversations from '@wasp/actions/createNewAndReturnAllConversations';
 
 import SmartSuggestionButton from './SmartSuggestionButton';

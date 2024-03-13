@@ -1,6 +1,6 @@
+import { type User } from "wasp/entities";
 import { faker } from '@faker-js/faker';
 import type { PrismaClient } from '@prisma/client';
-import type { User } from '@wasp/entities';
 import { TierIds } from '@wasp/shared/constants.js';
 
 // in a terminal window run `wasp db seed` to seed your dev database with this data

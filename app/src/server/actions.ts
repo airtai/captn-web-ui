@@ -1,20 +1,22 @@
+import { type User, type Chat, type Conversation } from "wasp/entities";
+import { HttpError } from "wasp/server";
+
+import {
+  type StripePayment,
+  type UpdateCurrentUser,
+  type UpdateUserById,
+  type CreateNewChat,
+  type CreateNewDailyAnalysisChat,
+  type CreateNewAndReturnAllConversations,
+  type CreateNewAndReturnLastConversation,
+  type UpdateCurrentChat,
+  type UpdateCurrentConversation,
+  type GetAgentResponse,
+} from "wasp/server/operations";
+
 import Stripe from 'stripe';
 import fetch from 'node-fetch';
-import HttpError from '@wasp/core/HttpError.js';
-import type { User, Chat, Conversation } from '@wasp/entities';
-import type { StripePayment } from '@wasp/actions/types';
 import type { StripePaymentResult } from './types';
-import {
-  UpdateCurrentUser,
-  UpdateUserById,
-  CreateNewChat,
-  CreateNewDailyAnalysisChat,
-  CreateNewAndReturnAllConversations,
-  CreateNewAndReturnLastConversation,
-  UpdateCurrentChat,
-  UpdateCurrentConversation,
-  GetAgentResponse,
-} from '@wasp/actions/types';
 import {
   fetchStripeCustomer,
   createStripeCheckoutSession,

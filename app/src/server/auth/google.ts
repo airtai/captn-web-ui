@@ -1,6 +1,5 @@
-import type { GetUserFieldsFn } from '@wasp/types';
-import { generateAvailableUsername } from '@wasp/core/auth.js';
-
+// TODO: Removed `GetUserFieldsFn` from "@wasp/types" import because it is deprecated and has no clear alternative. Please check migration instructions in Wasp docs on how to manually migrate the code that was using it.
+// TODO: Removed `generateAvailableUsername` from "@wasp/core/auth" import because it is deprecated and has no clear alternative. Please check migration instructions in Wasp docs on how to manually migrate the code that was using it.
 export const getUserFields: GetUserFieldsFn = async (
   _context: any,
   args: any

@@ -1,7 +1,7 @@
+import { config } from "wasp/server";
 import { useContext, useState, useEffect } from 'react';
 import { useForm, UseFormReturn } from 'react-hook-form';
 import { styled } from '@wasp/stitches.config';
-import config from '@wasp/config';
 
 import { AuthContext } from './Auth';
 import {
