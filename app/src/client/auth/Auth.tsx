@@ -1,7 +1,7 @@
 import { type CustomizationOptions } from 'wasp/client/auth';
 import { useState, createContext } from 'react';
 import { createTheme } from '@stitches/react';
-import { styled } from 'wasp/stitches.config';
+import { styled } from './stitches.config';
 
 import {
   type State,
