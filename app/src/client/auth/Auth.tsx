@@ -1,14 +1,15 @@
-import { type CustomizationOptions } from "wasp/client/auth";
+import { type CustomizationOptions } from 'wasp/client/auth';
 import { useState, createContext } from 'react';
 import { createTheme } from '@stitches/react';
-import { styled } from '@wasp/stitches.config';
+import { styled } from 'wasp/stitches.config';
 
-import { type State, type ErrorMessage, type AdditionalSignupFields } from '@wasp/auth/forms/types';
-import { LoginSignupForm } from './LoginSignupForm';
 import {
-  MessageError,
-  MessageSuccess,
-} from '@wasp/auth/forms/internal/Message';
+  type State,
+  type ErrorMessage,
+  type AdditionalSignupFields,
+} from 'wasp/auth/forms/types';
+import { LoginSignupForm } from './LoginSignupForm';
+import { MessageSuccess } from 'wasp/auth/forms/internal/Message';
 
 const logoStyle = {
   height: '6rem',
@@ -19,11 +20,11 @@ const Container = styled('div', {
   flexDirection: 'column',
 });
 
-const HeaderText = styled('h2', {
-  fontSize: '1.875rem',
-  fontWeight: '700',
-  marginTop: '1.5rem',
-});
+// const HeaderText = styled('h2', {
+//   fontSize: '1.875rem',
+//   fontWeight: '700',
+//   marginTop: '1.5rem',
+// });
 
 export const AuthContext = createContext({
   isLoading: false,
@@ -62,7 +63,7 @@ function Auth({
     socialLayout === 'vertical' ? 'vertical' : 'horizontal';
 
   return (
-    <Container className={customTheme}>
+    <div className={customTheme}>
       <div>
         {logo && (
           <img
@@ -96,7 +97,7 @@ function Auth({
           />
         )}
       </AuthContext.Provider>
-    </Container>
+    </div>
   );
 }
 

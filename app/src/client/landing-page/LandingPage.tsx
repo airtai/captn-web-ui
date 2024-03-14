@@ -1,5 +1,5 @@
-import { Link } from "wasp/client/router";
-import { useAuth } from "wasp/client/auth";
+import { Link } from 'wasp/client/router';
+import { useAuth } from 'wasp/client/auth';
 import { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { AiFillCloseCircle } from 'react-icons/ai';
@@ -14,12 +14,9 @@ import {
   navigation,
   faqs,
   footerNavigation,
-  testimonials,
 } from './contentSections';
 import DropdownUser from '../components/DropdownUser';
-import { DOCS_URL } from '@wasp/shared/constants';
 import { UserMenuItems } from '../components/UserMenuItems';
-import DarkModeSwitcher from '../admin/components/DarkModeSwitcher';
 import FreeTrialButton from '../components/FreeTrialButton';
 
 export default function LandingPage() {

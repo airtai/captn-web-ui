@@ -1,5 +1,5 @@
-import { Link } from "wasp/client/router";
-import { useAuth } from "wasp/client/auth";
+import { Link } from 'wasp/client/router';
+import { useAuth } from 'wasp/client/auth';
 import { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { BiLogIn } from 'react-icons/bi';
@@ -7,8 +7,6 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import { HiBars3 } from 'react-icons/hi2';
 import logo from '../static/logo.png';
 import DropdownUser from './DropdownUser';
-import { DOCS_URL, BLOG_URL } from '@wasp/shared/constants';
-import DarkModeSwitcher from '../admin/components/DarkModeSwitcher';
 import { UserMenuItems } from '../components/UserMenuItems';
 import FreeTrialButton from '../components/FreeTrialButton';
 

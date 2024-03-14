@@ -1,26 +1,10 @@
-import { config } from "wasp/server";
+import { config } from 'wasp/server';
 import { useContext, useState, useEffect } from 'react';
-import { useForm, UseFormReturn } from 'react-hook-form';
-import { styled } from '@wasp/stitches.config';
+import { useForm } from 'react-hook-form';
+import { styled } from 'wasp/stitches.config';
 
 import { AuthContext } from './Auth';
-import {
-  Form,
-  FormInput,
-  FormItemGroup,
-  FormLabel,
-  FormError,
-  FormTextarea,
-  SubmitButton,
-} from './Form';
-import type {
-  AdditionalSignupFields,
-  AdditionalSignupField,
-  AdditionalSignupFieldRenderFn,
-  FormState,
-} from '@wasp/auth/forms/types';
-import * as SocialIcons from '@wasp/auth/forms/internal/social/SocialIcons';
-import { SocialButton } from '@wasp/auth/forms/internal/social/SocialButton';
+import type { AdditionalSignupFields } from 'wasp/auth/forms/types';
 import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 // import {

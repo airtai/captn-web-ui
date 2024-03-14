@@ -1,8 +1,8 @@
-import { Link } from "wasp/client/router";
-import { type User } from "wasp/entities";
-import { logout } from "wasp/client/auth";
-import { STRIPE_CUSTOMER_PORTAL_LINK } from '@wasp/shared/constants';
-import { TierIds } from '@wasp/shared/constants';
+import { Link } from 'wasp/client/router';
+import { type User } from 'wasp/entities';
+import { logout } from 'wasp/client/auth';
+import { STRIPE_CUSTOMER_PORTAL_LINK } from '../../shared/constants';
+import { TierIds } from '../../shared/constants';
 import FreeTrialButton from '../components/FreeTrialButton';
 
 export default function AccountPage({ user }: { user: User }) {

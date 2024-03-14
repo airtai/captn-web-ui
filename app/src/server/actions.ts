@@ -1,5 +1,5 @@
-import { type User, type Chat, type Conversation } from "wasp/entities";
-import { HttpError } from "wasp/server";
+import { type User, type Chat, type Conversation } from 'wasp/entities';
+import { HttpError } from 'wasp/server';
 
 import {
   type StripePayment,
@@ -12,7 +12,7 @@ import {
   type UpdateCurrentChat,
   type UpdateCurrentConversation,
   type GetAgentResponse,
-} from "wasp/server/operations";
+} from 'wasp/server/operations';
 
 import Stripe from 'stripe';
 import fetch from 'node-fetch';
@@ -21,8 +21,8 @@ import {
   fetchStripeCustomer,
   createStripeCheckoutSession,
 } from './stripeUtils.js';
-import { TierIds } from '@wasp/shared/constants.js';
-import { _Conversation } from '@wasp/_types';
+import { TierIds } from '../shared/constants.js';
+// import { _Conversation } from 'wasp/_types';
 
 export const ADS_SERVER_URL =
   process.env.ADS_SERVER_URL || 'http://127.0.0.1:9000';

@@ -28,9 +28,9 @@ app CaptnAI {
     externalAuthEntity: SocialLogin,
     methods: {
       usernameAndPassword: {},
-      google: { // Guide for setting up Auth via Google https://wasp-lang.dev/docs/auth/social-auth/overview
-        getUserFieldsFn: import { getUserFields } from "@src/server/auth/google.js",
-        configFn: import { config } from "@src/server/auth/google.js",
+      google: {
+        userSignupFields: import { userSignupFields } from "@src/auth/google.js",
+        configFn: import { getConfig } from "@src/auth/google.js",
       },
       // email: {
       //   fromField: {
@@ -48,9 +48,9 @@ app CaptnAI {
       //   },
       // },
     },
-    signup: {
-      additionalFields: import setIsAdminViaEmailSignup from "@src/server/auth/setIsAdminViaEmailSignup.js",
-    },
+    // signup: {
+    //   additionalFields: import setIsAdminViaEmailSignup from "@src/server/auth/setIsAdminViaEmailSignup.js",
+    // },
     onAuthFailedRedirectTo: "/login",
     onAuthSucceededRedirectTo: "/chat",
   },
