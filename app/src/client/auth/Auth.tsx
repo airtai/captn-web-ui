@@ -1,7 +1,7 @@
 import { type CustomizationOptions } from 'wasp/client/auth';
 import { useState, createContext } from 'react';
 import { createTheme } from '@stitches/react';
-import { styled } from './stitches.config';
+import { styled } from './configs/stitches.config';
 
 import {
   type State,
@@ -9,7 +9,19 @@ import {
   type AdditionalSignupFields,
 } from 'wasp/auth/forms/types';
 import { LoginSignupForm } from './LoginSignupForm';
-import { MessageSuccess } from 'wasp/auth/forms/internal/Message';
+// import { MessageSuccess } from 'wasp/auth/forms/internal/Message';
+
+export const Message = styled('div', {
+  padding: '0.5rem 0.75rem',
+  borderRadius: '0.375rem',
+  marginTop: '1rem',
+  background: '$gray400',
+});
+
+export const MessageSuccess = styled(Message, {
+  background: '$successBackground',
+  color: '$successText',
+});
 
 const logoStyle = {
   height: '6rem',

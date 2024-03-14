@@ -5,8 +5,13 @@ import { Link } from 'react-router-dom';
 // import { LoginForm } from '@wasp/auth/forms/Login';
 import { AuthWrapper } from './authWrapper';
 import Auth from './Auth';
-import { State } from 'wasp/auth/forms/types';
+// import { State } from 'wasp/auth/forms/types';
 import imgUrl from '../static/captn-logo-large.png';
+
+export enum State {
+  Login = 'login',
+  Signup = 'signup',
+}
 
 export default function Login() {
   const history = useHistory();

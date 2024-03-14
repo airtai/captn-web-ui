@@ -29,8 +29,8 @@ app CaptnAI {
     methods: {
       usernameAndPassword: {},
       google: {
-        userSignupFields: import { userSignupFields } from "@src/auth/google.js",
-        configFn: import { getConfig } from "@src/auth/google.js",
+        userSignupFields: import { userSignupFields } from "@src/server/auth/google.js",
+        configFn: import { getConfig } from "@src/server/auth/google.js",
       },
       // email: {
       //   fromField: {
@@ -442,6 +442,12 @@ api smartSuggestionsWebHook {
   fn: import { smartSuggestionsWebHook } from "@src/server/webhooks/captn.js",
   entities: [Chat],
   httpRoute: (POST, "/smart-suggestions-webhook")
+}
+
+api migrateGoogle {
+  httpRoute: (GET, "/migrate-google"),
+  fn: import { migrateGoogleHandler } from "@src/migrateToNewAuth",
+  entities: []
 }
 
 /* 🕵️‍♂️ These are the Wasp Jobs. Use them to set up recurring tasks and/or queues:

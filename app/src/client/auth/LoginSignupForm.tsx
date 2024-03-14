@@ -1,12 +1,12 @@
 import { useContext, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { stripTrailingSlash } from "@universal/url";
 
-import { styled } from './stitches.config';
+import { styled } from './configs/stitches.config';
 import { AuthContext } from './Auth';
 import type { AdditionalSignupFields } from 'wasp/auth/forms/types';
 import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import config from './configs/config';
 // import {
 //   MessageError,
 //   MessageSuccess,
@@ -94,10 +94,7 @@ const SocialAuthButtons = styled('div', {
   },
 });
 
-const apiUrl =
-  stripTrailingSlash(import.meta.env.REACT_APP_API_URL) ||
-  "http://localhost:3001";
-const googleSignInUrl = `${apiUrl}/auth/google/login`;
+const googleSignInUrl = `${config.apiUrl}/auth/google/login`;
 
 export type LoginSignupFormFields = {
   [key: string]: string;
