@@ -6,7 +6,7 @@ export const ADS_SERVER_URL =
 const protocol = ADS_SERVER_URL === 'http://127.0.0.1:9000' ? 'ws' : 'wss';
 const WS_URL = `${protocol}://${
   ADS_SERVER_URL.split('//')[1].split(':')[0]
-}:8080`;
+}:9090`;
 
 async function getChat(chatId, context) {
   return await context.entities.Chat.findFirst({
