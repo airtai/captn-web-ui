@@ -1,18 +1,30 @@
+import { type CustomizationOptions } from 'wasp/client/auth';
 import { useState, createContext } from 'react';
 import { createTheme } from '@stitches/react';
-import { styled } from '@wasp/stitches.config';
-
-import {
-  type State,
-  type CustomizationOptions,
-  type ErrorMessage,
-  type AdditionalSignupFields,
-} from '@wasp/auth/forms/types';
+import { styled } from './configs/stitches.config';
 import { LoginSignupForm } from './LoginSignupForm';
-import {
-  MessageError,
-  MessageSuccess,
-} from '@wasp/auth/forms/internal/Message';
+
+export enum State {
+  Login = 'login',
+  Signup = 'signup',
+}
+
+export type ErrorMessage = {
+  title: string;
+  description?: string;
+};
+
+export const Message = styled('div', {
+  padding: '0.5rem 0.75rem',
+  borderRadius: '0.375rem',
+  marginTop: '1rem',
+  background: '$gray400',
+});
+
+export const MessageSuccess = styled(Message, {
+  background: '$successBackground',
+  color: '$successText',
+});
 
 const logoStyle = {
   height: '6rem',
@@ -23,11 +35,11 @@ const Container = styled('div', {
   flexDirection: 'column',
 });
 
-const HeaderText = styled('h2', {
-  fontSize: '1.875rem',
-  fontWeight: '700',
-  marginTop: '1.5rem',
-});
+// const HeaderText = styled('h2', {
+//   fontSize: '1.875rem',
+//   fontWeight: '700',
+//   marginTop: '1.5rem',
+// });
 
 export const AuthContext = createContext({
   isLoading: false,
@@ -45,7 +57,7 @@ function Auth({
 }: {
   state: State;
 } & CustomizationOptions & {
-    additionalSignupFields?: AdditionalSignupFields;
+    additionalSignupFields?: any;
   }) {
   const [errorMessage, setErrorMessage] = useState<ErrorMessage | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -66,7 +78,7 @@ function Auth({
     socialLayout === 'vertical' ? 'vertical' : 'horizontal';
 
   return (
-    <Container className={customTheme}>
+    <div className={customTheme}>
       <div>
         {logo && (
           <img
@@ -100,7 +112,7 @@ function Auth({
           />
         )}
       </AuthContext.Provider>
-    </Container>
+    </div>
   );
 }
 

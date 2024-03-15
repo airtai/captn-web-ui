@@ -1,4 +1,4 @@
-import { styled } from '@wasp/stitches.config';
+import { styled } from './configs/stitches.config';
 
 export const Form = styled('form', {
   marginTop: '1.5rem',

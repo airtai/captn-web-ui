@@ -1,8 +1,8 @@
-import { TierIds, STRIPE_CUSTOMER_PORTAL_LINK } from '@wasp/shared/constants';
+import { useAuth } from 'wasp/client/auth';
+import { stripePayment } from 'wasp/client/operations';
+import { TierIds, STRIPE_CUSTOMER_PORTAL_LINK } from '../../shared/constants';
 import { AiFillCheckCircle } from 'react-icons/ai';
 import { useState } from 'react';
-import stripePayment from '@wasp/actions/stripePayment';
-import useAuth from '@wasp/auth/useAuth';
 import { useHistory } from 'react-router-dom';
 
 export const tiers = [
@@ -189,9 +189,9 @@ const PricingPage = () => {
                   {tier.id === 'enterprise-tier'
                     ? 'Contact us'
                     : !!user
-                    ? // ? 'Buy plan'
-                      'Start free trial'
-                    : 'Log in to buy plan'}
+                      ? // ? 'Buy plan'
+                        'Start free trial'
+                      : 'Log in to buy plan'}
                 </button>
               )}
             </div>

@@ -1,8 +1,7 @@
+import { type Chat } from "wasp/entities";
+import { createNewChat, createNewDailyAnalysisChat } from "wasp/client/operations";
 import React, { useState } from 'react';
-import type { Chat } from '@wasp/entities';
 import { useHistory } from 'react-router-dom';
-import createNewChat from '@wasp/actions/createNewChat';
-import createNewDailyAnalysisChat from '@wasp/actions/createNewDailyAnalysisChat';
 
 import Markdown from 'markdown-to-jsx';
 

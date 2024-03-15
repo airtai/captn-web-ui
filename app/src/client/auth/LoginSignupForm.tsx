@@ -1,33 +1,11 @@
 import { useContext, useState, useEffect } from 'react';
-import { useForm, UseFormReturn } from 'react-hook-form';
-import { styled } from '@wasp/stitches.config';
-import config from '@wasp/config';
+import { useForm } from 'react-hook-form';
 
+import { styled } from './configs/stitches.config';
 import { AuthContext } from './Auth';
-import {
-  Form,
-  FormInput,
-  FormItemGroup,
-  FormLabel,
-  FormError,
-  FormTextarea,
-  SubmitButton,
-} from './Form';
-import type {
-  AdditionalSignupFields,
-  AdditionalSignupField,
-  AdditionalSignupFieldRenderFn,
-  FormState,
-} from '@wasp/auth/forms/types';
-import * as SocialIcons from '@wasp/auth/forms/internal/social/SocialIcons';
-import { SocialButton } from '@wasp/auth/forms/internal/social/SocialButton';
 import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-// import {
-//   MessageError,
-//   MessageSuccess,
-// } from '@wasp/auth/forms/internal/Message';
-// import { useUsernameAndPassword } from '../usernameAndPassword/useUsernameAndPassword'
+import config from './configs/config';
 
 export const Message = styled('div', {
   padding: '0.5rem 0.75rem',
@@ -109,6 +87,7 @@ const SocialAuthButtons = styled('div', {
     },
   },
 });
+
 const googleSignInUrl = `${config.apiUrl}/auth/google/login`;
 
 export type LoginSignupFormFields = {
@@ -123,7 +102,7 @@ export const LoginSignupForm = ({
 }: {
   state: 'login' | 'signup';
   socialButtonsDirection?: 'horizontal' | 'vertical';
-  additionalSignupFields?: AdditionalSignupFields;
+  additionalSignupFields?: any;
   errorMessage?: any;
 }) => {
   const { isLoading, setErrorMessage, setSuccessMessage, setIsLoading } =

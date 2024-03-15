@@ -1,9 +1,9 @@
 import {
-  CaptnDailyAnalysisWebhook,
-  CreateNewChatWebhook,
-  DeleteChatWebhook,
-  SmartSuggestionsWebHook,
-} from '@wasp/apis/types';
+  type CaptnDailyAnalysisWebhook,
+  type CreateNewChatWebhook,
+  type DeleteChatWebhook,
+  type SmartSuggestionsWebHook,
+} from "wasp/server/api";
 
 async function createConversation(
   message: string,

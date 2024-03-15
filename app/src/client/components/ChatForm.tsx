@@ -1,5 +1,5 @@
+import { type Chat } from "wasp/entities";
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import type { Chat } from '@wasp/entities';
 
 interface ChatFormProps {
   handleFormSubmit: (userQuery: string) => void;

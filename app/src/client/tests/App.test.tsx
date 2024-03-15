@@ -1,6 +1,6 @@
+import { renderInContext } from "wasp/client/test";
 import { test } from 'vitest';
 import { screen } from '@testing-library/react';
-import { renderInContext } from '@wasp/test';
 
 import App from '../App';
 

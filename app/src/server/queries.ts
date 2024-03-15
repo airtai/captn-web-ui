@@ -1,18 +1,18 @@
-import HttpError from '@wasp/core/HttpError.js';
-import type {
-  DailyStats,
-  User,
-  PageViewSource,
-  Chat,
-  Conversation,
-} from '@wasp/entities';
-import type {
-  GetDailyStats,
-  GetPaginatedUsers,
-  GetChats,
-  GetConversations,
-  GetChat,
-} from '@wasp/queries/types';
+import {
+  type DailyStats,
+  type User,
+  type PageViewSource,
+  type Chat,
+  type Conversation,
+} from "wasp/entities";
+import { HttpError } from "wasp/server";
+import {
+  type GetDailyStats,
+  type GetPaginatedUsers,
+  type GetChats,
+  type GetConversations,
+  type GetChat,
+} from "wasp/server/operations";
 
 type DailyStatsWithSources = DailyStats & {
   sources: PageViewSource[];
