@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" href="https://captn.ai/favicon.ico" type="image/x-icon"> <!-- Added favicon -->
+    <title>Capt'n.ai</title>
+    <style>
+        @font-face {
+            font-family: 'CustomFont';
+            src: url('https://captn.ai/fonts/47a8ea40a6adb66d377bd4931fa3e394.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'CustomFont', Arial, sans-serif; /* Updated font-family */
+            background-color: #eae4d9;
+            color: #003851;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 896px;
+            padding: 0 1em;
+            box-sizing: border-box;
+            line-height: 1;
+        }
+
+        .top-left {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 170px;
+            height: 40px;
+            margin-right: 1em; /* Add some space between the logo and the span */
+        }
+
+        .message {
+            font-size: 3.5em;
+            font-weight: bold;
+        }
+        
+        p {
+            font-size: 1.5em;
+            line-height: 2;
+        }
+
+        .ml-2 {
+            margin-left: 0.5rem;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+        }
+
+        .font-semibold {
+            font-weight: 600;
+        }
+
+        .leading-6 {
+            line-height: 1.5rem;
+        }
+
+        .dark .text-captn-light-cream {
+            color: #eae4d9
+        }
+
+        .sup .text-base {
+            font-size: 1rem;
+        }
+
+        .sup .text-captn-dark-blue {
+            color: #003851;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-left">
+        <img class="logo" src="app/src/client/static/logo.png">
+        <span class="ml-2 text-sm font-semibold leading-6 dark:text-captn-light-cream"><sup class="text-base text-captn-dark-blue">βeta</sup></span>
+    </div>
+    <div class="container">
+        <div class="message">We're currently sailing through planned maintenance.</div>
+        <p>We'll be back on deck soon. Thanks for your patience!</p>
+    </div>
+</body>
+</html>
