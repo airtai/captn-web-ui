@@ -25,7 +25,6 @@ app CaptnAI {
   // 🔐 Auth out of the box! https://wasp-lang.dev/docs/auth/overview
   auth: {
     userEntity: User,
-    externalAuthEntity: SocialLogin,
     methods: {
       usernameAndPassword: {},
       google: {
@@ -85,13 +84,9 @@ entity User {=psl
   id                        Int             @id @default(autoincrement())
   email                     String?         @unique
   username                  String          @unique
-  password                  String?
   createdAt                 DateTime        @default(now())
   lastActiveTimestamp       DateTime        @default(now())
   isAdmin                   Boolean         @default(false)
-  isEmailVerified           Boolean         @default(false)
-  emailVerificationSentAt   DateTime?
-  passwordResetSentAt       DateTime?
   stripeId                  String? 
   checkoutSessionId         String?
   hasPaid                   Boolean         @default(false)
@@ -100,22 +95,10 @@ entity User {=psl
   sendEmail                 Boolean         @default(false)
   datePaid                  DateTime?
   credits                   Int             @default(3)
-  externalAuthAssociations  SocialLogin[]
   contactFormMessages       ContactFormMessage[] 
   chats    Chat[]
   conversations    Conversation[]
 psl=}
-
-entity SocialLogin {=psl
-  id                        String          @id @default(uuid())
-  provider                  String
-  providerId                String
-  user                      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId                    Int
-  createdAt                 DateTime        @default(now())
-  @@unique([provider, providerId, userId])
-psl=}
-
 
 
 // TODO: add functionality to allow users to send messages to admin
@@ -442,12 +425,6 @@ api smartSuggestionsWebHook {
   fn: import { smartSuggestionsWebHook } from "@src/server/webhooks/captn.js",
   entities: [Chat],
   httpRoute: (POST, "/smart-suggestions-webhook")
-}
-
-api migrateGoogle {
-  httpRoute: (GET, "/migrate-google"),
-  fn: import { migrateGoogleHandler } from "@src/migrateToNewAuth",
-  entities: []
 }
 
 /* 🕵️‍♂️ These are the Wasp Jobs. Use them to set up recurring tasks and/or queues:
