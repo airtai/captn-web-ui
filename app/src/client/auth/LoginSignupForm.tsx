@@ -3,15 +3,9 @@ import { useForm } from 'react-hook-form';
 
 import { styled } from './configs/stitches.config';
 import { AuthContext } from './Auth';
-import type { AdditionalSignupFields } from 'wasp/auth/forms/types';
 import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import config from './configs/config';
-// import {
-//   MessageError,
-//   MessageSuccess,
-// } from '@wasp/auth/forms/internal/Message';
-// import { useUsernameAndPassword } from '../usernameAndPassword/useUsernameAndPassword'
 
 export const Message = styled('div', {
   padding: '0.5rem 0.75rem',
@@ -108,7 +102,7 @@ export const LoginSignupForm = ({
 }: {
   state: 'login' | 'signup';
   socialButtonsDirection?: 'horizontal' | 'vertical';
-  additionalSignupFields?: AdditionalSignupFields;
+  additionalSignupFields?: any;
   errorMessage?: any;
 }) => {
   const { isLoading, setErrorMessage, setSuccessMessage, setIsLoading } =

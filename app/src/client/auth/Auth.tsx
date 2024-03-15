@@ -2,14 +2,17 @@ import { type CustomizationOptions } from 'wasp/client/auth';
 import { useState, createContext } from 'react';
 import { createTheme } from '@stitches/react';
 import { styled } from './configs/stitches.config';
-
-import {
-  type State,
-  type ErrorMessage,
-  type AdditionalSignupFields,
-} from 'wasp/auth/forms/types';
 import { LoginSignupForm } from './LoginSignupForm';
-// import { MessageSuccess } from 'wasp/auth/forms/internal/Message';
+
+export enum State {
+  Login = 'login',
+  Signup = 'signup',
+}
+
+export type ErrorMessage = {
+  title: string;
+  description?: string;
+};
 
 export const Message = styled('div', {
   padding: '0.5rem 0.75rem',
@@ -54,7 +57,7 @@ function Auth({
 }: {
   state: State;
 } & CustomizationOptions & {
-    additionalSignupFields?: AdditionalSignupFields;
+    additionalSignupFields?: any;
   }) {
   const [errorMessage, setErrorMessage] = useState<ErrorMessage | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
