@@ -1,12 +1,17 @@
+import { useAuth, type CustomizationOptions } from 'wasp/client/auth';
 import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 // import { LoginForm } from '@wasp/auth/forms/Login';
 import { AuthWrapper } from './authWrapper';
 import Auth from './Auth';
-import useAuth from '@wasp/auth/useAuth';
-import { type CustomizationOptions, State } from '@wasp/auth/forms/types';
+// import { State } from 'wasp/auth/forms/types';
 import imgUrl from '../static/captn-logo-large.png';
+
+export enum State {
+  Login = 'login',
+  Signup = 'signup',
+}
 
 export default function Login() {
   const history = useHistory();

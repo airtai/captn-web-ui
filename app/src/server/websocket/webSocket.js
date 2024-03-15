@@ -3,10 +3,12 @@ import WebSocket from 'ws';
 export const ADS_SERVER_URL =
   process.env.ADS_SERVER_URL || 'http://127.0.0.1:9000';
 
-const protocol = ADS_SERVER_URL === 'http://127.0.0.1:9000' ? 'ws' : 'wss';
+const isLocal = ADS_SERVER_URL === 'http://127.0.0.1:9000';
+const protocol = isLocal ? 'ws' : 'wss';
+const port = isLocal ? '8080' : '9090';
 const WS_URL = `${protocol}://${
   ADS_SERVER_URL.split('//')[1].split(':')[0]
-}:9090`;
+}:${port}`;
 
 async function getChat(chatId, context) {
   return await context.entities.Chat.findFirst({

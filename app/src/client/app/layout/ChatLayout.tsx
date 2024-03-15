@@ -1,10 +1,10 @@
-import { useState, ReactNode, FC, useRef, useEffect } from 'react';
+import { type Chat } from "wasp/entities";
 
+import { useAuth } from "wasp/client/auth";
+import { useState, ReactNode, FC, useRef, useEffect } from 'react';
 import Header from '../../admin/components/Header';
 import ChatSidebar from '../../components/ChatSidebar';
 import ChatForm from '../../components/ChatForm';
-import useAuth from '@wasp/auth/useAuth';
-import type { Chat } from '@wasp/entities';
 import { useHistory } from 'react-router-dom';
 
 interface Props {

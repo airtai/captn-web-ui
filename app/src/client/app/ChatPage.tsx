@@ -1,17 +1,19 @@
-import type { User } from '@wasp/entities';
+import { useSocket, useSocketListener } from "wasp/client/webSocket";
+import { type User, type Conversation } from "wasp/entities";
+
+import {
+  getAgentResponse,
+  createNewAndReturnAllConversations,
+  createNewAndReturnLastConversation,
+  updateCurrentChat,
+  updateCurrentConversation,
+  useQuery,
+  getChat,
+  getConversations,
+} from "wasp/client/operations";
+
 import { useHistory, useLocation, Redirect } from 'react-router-dom';
 
-import { useQuery } from '@wasp/queries';
-import getChat from '@wasp/queries/getChat';
-import getAgentResponse from '@wasp/actions/getAgentResponse';
-import createNewAndReturnAllConversations from '@wasp/actions/createNewAndReturnAllConversations';
-import createNewAndReturnLastConversation from '@wasp/actions/createNewAndReturnLastConversation';
-import updateCurrentChat from '@wasp/actions/updateCurrentChat';
-import updateCurrentConversation from '@wasp/actions/updateCurrentConversation';
-import type { Conversation } from '@wasp/entities';
-import { useSocket, useSocketListener } from '@wasp/webSocket';
-
-import getConversations from '@wasp/queries/getConversations';
 import ChatLayout from './layout/ChatLayout';
 import ConversationsList from '../components/ConversationList';
 

@@ -1,7 +1,7 @@
-import React from 'react';
+import { useAuth } from "wasp/client/auth";
 
+import React from 'react';
 import { Redirect } from 'react-router-dom';
-import useAuth from '@wasp/auth/useAuth';
 
 const createAuthRequiredChatPage = (Page) => {
   return (props) => {
