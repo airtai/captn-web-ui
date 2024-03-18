@@ -21,6 +21,7 @@
             font-family: 'CustomFont', Arial, sans-serif; /* Updated font-family */
             background-color: #eae4d9;
             color: #003851;
+            font-size: 16px;
         }
 
         .container {
@@ -42,7 +43,6 @@
         .logo {
             width: 170px;
             height: 40px;
-            margin-right: 1em; /* Add some space between the logo and the span */
         }
 
         .message {
@@ -60,7 +60,7 @@
         }
 
         .text-sm {
-            font-size: 0.875rem;
+            font-size: 1.2rem;
         }
 
         .font-semibold {
@@ -81,6 +81,22 @@
 
         .sup .text-captn-dark-blue {
             color: #003851;
+            
+        }
+        .top-left span {
+            display: inline-block;
+            margin-top: -10px;
+        }
+    
+        @media (max-width: 600px) {
+            .message {
+                font-size: 2em;
+                line-height: 1.2;
+            }
+            p {
+                font-size: 1.2em;
+                line-height: 1.2;
+            }
         }
     </style>
 </head>

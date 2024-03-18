@@ -1,0 +1,46 @@
+name: Switch Maintenance Mode
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Switch mode: maintenance or working'
+        required: true
+        default: 'working'
+        options:
+          - 'maintenance'
+          - 'working'
+
+jobs:
+  switch_maintenance_mode:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare for mode switch
+        run: |
+          if [ "${{ github.event.inputs.mode }}" == "maintenance" ]; then
+            timestamp=$(date +"%Y%m%d%H%M%S")
+            mv index.html index_${timestamp}.html
+            mv maintenance.html index.html
+          elif [ "${{ github.event.inputs.mode }}" == "working" ]; then
+            latest_index=$(ls -t index_*.html | head -1)
+            mv $latest_index index.html
+          else
+            echo "Invalid mode specified"
+            exit 1
+          fi
+
+      - name: Commit mode switch changes
+        run: |
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git config --global user.name "${{ github.actor }}"
+          git add index.html
+          git commit -m "Switch to ${{ github.event.inputs.mode }} mode"
+
+      - name: Push changes to GitHub
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
