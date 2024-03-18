@@ -36,6 +36,12 @@ jobs:
           mkdir tmp
           cp maintenance.html tmp/
 
+      - name: Get current UTC timestamp and inject into maintenance.html
+        run: |
+          timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          echo "Current UTC timestamp: ${timestamp}"
+          sed -i "s|WRITE_TIMESTAMP_HERE|${timestamp}|" tmp/maintenance.html
+
       - name: Switch to gh-pages branch
         run: |
           git fetch origin gh-pages --depth=1

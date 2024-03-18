@@ -26,7 +26,7 @@
 
         .container {
             text-align: center;
-            max-width: 896px;
+            max-width: 930px;
             padding: 0 1em;
             box-sizing: border-box;
             line-height: 1;
@@ -46,12 +46,13 @@
         }
 
         .message {
-            font-size: 3.5em;
+            font-size: 3em;
             font-weight: bold;
+            line-height: 1.2;
         }
         
         p {
-            font-size: 1.5em;
+            font-size: 1.3em;
             line-height: 2;
         }
 
@@ -87,6 +88,9 @@
             display: inline-block;
             margin-top: -10px;
         }
+        .email-us {
+            font-size: 1rem;
+        }
     
         @media (max-width: 600px) {
             .message {
@@ -106,8 +110,20 @@
         <span class="ml-2 text-sm font-semibold leading-6 dark:text-captn-light-cream"><sup class="text-base text-captn-dark-blue">βeta</sup></span>
     </div>
     <div class="container">
-        <div class="message">We're currently sailing through planned maintenance.</div>
-        <p>We'll be back on deck soon. Thanks for your patience!</p>
+        <div class="message">We have entered maintenance mode since <span id="time"></span> local time.</div>
+        <p>We'll resume normal operations shortly. Thank you for your patience!</p>
+        <p class="email-us">For urgent matters or updates on the application's return, please reach out to us at <a href="mailto:support@captn.ai">support@captn.ai</a>.</p>
     </div>
 </body>
+<script>
+    function displayLocalTime(utcTimestamp) {
+      const utcDate = new Date(utcTimestamp);
+      const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      const localTime = utcDate.toLocaleString(undefined, options);
+      document.getElementById('time').textContent = localTime;
+    }
+    const utcTimestamp = "WRITE_TIMESTAMP_HERE";
+    displayLocalTime(utcTimestamp);
+</script>
+</script>
 </html>
