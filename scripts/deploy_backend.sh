@@ -22,6 +22,8 @@ check_variable "ADS_SERVER_URL"
 check_variable "STRIPE_KEY"
 check_variable "PRO_SUBSCRIPTION_PRICE_ID"
 check_variable "STRIPE_WEBHOOK_SECRET"
+check_variable "GOOGLE_CLIENT_ID"
+check_variable "GOOGLE_CLIENT_SECRET"
 
 
 if [ ! -f key.pem ]; then
