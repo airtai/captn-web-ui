@@ -19,7 +19,7 @@ jobs:
                 node-version: 20
 
             - name: Install wasp
-              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh -s
+              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh -s -- -v 0.12.4
 
             - name: Temporary wasp fix
               run: |
@@ -54,7 +54,7 @@ jobs:
                 node-version: 20
 
             - name: Install wasp
-              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh -s
+              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh -s -- -v 0.12.4
 
             - name: Temporary wasp fix
               run: |
@@ -148,7 +148,7 @@ jobs:
                 node-version: 20
 
             - name: Install wasp
-              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh -s
+              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh -s -- -v 0.12.4
 
             - name: Temporary wasp fix
               run: |
