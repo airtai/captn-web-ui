@@ -432,8 +432,7 @@ export default function PrivacyPage() {
             <h2 className='text-xl font-semibold mb-2'>Your Choices</h2>
             <p>
               You can access and update your account information through the
-              Service. You can also unsubscribe from our promotional emails by
-              following the instructions in the email.
+              Service.
             </p>
           </section>
 

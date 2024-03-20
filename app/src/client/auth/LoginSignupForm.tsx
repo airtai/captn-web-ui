@@ -111,51 +111,21 @@ export const LoginSignupForm = ({
   const cta = isLogin ? 'Log in' : 'Sign up';
   const history = useHistory();
   const [tocChecked, setTocChecked] = useState(false);
-  const [marketingEmailsChecked, setMarketingEmailsChecked] = useState(false);
-  //   const onErrorHandler = (error) => {
-  //     setErrorMessage({
-  //       title: error.message,
-  //       description: error.data?.data?.message,
-  //     });
-  //   };
   const hookForm = useForm<LoginSignupFormFields>();
   const {
     register,
     formState: { errors },
     handleSubmit: hookFormHandleSubmit,
   } = hookForm;
-  //   const { handleSubmit } = useUsernameAndPassword({
-  //     isLogin,
-  //     onError: onErrorHandler,
-  //     onSuccess() {
-  //       history.push('/chat');
-  //     },
-  //   });
-  //   async function onSubmit(data) {
-  //     setIsLoading(true);
-  //     setErrorMessage(null);
-  //     setSuccessMessage(null);
-  //     try {
-  //       await handleSubmit(data);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   }
 
   useEffect(() => {
-    if (tocChecked && marketingEmailsChecked) {
+    if (tocChecked) {
       setErrorMessage(null);
     }
-  }, [tocChecked, marketingEmailsChecked]);
+  }, [tocChecked]);
 
   const handleTocChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTocChecked(event.target.checked);
-  };
-
-  const handleMarketingEmailsChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setMarketingEmailsChecked(event.target.checked);
   };
 
   const handleClick = (
@@ -163,12 +133,12 @@ export const LoginSignupForm = ({
     googleSignInUrl: string
   ) => {
     event.preventDefault();
-    if (tocChecked && marketingEmailsChecked) {
+    if (tocChecked) {
       window.location.href = googleSignInUrl;
     } else {
       const err = {
         title:
-          'To proceed, please ensure you have accepted the Terms & Conditions, Privacy Policy, and opted to receive marketing emails.',
+          'To proceed, please ensure you have accepted the Terms & Conditions and Privacy Policy.',
         description: '',
       };
       setErrorMessage(err);
@@ -201,17 +171,6 @@ export const LoginSignupForm = ({
           >
             Privacy Policy
           </Link>
-        </label>
-      </div>
-      <div>
-        <input
-          type='checkbox'
-          id='marketingEmails'
-          checked={marketingEmailsChecked}
-          onChange={handleMarketingEmailsChange}
-        />
-        <label className='text-sm ml-2' htmlFor='marketingEmails'>
-          I agree to receiving marketing emails
         </label>
       </div>
       {errorMessage && (

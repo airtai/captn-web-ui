@@ -103,23 +103,64 @@ export default function TocPage() {
           </section>
 
           <section className='mb-8'>
-            <h2 className='text-xl font-semibold mb-2'>Marketing Emails</h2>
+            <h2 className='text-xl font-semibold mb-2'>
+              Communications and Email Policy
+            </h2>
             <p>
-              By signing up or creating an account on this website, you agree to
-              receive marketing emails from us, unless you choose to
-              unsubscribe. These emails may include promotional offers, product
-              updates, newsletters, or other information related to our
-              services. We value your privacy and assure you that your email
-              address and personal information will be handled in accordance
-              with our Privacy Policy.
+              By creating an account on this website, you consent to receive
+              emails that are strictly related to the product and services we
+              provide. These communications are necessary for the effective use
+              of our service and include, but are not limited to, campaign
+              monitoring reports, product updates, new features, and account
+              notifications.
             </p>
             <br />
             <p>
-              If you wish to unsubscribe from our marketing emails, you can do
-              so by clicking the "unsubscribe" link provided at the bottom of
-              each email. Please note that even if you unsubscribe from
-              marketing emails, you may still receive transactional or
-              account-related communications regarding your use of our services.
+              We emphasize our commitment to not sending marketing or
+              promotional emails unrelated to the direct functionalities and
+              updates of our products and services. We value your privacy and
+              assure you that your email address and personal information will
+              be handled in accordance with our Privacy Policy.
+            </p>
+          </section>
+
+          <section className='mb-8'>
+            <h2 className='text-xl font-semibold mb-2'>
+              Product-related Emails
+            </h2>
+            <p>
+              We believe in keeping you informed about the essential aspects of
+              our service that affect your user experience. As such, you will
+              receive emails regarding:
+            </p>
+            <br />
+            <ul className='list-decimal pl-6'>
+              <li>
+                <b>Campaign Monitoring Reports:</b> Periodic emails summarizing
+                the performance of your marketing or advertising campaigns.
+              </li>
+              <li>
+                <b>Product Updates:</b> Information about changes or
+                improvements to our products and services.
+              </li>
+              <li>
+                <b>New Features:</b> Announcements about new features or
+                functionalities that have been added to our products and
+                services.
+              </li>
+              <li>
+                <b>Account Notifications:</b> Important notices regarding your
+                account, including security updates or changes to our terms and
+                policies.
+              </li>
+            </ul>
+            <br />
+            <p>
+              Opting out of these essential communications may impact your
+              ability to use our service effectively. As these emails are
+              fundamental to our service offering, you will not be able to
+              unsubscribe from receiving them while maintaining an active
+              account.
             </p>
           </section>
 
