@@ -14,7 +14,7 @@ const EditableChatName: React.FC<EditableChatNameProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState(
-    chatName ? `${chatName}` : `New chat ${chatId}`
+    chatName ? `${chatName}` : `New chat`
   );
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -46,8 +46,15 @@ const EditableChatName: React.FC<EditableChatNameProps> = ({
   };
 
   return (
-    <div className='editable-chat-name'>
-      {!isEditing && inputValue}
+    <div className='editable-chat-name' style={{ width: '170px' }}>
+      {!isEditing && (
+        <span
+          className='chat-name overflow-ellipsis overflow-hidden whitespace-nowrap'
+          style={{ display: 'inherit' }}
+        >
+          {inputValue}
+        </span>
+      )}
       {isEditing && (
         <form onSubmit={handleSubmit} data-testid='edit-form'>
           <input
@@ -56,7 +63,7 @@ const EditableChatName: React.FC<EditableChatNameProps> = ({
             onChange={handleInputChange}
             onBlur={handleBlur}
             value={inputValue}
-            className='w-5/6 focus:outline-none focus:ring-0 focus:border-captn-light-blue'
+            className='w-5/6 focus:outline-none focus:ring-0 focus:border-captn-light-blue bg-captn-light-cream'
             style={{ height: '30px', paddingLeft: '5px', marginLeft: '-5px' }}
           />
         </form>
