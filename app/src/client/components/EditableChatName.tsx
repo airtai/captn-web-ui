@@ -63,7 +63,7 @@ const EditableChatName: React.FC<EditableChatNameProps> = ({
             onChange={handleInputChange}
             onBlur={handleBlur}
             value={inputValue}
-            className='w-5/6 focus:outline-none focus:ring-0 focus:border-captn-light-blue bg-captn-light-cream'
+            className='w-5/6 focus:outline-none focus:ring-0 focus:border-captn-light-blue bg-captn-light-cream text-captn-dark-blue'
             style={{ height: '30px', paddingLeft: '5px', marginLeft: '-5px' }}
           />
         </form>
