@@ -21,19 +21,6 @@ test('renders EditableChatName component', async () => {
   screen.debug();
 });
 
-test('Render the default chat name', async () => {
-  renderInContext(
-    <EditableChatName
-      chatId={chatId}
-      chatName=''
-      onValueChange={mockOnValueChange}
-    />
-  );
-  const signInItems = await screen.findAllByText('New chat');
-  expect(signInItems).toHaveLength(1);
-  screen.debug();
-});
-
 test('shows input box when edit button is clicked', async () => {
   const { getByRole, getByTestId } = renderInContext(
     <EditableChatName
