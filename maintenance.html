@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" href="https://captn.ai/favicon.ico" type="image/x-icon"> <!-- Added favicon -->
+    <title>Capt'n.ai</title>
+    <style>
+        @font-face {
+            font-family: 'CustomFont';
+            src: url('https://captn.ai/fonts/47a8ea40a6adb66d377bd4931fa3e394.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'CustomFont', Arial, sans-serif; /* Updated font-family */
+            background-color: #eae4d9;
+            color: #003851;
+            font-size: 16px;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 930px;
+            padding: 0 1em;
+            box-sizing: border-box;
+            line-height: 1;
+        }
+
+        .top-left {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 170px;
+            height: 40px;
+        }
+
+        .message {
+            font-size: 3em;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+        
+        p {
+            font-size: 1.3em;
+            line-height: 2;
+        }
+
+        .ml-2 {
+            margin-left: 0.5rem;
+        }
+
+        .text-sm {
+            font-size: 1.2rem;
+        }
+
+        .font-semibold {
+            font-weight: 600;
+        }
+
+        .leading-6 {
+            line-height: 1.5rem;
+        }
+
+        .dark .text-captn-light-cream {
+            color: #eae4d9
+        }
+
+        .sup .text-base {
+            font-size: 1rem;
+        }
+
+        .sup .text-captn-dark-blue {
+            color: #003851;
+            
+        }
+        .top-left span {
+            display: inline-block;
+            margin-top: -10px;
+        }
+        .email-us {
+            font-size: 1rem;
+        }
+
+        a {
+            color: #6faabc;
+            text-decoration: underline;
+        }
+    
+        @media (max-width: 600px) {
+            .message {
+                font-size: 2em;
+                line-height: 1.2;
+            }
+            p {
+                font-size: 1.2em;
+                line-height: 1.2;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-left">
+        <img class="logo" src="https://captn.ai/logo.png">
+        <span class="ml-2 text-sm font-semibold leading-6 dark:text-captn-light-cream"><sup class="text-base text-captn-dark-blue">βeta</sup></span>
+    </div>
+    <div class="container">
+        <div class="message">We have entered maintenance mode since <i><span id="time"></span>.</i></div>
+        <p>We'll resume normal operations shortly. Thank you for your patience!</p>
+        <p class="email-us">For urgent matters or updates on the application's return, please reach out to us at <a href="mailto:support@captn.ai">support@captn.ai</a>.</p>
+    </div>
+</body>
+<script>
+    function displayLocalTime(utcTimestamp) {
+      const utcDate = new Date(utcTimestamp);
+      const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      const localTime = utcDate.toLocaleString(undefined, options);
+      const timeZone = new Date().toLocaleDateString(undefined, {day:'2-digit',timeZoneName: 'long' }).substring(4);
+      document.getElementById('time').textContent = `${localTime} (${timeZone})`;
+    }
+    const utcTimestamp = "WRITE_TIMESTAMP_HERE";
+    displayLocalTime(utcTimestamp);
+</script>
+</script>
+</html>

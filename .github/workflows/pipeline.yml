@@ -19,7 +19,7 @@ jobs:
                 node-version: 20
 
             - name: Install wasp
-              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh -s
+              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh -s -- -v 0.12.4
 
             - name: Temporary wasp fix
               run: |
@@ -54,7 +54,7 @@ jobs:
                 node-version: 20
 
             - name: Install wasp
-              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh -s
+              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh -s -- -v 0.12.4
 
             - name: Temporary wasp fix
               run: |
@@ -72,7 +72,7 @@ jobs:
             - run: docker pull ghcr.io/$GITHUB_REPOSITORY:$GITHUB_REF_NAME || docker pull ghcr.io/$GITHUB_REPOSITORY:dev || true
             - name: Build wasp
               run: cd app && wasp build
-            - run: docker build --build-arg PORT=$PORT -t ghcr.io/$GITHUB_REPOSITORY:$GITHUB_REF_NAME ./app/.wasp/build/
+            - run: docker build --build-arg PORT=$PORT -t ghcr.io/$GITHUB_REPOSITORY:${GITHUB_REF_NAME////-} ./app/.wasp/build/
             - name: Add tag latest if branch is main
               if: github.ref_name == 'main'
               run: docker tag ghcr.io/$GITHUB_REPOSITORY:$GITHUB_REF_NAME ghcr.io/$GITHUB_REPOSITORY:latest
@@ -148,7 +148,7 @@ jobs:
                 node-version: 20
 
             - name: Install wasp
-              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh -s
+              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh -s -- -v 0.12.4
 
             - name: Temporary wasp fix
               run: |
