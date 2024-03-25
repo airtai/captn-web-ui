@@ -13,9 +13,7 @@ const EditableChatName: React.FC<EditableChatNameProps> = ({
   onValueChange,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [inputValue, setInputValue] = useState(
-    chatName ? `${chatName}` : `New chat`
-  );
+  const [inputValue, setInputValue] = useState(chatName);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
