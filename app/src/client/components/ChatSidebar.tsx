@@ -1,10 +1,12 @@
-import { type Chat } from "wasp/entities";
-import { createNewChat, useQuery, getChats } from "wasp/client/operations";
+import { type Chat } from 'wasp/entities';
+import { createNewChat, useQuery, getChats } from 'wasp/client/operations';
 import React, { useEffect, useRef, useState, MouseEventHandler } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { NavLink, useLocation } from 'react-router-dom';
 import Logo from '../static/logo-for-dark-bg.png';
-import SidebarLinkGroup from '../admin/components/SidebarLinkGroup';
+import EditableChatName from './EditableChatName';
+
+import { updateCurrentChat } from 'wasp/client/operations';
 
 interface ChatSidebarProps {
   sidebarOpen: boolean;
@@ -24,6 +26,20 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen }: ChatSidebarProps) => {
   const [sidebarExpanded, setSidebarExpanded] = useState(
     storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true'
   );
+
+  const handlechatNameChange = async (chatId: number, newChatName: string) => {
+    try {
+      await updateCurrentChat({
+        id: chatId,
+        data: {
+          name: newChatName,
+        },
+      });
+    } catch (err: any) {
+      console.log('Unable to update the chat name. Please try again later.');
+    }
+  };
+
   const { data: chats, isLoading: isLoadingChats } = useQuery(getChats);
 
   // close on click outside
@@ -163,7 +179,7 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen }: ChatSidebarProps) => {
                     <NavLink
                       key={chat.id}
                       to={`/chat/${chat.id}?`}
-                      className={`no-underline group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out ${
+                      className={`chat-link relative no-underline group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out ${
                         pathname === '/' && 'bg-gray-700 dark:bg-meta-4'
                       } ${
                         chat.id === activeChat
@@ -185,7 +201,12 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen }: ChatSidebarProps) => {
                       >
                         <path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'></path>
                       </svg>
-                      <span className='ml-3'>{chat.id}</span>
+                      <span className='ml-3'>
+                        <EditableChatName
+                          chat={chat}
+                          onValueChange={handlechatNameChange}
+                        />
+                      </span>
                     </NavLink>
                   ))}
               </li>

@@ -1,5 +1,8 @@
-import { type Chat } from "wasp/entities";
-import { createNewChat, createNewDailyAnalysisChat } from "wasp/client/operations";
+import { type Chat } from 'wasp/entities';
+import {
+  createNewChat,
+  createNewDailyAnalysisChat,
+} from 'wasp/client/operations';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -22,9 +25,8 @@ export default function SmartSuggestionButton({
   ) {
     if (currentChatDetails.isExceptionOccured) {
       if (currentChatDetails.chatType === 'daily_analysis') {
-        const newChat: Chat = await createNewDailyAnalysisChat(
-          currentChatDetails
-        );
+        const newChat: Chat =
+          await createNewDailyAnalysisChat(currentChatDetails);
         history.push(`/chat/${newChat.id}`);
       } else {
         const chat: Chat = await createNewChat();
@@ -48,7 +50,7 @@ export default function SmartSuggestionButton({
             {suggestions.map((suggestion, index) => (
               <button
                 key={index}
-                className=' bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 m-1 text-captn-light-cream'
+                className=' bg-captn-cta-green hover:bg-captn-cta-green-hover font-medium rounded-lg text-sm px-3 py-2 m-1 text-captn-light-cream'
                 onClick={() =>
                   handleSuggestionClick(suggestion, smartSuggestionOnClick)
                 }

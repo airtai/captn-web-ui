@@ -1,4 +1,4 @@
-import { type Chat } from "wasp/entities";
+import { type Chat } from 'wasp/entities';
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 
 interface ChatFormProps {
@@ -53,7 +53,7 @@ export default function ChatForm({
             type='search'
             id='userQuery'
             name='search'
-            className='block rounded-lg w-full h-12 text-sm text-captn-light-cream bg-captn-dark-blue focus:ring-blue-500 focus:border-blue-500'
+            className='block rounded-lg w-full h-12 text-sm text-captn-light-cream bg-captn-dark-blue focus:outline-none focus:ring-0 focus:border-captn-light-blue'
             placeholder='Message Capt’n...'
             required
             ref={formInputRef}
@@ -62,7 +62,7 @@ export default function ChatForm({
           />
           <button
             type='submit'
-            className={`text-captn-light-cream bg-captn-cta-green hover:bg-captn-cta-green-hover focus:ring-4 focus:outline-none focus:ring-blue-300 absolute right-2 font-medium rounded-lg text-sm px-1.5 py-1.5`}
+            className={`text-captn-light-cream bg-captn-cta-green hover:bg-captn-cta-green-hover absolute right-2 font-medium rounded-lg text-sm px-1.5 py-1.5`}
           >
             <span className=''>
               <svg
