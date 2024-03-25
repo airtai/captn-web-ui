@@ -203,7 +203,8 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen }: ChatSidebarProps) => {
                       </svg>
                       <span className='ml-3'>
                         <EditableChatName
-                          chat={chat}
+                          chatId={chat.id}
+                          chatName={chat.name ? chat.name : ''}
                           onValueChange={handlechatNameChange}
                         />
                       </span>
