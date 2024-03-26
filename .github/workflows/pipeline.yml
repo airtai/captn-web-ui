@@ -79,13 +79,52 @@ jobs:
             - name: Push only if branch name is main or dev
               if: github.ref_name == 'main' || github.ref_name == 'dev'
               run: docker push ghcr.io/$GITHUB_REPOSITORY --all-tags
+    
+    docker_build_push_python:
+        runs-on: ubuntu-22.04
+        needs: [docker_build_push]
+        permissions:
+            contents: read
+            packages: write
+        env:
+          PORT: ${{ vars.PORT }}
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Log in to the Container registry
+              uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+              with:
+                  registry: ${{ env.REGISTRY }}
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Pull node image
+              run: docker pull ghcr.io/$GITHUB_REPOSITORY:$GITHUB_REF_NAME || docker pull ghcr.io/$GITHUB_REPOSITORY:dev || true
+            - name: Pull node image with python
+              run: docker pull ghcr.io/${GITHUB_REPOSITORY}-python:$GITHUB_REF_NAME || docker pull ghcr.io/${GITHUB_REPOSITORY}-python:dev || true
+
+            - run: |
+                if [ "$GITHUB_REF_NAME" == "main" ]; then
+                  TAG="main"
+                else
+                  TAG="dev"
+                fi
+                docker build --build-arg PORT=$PORT --build-arg TAG=$TAG -t ghcr.io/${GITHUB_REPOSITORY}-python:${GITHUB_REF_NAME////-} .
+
+            - name: Add tag latest if branch is main
+              if: github.ref_name == 'main'
+              run: docker tag ghcr.io/${GITHUB_REPOSITORY}-python:$GITHUB_REF_NAME ghcr.io/${GITHUB_REPOSITORY}-python:latest
+            - name: Push only if branch name is main or dev
+              if: github.ref_name == 'main' || github.ref_name == 'dev'
+              run: docker push ghcr.io/${GITHUB_REPOSITORY}-python --all-tags
 
     deploy_backend:
         runs-on: ubuntu-22.04
         defaults:
             run:
                 shell: bash
-        needs: [docker_build_push]
+        needs: [docker_build_push_python]
         if: github.ref_name == 'main' || github.ref_name == 'dev'
         env:
             GITHUB_USERNAME: ${{ github.actor }}
@@ -130,7 +169,7 @@ jobs:
 
     deploy_frontend:
         runs-on: ubuntu-22.04
-        needs: [docker_build_push]
+        needs: [docker_build_push_python]
         permissions:
             contents: write
         if: github.ref_name == 'main' || github.ref_name == 'dev'
