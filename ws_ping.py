@@ -13,8 +13,13 @@ SERVER_URL = f"wss://{ads_server_domain}:9090"
 async def connect_to_server():
     try:
         async with websockets.connect(SERVER_URL) as websocket:
+            await websocket.send("ping")
+            msg = await websocket.recv()
+            assert msg.strip() == "pong"
             current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
             print(f"Connected successfully to server at {current_time}")
+    except AssertionError:
+        print(f"Error: Server did not respond with 'pong', instead got: {msg}")
     except Exception as e:
         print(f"Error connecting to server: {e}")
 
