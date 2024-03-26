@@ -4,6 +4,7 @@ import { logout } from 'wasp/client/auth';
 import { STRIPE_CUSTOMER_PORTAL_LINK } from '../../shared/constants';
 import { TierIds } from '../../shared/constants';
 import FreeTrialButton from '../components/FreeTrialButton';
+import { MarketingEmailPreferenceSwitcher } from '../components/MarketingEmailPreferenceSwitcher';
 
 export default function AccountPage({ user }: { user: User }) {
   return (
@@ -69,6 +70,18 @@ export default function AccountPage({ user }: { user: User }) {
                   </div>
                 </>
               )}
+            </div>
+            <div className='py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6'>
+              <dt className='text-sm font-medium text-captn-dark-blue'>
+                I agree to receiving marketing emails
+              </dt>
+              <>
+                <MarketingEmailPreferenceSwitcher
+                  hasSubscribedToMarketingEmails={
+                    user.hasSubscribedToMarketingEmails
+                  }
+                />
+              </>
             </div>
             {/* <div className='py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6'>
               <dt className='text-sm font-medium text-captn-dark-blue'>About</dt>
