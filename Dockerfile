@@ -7,4 +7,4 @@ COPY ws_ping.py scripts/start_service.sh /app/.wasp/build/server/
 RUN pip install websockets
 
 ENTRYPOINT []
-CMD ["/app/.wasp/build/server/start_service.sh"]
+CMD ["sh", "/app/.wasp/build/server/start_service.sh"]
