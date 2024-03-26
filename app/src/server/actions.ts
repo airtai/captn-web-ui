@@ -132,6 +132,7 @@ export const createNewChat: CreateNewChat<void, Chat> = async (
           'Increase brand awareness',
           'Drive website traffic',
           'Promote a product or service',
+          'Create a new Google ads campaign',
         ],
       },
     },
