@@ -64,9 +64,13 @@ function wsConnection(
   currentChatDetails,
   conversationId,
   lastMessage,
-  allMessages
+  allMessages,
+  team_name
 ) {
   const ws = new WebSocket(WS_URL);
+  const googleAdsTeamName = team_name
+    ? team_name
+    : currentChatDetails.team_name;
   const data = {
     conv_id: currentChatDetails.id,
     user_id: currentChatDetails.userId,
@@ -76,6 +80,10 @@ function wsConnection(
     is_continue_daily_analysis:
       currentChatDetails.chatType === 'daily_analysis' &&
       !!currentChatDetails.team_status,
+    google_ads_team: googleAdsTeamName.replace(
+      `_${currentChatDetails.userId}_${currentChatDetails.id}`,
+      ''
+    ),
   };
   let socketConversationHistory = '';
   let lastSocketMessage = null;
@@ -142,7 +150,8 @@ export const socketFn = (io, context) => {
           currentChatDetails,
           conversationId,
           lastMessage,
-          allMessages
+          allMessages,
+          team_name
         ) => {
           wsConnection(
             socket,
@@ -150,7 +159,8 @@ export const socketFn = (io, context) => {
             currentChatDetails,
             conversationId,
             lastMessage,
-            allMessages
+            allMessages,
+            team_name
           );
         }
       );
