@@ -4,6 +4,7 @@ import { logout } from 'wasp/client/auth';
 import { STRIPE_CUSTOMER_PORTAL_LINK } from '../../shared/constants';
 import { TierIds } from '../../shared/constants';
 import FreeTrialButton from '../components/FreeTrialButton';
+import { MarketingEmailPreferenceSwitcher } from '../components/MarketingEmailPreferenceSwitcher';
 
 export default function AccountPage({ user }: { user: User }) {
   return (
@@ -70,6 +71,18 @@ export default function AccountPage({ user }: { user: User }) {
                 </>
               )}
             </div>
+            <div className='py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6'>
+              <dt className='text-sm font-medium text-captn-dark-blue'>
+                I agree to receiving marketing emails
+              </dt>
+              <>
+                <MarketingEmailPreferenceSwitcher
+                  hasSubscribedToMarketingEmails={
+                    user.hasSubscribedToMarketingEmails
+                  }
+                />
+              </>
+            </div>
             {/* <div className='py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6'>
               <dt className='text-sm font-medium text-captn-dark-blue'>About</dt>
               <dd className='mt-1 text-sm text-captn-dark-blue sm:col-span-2 sm:mt-0'>
@@ -84,7 +97,7 @@ export default function AccountPage({ user }: { user: User }) {
           onClick={logout}
           className='inline-flex justify-center mx-8 py-2 px-4 border border-transparent shadow-md text-sm font-medium rounded-md text-captn-light-cream bg-captn-cta-green hover:bg-captn-cta-green-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
         >
-          logout
+          Log out
         </button>
       </div>
     </div>
@@ -111,7 +124,7 @@ function CustomerPortalButton() {
   };
 
   return (
-    <div className='ml-4 flex-shrink-0 sm:col-span-1 sm:mt-0'>
+    <div className='ml-0 md:ml-4 flex-shrink-0 sm:col-span-1 sm:mt-0'>
       <button
         onClick={handleClick}
         className={`font-medium text-sm text-captn-light-blue hover:underline`}

@@ -1,6 +1,6 @@
-import { Link } from "wasp/client/router";
-import { type User } from "wasp/entities";
-import { logout } from "wasp/client/auth";
+import { Link } from 'wasp/client/router';
+import { type User } from 'wasp/entities';
+import { logout } from 'wasp/client/auth';
 import { MdOutlineSpaceDashboard } from 'react-icons/md';
 import { TfiDashboard } from 'react-icons/tfi';
 
@@ -58,7 +58,7 @@ export const UserMenuItems = ({
                 fill=''
               />
             </svg>
-            Account Settings
+            Account settings
           </Link>
         </li>
       </ul>
@@ -75,7 +75,7 @@ export const UserMenuItems = ({
               className='no-underline  flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out text-captn-light-cream hover:text-captn-light-blue'
             >
               <TfiDashboard size='1.1rem' />
-              Admin Dashboard
+              Admin dashboard
             </Link>
           </li>
         </ul>
@@ -103,7 +103,7 @@ export const UserMenuItems = ({
             fill=''
           />
         </svg>
-        Log Out
+        Log out
       </button>
     </>
   );
