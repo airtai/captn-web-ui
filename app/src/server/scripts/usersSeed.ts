@@ -35,6 +35,8 @@ export function createRandomUser() {
     credits: faker.number.int({ min: 0, max: 3 }),
     checkoutSessionId: null,
     subscriptionTier: faker.helpers.arrayElement([TierIds.HOBBY, TierIds.PRO]),
+    hasAcceptedTos: true,
+    hasSubscribedToMarketingEmails: true,
   };
   return user;
 }
