@@ -116,7 +116,8 @@ entity ContactFormMessage {=psl
 psl=}
 
 entity Chat {=psl
-    id          Int     @id @default(autoincrement())
+    id                        Int             @id @default(autoincrement())
+    uuid                      String?         @default(uuid())
     createdAt                 DateTime        @default(now())
     updatedAt                 DateTime        @updatedAt
     team_id                   Int?
@@ -391,6 +392,11 @@ query getChats {
 query getConversations {
   fn: import { getConversations } from "@src/server/queries.js",
   entities: [Conversation]
+}
+
+query getChatFromUUID {
+  fn: import { getChatFromUUID } from "@src/server/queries.js",
+  entities: [Chat]
 }
 
 /*
