@@ -1,5 +1,5 @@
-import { useSocket, useSocketListener } from "wasp/client/webSocket";
-import { type User, type Conversation } from "wasp/entities";
+import { useSocket, useSocketListener } from 'wasp/client/webSocket';
+import { type User, type Conversation } from 'wasp/entities';
 
 import {
   getAgentResponse,
@@ -10,7 +10,7 @@ import {
   useQuery,
   getChat,
   getConversations,
-} from "wasp/client/operations";
+} from 'wasp/client/operations';
 
 import { useHistory, useLocation, Redirect } from 'react-router-dom';
 
@@ -148,7 +148,8 @@ const ChatPage = ({ user }: { user: User }) => {
               currentChatDetails,
               inProgressConversation.id,
               response.customer_brief,
-              messages
+              messages,
+              response['team_name']
             );
           }
           // Emit an event to check the smartSuggestion status

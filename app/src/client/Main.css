@@ -80,6 +80,15 @@ a {
   background: #eae4d9;
 }
 
+.chat-link .editable-chat-name .edit-button {
+    position: absolute;
+    visibility: hidden;
+}
+
+.chat-link:hover .editable-chat-name .edit-button {
+  visibility: visible;
+}
+
 /* Google login button */
 .gsi-material-button {
   -moz-user-select: none;

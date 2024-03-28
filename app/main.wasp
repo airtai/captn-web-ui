@@ -87,6 +87,8 @@ entity User {=psl
   createdAt                 DateTime        @default(now())
   lastActiveTimestamp       DateTime        @default(now())
   isAdmin                   Boolean         @default(false)
+  hasAcceptedTos             Boolean         @default(true)
+  hasSubscribedToMarketingEmails  Boolean         @default(true)
   stripeId                  String? 
   checkoutSessionId         String?
   hasPaid                   Boolean         @default(false)
@@ -132,7 +134,7 @@ entity Chat {=psl
     customerBrief       String?
     user        User?    @relation(fields: [userId], references: [id])
     userId      Int?
-    name        String?
+    name        String?          @default("New chat")
     conversations    Conversation[]
 psl=}
 
