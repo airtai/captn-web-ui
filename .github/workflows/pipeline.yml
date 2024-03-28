@@ -19,7 +19,7 @@ jobs:
                 node-version: 20
 
             - name: Install wasp
-              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh -s -- -v 0.12.4
+              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh
 
             - name: Temporary wasp fix
               run: |
@@ -54,7 +54,7 @@ jobs:
                 node-version: 20
 
             - name: Install wasp
-              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh -s -- -v 0.12.4
+              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh
 
             - name: Temporary wasp fix
               run: |
@@ -135,6 +135,7 @@ jobs:
             GOOGLE_CLIENT_SECRET: ${{ github.ref_name == 'main' && secrets.PROD_GOOGLE_CLIENT_SECRET || secrets.STAGING_GOOGLE_CLIENT_SECRET }}
             ADMIN_EMAILS: ${{ vars.ADMIN_EMAILS }}
 
+            WASP_SERVER_URL: ${{ github.ref_name == 'main' && vars.PROD_WASP_SERVER_URL || vars.STAGING_WASP_SERVER_URL }}
             ADS_SERVER_URL: ${{ github.ref_name == 'main' && vars.PROD_ADS_SERVER_URL || vars.STAGING_ADS_SERVER_URL }}
             BACKEND_DOMAIN: ${{ github.ref_name == 'main' && vars.PROD_BACKEND_DOMAIN || vars.STAGING_BACKEND_DOMAIN }}
             WASP_WEB_CLIENT_URL: ${{ github.ref_name == 'main' && vars.PROD_WASP_WEB_CLIENT_URL || vars.STAGING_WASP_WEB_CLIENT_URL }}
@@ -187,7 +188,7 @@ jobs:
                 node-version: 20
 
             - name: Install wasp
-              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh -s -- -v 0.12.4
+              run: curl -sSL https://get.wasp-lang.dev/installer.sh | sh
 
             - name: Temporary wasp fix
               run: |
