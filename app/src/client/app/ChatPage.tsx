@@ -9,6 +9,7 @@ import {
   updateCurrentConversation,
   useQuery,
   getChat,
+  getChatFromUUID,
   getConversations,
 } from 'wasp/client/operations';
 
@@ -53,7 +54,12 @@ const ChatPage = ({ user }: { user: User }) => {
   const history = useHistory();
   const queryParams = new URLSearchParams(location.search);
 
-  const activeChatId = Number(pathname.split('/').pop());
+  const uuidFromURL = pathname.split('/').pop();
+  const activeChatUUId = uuidFromURL === 'chat' ? null : uuidFromURL;
+  const { data: activeChat } = useQuery(getChatFromUUID, {
+    chatUUID: activeChatUUId,
+  });
+  const activeChatId = Number(activeChat?.id);
   const {
     data: currentChatDetails,
     refetch: refetchChat,
@@ -197,6 +203,7 @@ const ChatPage = ({ user }: { user: User }) => {
           history.push('/pricing');
         } else {
           await updateCurrentConversation({
+            //@ts-ignore
             id: inProgressConversation.id,
             data: {
               isLoading: false,

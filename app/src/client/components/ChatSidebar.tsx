@@ -17,7 +17,7 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen }: ChatSidebarProps) => {
   const history = useHistory();
   const location = useLocation();
   const { pathname } = location;
-  const activeChat = Number(pathname.split('/').pop());
+  const activeChat = pathname.split('/').pop();
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
@@ -82,7 +82,7 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen }: ChatSidebarProps) => {
   ) => {
     try {
       const chat: Chat = await createNewChat();
-      history.push(`/chat/${chat.id}`);
+      history.push(`/chat/${chat.uuid}`);
     } catch (err: any) {
       console.log('Error: ' + err.message);
       if (err.message === 'No Subscription Found') {
@@ -178,11 +178,11 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen }: ChatSidebarProps) => {
                   chats.map((chat: Chat, idx) => (
                     <NavLink
                       key={chat.id}
-                      to={`/chat/${chat.id}?`}
+                      to={`/chat/${chat.uuid}?`}
                       className={`chat-link relative no-underline group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out ${
                         pathname === '/' && 'bg-gray-700 dark:bg-meta-4'
                       } ${
-                        chat.id === activeChat
+                        chat.uuid === activeChat
                           ? 'bg-captn-light-cream text-captn-dark-blue hover:bg-captn-light-blue hover:text-captn-dark-blue'
                           : 'text-captn-light-cream hover:bg-captn-light-blue hover:text-captn-dark-blue'
                       }`}

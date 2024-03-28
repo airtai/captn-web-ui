@@ -4,15 +4,15 @@ import {
   type PageViewSource,
   type Chat,
   type Conversation,
-} from "wasp/entities";
-import { HttpError } from "wasp/server";
+} from 'wasp/entities';
+import { HttpError } from 'wasp/server';
 import {
   type GetDailyStats,
   type GetPaginatedUsers,
   type GetChats,
   type GetConversations,
   type GetChat,
-} from "wasp/server/operations";
+} from 'wasp/server/operations';
 
 type DailyStatsWithSources = DailyStats & {
   sources: PageViewSource[];
@@ -174,6 +174,37 @@ export const getConversations: GetConversations<
     console.error('Error while fetching conversations:', error);
     return [];
   }
+};
+
+type getChatFromUUIDPayload = {
+  chatUUID: string | null | undefined;
+};
+
+export const getChatFromUUID: GetChat<getChatFromUUIDPayload, Chat> = async (
+  args: any,
+  context: any
+) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+
+  let chat = null;
+
+  if (context.user.isAdmin) {
+    chat = await context.entities.Chat.findFirst({
+      where: {
+        uuid: args.chatUUID,
+      },
+    });
+  } else {
+    chat = await context.entities.Chat.findFirst({
+      where: {
+        uuid: args.chatUUID,
+        userId: context.user.id,
+      },
+    });
+  }
+  return chat;
 };
 
 type GetChatPayload = {
