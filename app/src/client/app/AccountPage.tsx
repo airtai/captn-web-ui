@@ -6,7 +6,9 @@ import { TierIds } from '../../shared/constants';
 import FreeTrialButton from '../components/FreeTrialButton';
 import { MarketingEmailPreferenceSwitcher } from '../components/MarketingEmailPreferenceSwitcher';
 
-export default function AccountPage({ user }: { user: User }) {
+import CustomAuthRequiredLayout from './layout/CustomAuthRequiredLayout';
+
+const AccountPage = ({ user }: { user: User }) => {
   return (
     <div className='mt-10 px-6'>
       <div className='overflow-hidden bg-captn-light-cream ring-1 ring-gray-900/10 shadow-lg sm:rounded-lg lg:m-8 '>
@@ -102,7 +104,10 @@ export default function AccountPage({ user }: { user: User }) {
       </div>
     </div>
   );
-}
+};
+
+const AccountPageWithCustomAuthLayout = CustomAuthRequiredLayout(AccountPage);
+export default AccountPageWithCustomAuthLayout;
 
 function BuyMoreButton() {
   return (
