@@ -3,7 +3,7 @@ import {
   type CreateNewChatWebhook,
   type DeleteChatWebhook,
   type SmartSuggestionsWebHook,
-} from "wasp/server/api";
+} from 'wasp/server/api';
 
 async function createConversation(
   message: string,
@@ -115,6 +115,7 @@ export const createNewChatWebhook: CreateNewChatWebhook = async (
 
     response.json({
       chatId: chat.id,
+      chatUUID: chat.uuid,
     });
   } else {
     console.log('Invalid user id: ', userId);
