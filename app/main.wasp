@@ -241,8 +241,8 @@ page PricingPage {
 
 route AccountRoute { path: "/account", to: AccountPage }
 page AccountPage {
-  authRequired: true,
-  component: import Account from "@src/client/app/AccountPage"
+  // authRequired: true,
+  component: import AccountPageWithCustomAuthLayout from "@src/client/app/AccountPage"
 }
 
 route CheckoutRoute { path: "/checkout", to: CheckoutPage }
