@@ -107,7 +107,6 @@ const AccountPage = ({ user }: { user: User }) => {
 };
 
 const AccountPageWithCustomAuthLayout = CustomAuthRequiredLayout(AccountPage);
-
 export default AccountPageWithCustomAuthLayout;
 
 function BuyMoreButton() {
