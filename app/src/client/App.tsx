@@ -2,7 +2,7 @@ import { useAuth } from 'wasp/client/auth';
 import { updateCurrentUser } from 'wasp/client/operations';
 import './Main.css';
 import AppNavBar from './components/AppNavBar';
-import SystemFailureComponent from './components/SystemFailureComponent';
+import ServerNotRechableComponent from './components/ServerNotRechableComponent';
 import LoadingComponent from './components/LoadingComponent';
 import { useMemo, useEffect, ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -61,7 +61,9 @@ export default function App({ children }: { children: ReactNode }) {
             {shouldDisplayAppNavBar && <AppNavBar />}
             <div className='mx-auto max-w-7xl sm:px-6 lg:px-8'>
               {isError ? (
-                <SystemFailureComponent />
+                <ServerNotRechableComponent>
+                  {children}
+                </ServerNotRechableComponent>
               ) : isLoading ? (
                 <LoadingComponent />
               ) : (

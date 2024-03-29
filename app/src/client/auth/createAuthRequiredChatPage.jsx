@@ -3,7 +3,7 @@ import { useAuth } from 'wasp/client/auth';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
-import SystemFailureComponent from '../components/SystemFailureComponent';
+import ServerNotRechableComponent from '../components/ServerNotRechableComponent';
 import LoadingComponent from '../components/LoadingComponent';
 
 const createAuthRequiredChatPage = (Page) => {
@@ -29,9 +29,17 @@ const createAuthRequiredChatPage = (Page) => {
     } else if (isLoading) {
       return <LoadingComponent />;
     } else if (isError) {
-      return <SystemFailureComponent />;
+      return (
+        <ServerNotRechableComponent>
+          <Page {...props} user={user} />
+        </ServerNotRechableComponent>
+      );
     } else {
-      return <SystemFailureComponent />;
+      return (
+        <ServerNotRechableComponent>
+          <Page {...props} user={user} />
+        </ServerNotRechableComponent>
+      );
     }
   };
 };
