@@ -1,7 +1,10 @@
-import { useAuth } from "wasp/client/auth";
+import { useAuth } from 'wasp/client/auth';
 
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+
+import ServerNotRechableComponent from '../components/ServerNotRechableComponent';
+import LoadingComponent from '../components/LoadingComponent';
 
 const createAuthRequiredChatPage = (Page) => {
   return (props) => {
@@ -24,11 +27,19 @@ const createAuthRequiredChatPage = (Page) => {
         return <Redirect to='/login' />;
       }
     } else if (isLoading) {
-      return <span>Loading...</span>;
+      return <LoadingComponent />;
     } else if (isError) {
-      return <span>An error ocurred. Please refresh the page.</span>;
+      return (
+        <ServerNotRechableComponent>
+          <Page {...props} user={user} />
+        </ServerNotRechableComponent>
+      );
     } else {
-      return <span>An unknown error ocurred. Please refresh the page.</span>;
+      return (
+        <ServerNotRechableComponent>
+          <Page {...props} user={user} />
+        </ServerNotRechableComponent>
+      );
     }
   };
 };

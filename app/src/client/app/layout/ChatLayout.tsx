@@ -1,6 +1,6 @@
-import { type Chat } from "wasp/entities";
+import { type Chat } from 'wasp/entities';
 
-import { useAuth } from "wasp/client/auth";
+import { useAuth } from 'wasp/client/auth';
 import { useState, ReactNode, FC, useRef, useEffect } from 'react';
 import Header from '../../admin/components/Header';
 import ChatSidebar from '../../components/ChatSidebar';
@@ -26,8 +26,12 @@ const ChatLayout: FC<Props> = ({
   const history = useHistory();
 
   useEffect(() => {
-    if (!user?.hasPaid) {
-      history.push('/pricing');
+    if (!user) {
+      history.push('/login');
+    } else {
+      if (!user.hasPaid) {
+        history.push('/pricing');
+      }
     }
   }, [user, history]);
 
