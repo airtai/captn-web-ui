@@ -17,6 +17,7 @@ module.exports = {
         'captn-cta-green': '#71ad3d',
         'captn-cta-red': '#c22828',
         'captn-cta-green-hover': '#9ac475',
+        'captn-rose-quartz': '#bb6e90',
         current: 'currentColor',
         transparent: 'transparent',
         // white: '#FFFFFF',
