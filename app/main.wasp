@@ -352,6 +352,11 @@ action updateCurrentConversation {
   entities: [Conversation]
 }
 
+action deleteConversation {
+  fn: import { deleteConversation } from "@src/server/actions.js",
+  entities: [Conversation]
+}
+
 action createNewAndReturnAllConversations {
   fn: import { createNewAndReturnAllConversations } from "@src/server/actions.js",
   entities: [Conversation]

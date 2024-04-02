@@ -12,6 +12,7 @@ import {
   type UpdateCurrentChat,
   type UpdateCurrentConversation,
   type GetAgentResponse,
+  type DeleteConversation,
 } from 'wasp/server/operations';
 
 import Stripe from 'stripe';
@@ -227,6 +228,27 @@ export const updateCurrentConversation: UpdateCurrentConversation<
   });
 
   return conversation;
+};
+
+export const deleteConversation: DeleteConversation<number> = async (
+  id: number,
+  context: any
+) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+
+  const conversation = await context.entities.Conversation.findUnique({
+    where: { id: id },
+  });
+
+  if (conversation) {
+    console.log('Deleting conversation with id:', id);
+
+    await context.entities.Conversation.delete({
+      where: { id: id },
+    });
+  }
 };
 
 export const createNewAndReturnAllConversations: CreateNewAndReturnAllConversations<

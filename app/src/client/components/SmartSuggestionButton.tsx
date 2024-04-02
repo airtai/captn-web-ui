@@ -24,13 +24,23 @@ export default function SmartSuggestionButton({
     smartSuggestionOnClick: any
   ) {
     if (currentChatDetails.isExceptionOccured) {
+      // if the team is created, then create a new chat with conversations before team creation
       if (currentChatDetails.chatType === 'daily_analysis') {
         const newChat: Chat =
           await createNewDailyAnalysisChat(currentChatDetails);
-        history.push(`/chat/${newChat.id}`);
-      } else {
+        history.push(`/chat/${newChat.uuid}`);
+      } else if (
+        currentChatDetails.chatType !== 'daily_analysis' &&
+        currentChatDetails.team_name
+      ) {
         const chat: Chat = await createNewChat();
-        history.push(`/chat/${chat.id}`);
+        history.push(`/chat/${chat.uuid}`);
+      } else {
+        // delete the current chat and then send the remaining to openAI
+        // get all conversions for the current chat
+        // delete the last one and then update the DB, then trigger the submit
+        smartSuggestionOnClick(suggestion);
+        setIsShowSuggestions(false);
       }
     } else {
       smartSuggestionOnClick(suggestion);
