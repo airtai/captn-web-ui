@@ -129,12 +129,17 @@ const ChatPage = ({ user }: { user: User }) => {
           currentChatDetails.customerBrief ||
           currentChatDetails.chatType === 'daily_analysis'
         ) {
+          const teamName =
+            currentChatDetails.chatType === 'daily_analysis'
+              ? `default_team_${currentChatDetails.userId}_${currentChatDetails.id}`
+              : currentChatDetails.team_name;
           socket.emit(
             'sendMessageToTeam',
             currentChatDetails,
             inProgressConversation.id,
             userQuery,
-            messages
+            messages,
+            teamName
           );
           await updateCurrentChat({
             id: activeChatId,
