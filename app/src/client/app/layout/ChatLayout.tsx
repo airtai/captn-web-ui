@@ -54,10 +54,14 @@ const ChatLayout: FC<Props> = ({
   // make call to api -> from action file access conversation entity and pass it to openai
   // get response from openai and save it against the conversation
 
+  const wrapperClass = document.body.classList.contains('server-error')
+    ? 'h-[calc(100vh-85px)]'
+    : 'h-screen';
+
   return (
     <div className='dark:bg-boxdark-2 dark:text-bodydark bg-captn-light-blue'>
       {/* <!-- ===== Page Wrapper Start ===== --> */}
-      <div className='flex h-screen overflow-hidden'>
+      <div className={`flex ${wrapperClass} overflow-hidden`}>
         {/* <!-- ===== Sidebar Start ===== --> */}
         <ChatSidebar
           sidebarOpen={sidebarOpen}
