@@ -27,10 +27,10 @@ export default function SmartSuggestionButton({
       if (currentChatDetails.chatType === 'daily_analysis') {
         const newChat: Chat =
           await createNewDailyAnalysisChat(currentChatDetails);
-        history.push(`/chat/${newChat.id}`);
+        history.push(`/chat/${newChat.uuid}`);
       } else {
         const chat: Chat = await createNewChat();
-        history.push(`/chat/${chat.id}`);
+        history.push(`/chat/${chat.uuid}`);
       }
     } else {
       smartSuggestionOnClick(suggestion);
