@@ -29,6 +29,10 @@ vi.mock('wasp/client/operations', async (importOriginal) => {
       isLoading: true,
     }),
     updateCurrentConversation: vi.fn().mockResolvedValue(null),
+    deleteLastConversationInChat: vi.fn().mockResolvedValue([
+      { role: 'user', message: 'Hello' },
+      { role: 'assistant', message: 'Hi there!' },
+    ]),
   };
 });
 
@@ -61,6 +65,25 @@ describe('chatUtils', () => {
       userQuery: 'Hello',
       role: 'user',
     });
+    expect(operations.updateCurrentChat).toHaveBeenCalledWith({
+      id: 1,
+      data: {
+        showLoader: true,
+      },
+    });
+  });
+
+  test('getFormattedChatMessages with retrySameChat', async () => {
+    const actual = await getFormattedChatMessages(1, 'Hello', true);
+
+    const expected = [
+      { role: 'user', content: 'Hello' },
+      { role: 'assistant', content: 'Hi there!' },
+    ];
+
+    expect(actual).toEqual(expected);
+
+    expect(operations.deleteLastConversationInChat).toHaveBeenCalledWith(1);
     expect(operations.updateCurrentChat).toHaveBeenCalledWith({
       id: 1,
       data: {
@@ -115,6 +138,24 @@ describe('chatUtils', () => {
       role: 'assistant',
       isLoading: true,
     });
+  });
+
+  test('getInProgressConversation with retrySameChat', async () => {
+    const actual = await getInProgressConversation(1, 'Hello', true);
+
+    expect(operations.createNewAndReturnLastConversation).toHaveBeenCalledWith({
+      chatId: 1,
+      userQuery: '',
+      role: 'assistant',
+      isLoading: true,
+    });
+
+    const expected = {
+      role: 'assistant',
+      message: 'Hi there!',
+      isLoading: true,
+    };
+    expect(actual).toEqual(expected);
   });
 
   test('handleDailyAnalysisChat', async () => {
