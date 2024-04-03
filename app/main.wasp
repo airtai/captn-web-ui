@@ -399,6 +399,11 @@ query getChatFromUUID {
   entities: [Chat]
 }
 
+query metrics {
+  fn: import { metrics } from "@src/server/queries.js",
+  entities: []
+}
+
 /*
  * 📡 These are custom Wasp API Endpoints. Use them for callbacks, webhooks, etc.
  * https://wasp-lang.dev/docs/advanced/apis

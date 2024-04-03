@@ -49,3 +49,12 @@ function checkStripePortalLinksExist(links: StripePortalUrls) {
   }
   console.log(consoleMsg.color, consoleMsg.msg);
 }
+
+
+import * as _client from 'prom-client';
+export const client = _client;
+
+export const counter = new client.Counter({
+  name: 'metric_name',
+  help: 'metric_help',
+});
