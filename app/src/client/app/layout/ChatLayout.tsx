@@ -11,14 +11,14 @@ interface Props {
   children?: ReactNode;
   handleFormSubmit: any;
   currentChatDetails?: Chat | null;
-  googleRedirectLoginMsg?: string | null;
+  triggerChatFormSubmitMsg?: string | null;
 }
 
 const ChatLayout: FC<Props> = ({
   children,
   handleFormSubmit,
   currentChatDetails,
-  googleRedirectLoginMsg,
+  triggerChatFormSubmitMsg,
 }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: user } = useAuth();
@@ -88,7 +88,7 @@ const ChatLayout: FC<Props> = ({
             <ChatForm
               handleFormSubmit={handleFormSubmit}
               currentChatDetails={currentChatDetails}
-              googleRedirectLoginMsg={googleRedirectLoginMsg}
+              triggerChatFormSubmitMsg={triggerChatFormSubmitMsg}
             />
           ) : (
             <></>

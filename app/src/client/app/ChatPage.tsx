@@ -133,12 +133,12 @@ const ChatPage = ({ user }: { user: User }) => {
     });
   };
 
-  let googleRedirectLoginMsg = queryParams.get('msg');
+  let triggerChatFormSubmitMsg = queryParams.get('msg');
   if (
-    googleRedirectLoginMsg &&
+    triggerChatFormSubmitMsg &&
     currentChatDetails?.userRespondedWithNextAction
   ) {
-    googleRedirectLoginMsg = null;
+    triggerChatFormSubmitMsg = null;
   }
 
   const userSelectedAction: any = queryParams.get('selected_user_action');
@@ -157,7 +157,7 @@ const ChatPage = ({ user }: { user: User }) => {
     <ChatLayout
       handleFormSubmit={handleFormSubmit}
       currentChatDetails={currentChatDetails}
-      googleRedirectLoginMsg={googleRedirectLoginMsg}
+      triggerChatFormSubmitMsg={triggerChatFormSubmitMsg}
     >
       <div className='flex h-full flex-col'>
         {currentChatDetails ? (

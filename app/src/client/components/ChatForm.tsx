@@ -4,29 +4,29 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 interface ChatFormProps {
   handleFormSubmit: (userQuery: string) => void;
   currentChatDetails: Chat;
-  googleRedirectLoginMsg?: string | null;
+  triggerChatFormSubmitMsg?: string | null;
 }
 
 export default function ChatForm({
   handleFormSubmit,
   currentChatDetails,
-  googleRedirectLoginMsg,
+  triggerChatFormSubmitMsg,
 }: ChatFormProps) {
   const [formInputValue, setFormInputValue] = useState('');
 
   const formInputRef = useCallback(
     async (node: any) => {
-      if (node !== null && googleRedirectLoginMsg) {
+      if (node !== null && triggerChatFormSubmitMsg) {
         // @ts-ignore
-        await handleFormSubmit(googleRedirectLoginMsg, true);
+        await handleFormSubmit(triggerChatFormSubmitMsg, true);
       }
       // if (node !== null && userSelectedActionMessage) {
       //   // @ts-ignore
       //   await handleFormSubmit(userSelectedActionMessage, true);
       // }
     },
-    [googleRedirectLoginMsg]
-    // [googleRedirectLoginMsg, userSelectedActionMessage]
+    [triggerChatFormSubmitMsg]
+    // [triggerChatFormSubmitMsg, userSelectedActionMessage]
   );
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

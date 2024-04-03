@@ -1,8 +1,8 @@
 import { test, expect, vi, describe } from 'vitest';
 import { renderInContext } from 'wasp/client/test';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import { createMemoryHistory } from 'history';
 import * as operations from 'wasp/client/operations';
+import { createMemoryHistory } from 'history';
 
 import { type Chat } from 'wasp/entities';
 import SmartSuggestionButton from '../components/SmartSuggestionButton';
@@ -12,7 +12,7 @@ vi.mock('wasp/client/operations', async (importOriginal) => {
   return {
     ...mod,
     createNewDailyAnalysisChat: vi.fn().mockResolvedValue({ uuid: '123' }),
-    createNewChat: vi.fn().mockResolvedValue({ uuid: '123' }),
+    retryTeamChat: vi.fn().mockResolvedValue({ uuid: '123' }),
   };
 });
 
@@ -105,6 +105,7 @@ describe('SmartSuggestionButton', () => {
 
   test('handles team chat type correctly', async () => {
     const mockOnClick = vi.fn();
+    const history = createMemoryHistory();
     const currentChatDetails: Partial<Chat> = {
       chatType: 'normal_chat',
       team_name: 'Team Name',
@@ -112,6 +113,7 @@ describe('SmartSuggestionButton', () => {
         suggestions: ['Suggestion 1', 'Suggestion 2'],
       },
       isExceptionOccured: true,
+      id: 1,
     };
 
     renderInContext(
@@ -124,6 +126,8 @@ describe('SmartSuggestionButton', () => {
 
     fireEvent.click(screen.getByText('Suggestion 1'));
 
-    expect(operations.createNewChat).toHaveBeenCalled();
+    expect(operations.retryTeamChat).toHaveBeenCalledWith(
+      currentChatDetails.id
+    );
   });
 });
