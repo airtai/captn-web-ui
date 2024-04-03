@@ -15,8 +15,8 @@ export const Message = styled('div', {
 });
 
 export const MessageError = styled(Message, {
-  background: '#eae4d9',
-  color: '#003851',
+  background: '#bb6e90',
+  color: '#eae4d9',
 });
 
 const OrContinueWith = styled('div', {
@@ -216,7 +216,7 @@ export const LoginSignupForm = ({
       </div>
       {errorMessage && (
         <div className='text-sm'>
-          <MessageError style={{ border: '1px solid #c22828' }}>
+          <MessageError style={{ border: '1px solid #bb6e90' }}>
             {errorMessage.title}
             {errorMessage.description && ': '}
             {errorMessage.description}

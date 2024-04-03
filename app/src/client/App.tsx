@@ -7,6 +7,18 @@ import LoadingComponent from './components/LoadingComponent';
 import { useMemo, useEffect, ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 
+const addServerErrorClass = () => {
+  if (!document.body.classList.contains('server-error')) {
+    document.body.classList.add('server-error');
+  }
+};
+
+const removeServerErrorClass = () => {
+  if (document.body.classList.contains('server-error')) {
+    document.body.classList.remove('server-error');
+  }
+};
+
 /**
  * use this component to wrap all child components
  * this is useful for templates, themes, and context
@@ -54,6 +66,7 @@ export default function App({ children }: { children: ReactNode }) {
   return (
     <>
       <div className='min-h-screen dark:text-captn-light-cream dark:bg-boxdark-2 bg-captn-light-cream text-captn-dark-blue'>
+        {isError && (addServerErrorClass(), (<ServerNotRechableComponent />))}
         {isAdminDashboard || isChatPage ? (
           <>{children}</>
         ) : (
@@ -61,13 +74,11 @@ export default function App({ children }: { children: ReactNode }) {
             {shouldDisplayAppNavBar && <AppNavBar />}
             <div className='mx-auto max-w-7xl sm:px-6 lg:px-8'>
               {isError ? (
-                <ServerNotRechableComponent>
-                  {children}
-                </ServerNotRechableComponent>
+                <>{children}</>
               ) : isLoading ? (
                 <LoadingComponent />
               ) : (
-                children
+                (removeServerErrorClass(), children)
               )}
             </div>
           </>

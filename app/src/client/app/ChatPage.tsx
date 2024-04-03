@@ -1,12 +1,8 @@
 import { useSocket, useSocketListener } from 'wasp/client/webSocket';
-import { type User, type Conversation } from 'wasp/entities';
+import { type User } from 'wasp/entities';
 
 import {
-  getAgentResponse,
-  createNewAndReturnAllConversations,
-  createNewAndReturnLastConversation,
   updateCurrentChat,
-  updateCurrentConversation,
   useQuery,
   getChat,
   getChatFromUUID,
@@ -19,33 +15,14 @@ import ChatLayout from './layout/ChatLayout';
 import ConversationsList from '../components/ConversationList';
 
 import createAuthRequiredChatPage from '../auth/createAuthRequiredChatPage';
-import { use } from 'chai';
-
-const exceptionMessage =
-  "Ahoy, mate! It seems our voyage hit an unexpected squall. Let's trim the sails and set a new course. Cast off once more by clicking the button below.";
-
-const Loader = () => {
-  return (
-    <div className='absolute top-[38%] left-[45%] -translate-y-2/4 -translate-x-2/4'>
-      <div className='w-12 h-12 border-4 border-white rounded-full animate-spin border-t-captn-light-blue border-t-4'></div>
-    </div>
-  );
-};
-
-type OutputMessage = {
-  role: string;
-  content: string;
-};
-
-export function prepareOpenAIRequest(input: Conversation[]): OutputMessage[] {
-  const messages: OutputMessage[] = input.map((message) => {
-    return {
-      role: message.role,
-      content: message.message,
-    };
-  });
-  return messages;
-}
+import {
+  updateCurrentChatStatus,
+  getInProgressConversation,
+  getFormattedChatMessages,
+  handleDailyAnalysisChat,
+  callOpenAiAgent,
+  handleChatError,
+} from '../utils/chatUtils';
 
 const ChatPage = ({ user }: { user: User }) => {
   const { socket } = useSocket();
@@ -98,130 +75,48 @@ const ChatPage = ({ user }: { user: User }) => {
     } else {
       let inProgressConversation;
       try {
-        isUserRespondedWithNextAction && removeQueryParameters();
-        await updateCurrentChat({
-          id: activeChatId,
-          data: {
-            smartSuggestions: { suggestions: [''], type: '' },
-            userRespondedWithNextAction: isUserRespondedWithNextAction,
-          },
-        });
-        const allConversations = await createNewAndReturnAllConversations({
-          chatId: activeChatId,
-          userQuery,
-          role: 'user',
-        });
-        const messages: any = prepareOpenAIRequest(allConversations);
-        await updateCurrentChat({
-          id: activeChatId,
-          data: {
-            showLoader: true,
-          },
-        });
-        inProgressConversation = await createNewAndReturnLastConversation({
-          chatId: activeChatId,
-          userQuery,
-          role: 'assistant',
-          isLoading: true,
-        });
+        await updateCurrentChatStatus(
+          activeChatId,
+          isUserRespondedWithNextAction,
+          removeQueryParameters
+        );
+        const messages: any = await getFormattedChatMessages(
+          activeChatId,
+          userQuery
+        );
+        inProgressConversation = await getInProgressConversation(
+          activeChatId,
+          userQuery
+        );
         // if the chat has customerBrief already then directly send required detalils in socket event
         if (
           currentChatDetails.customerBrief ||
           currentChatDetails.chatType === 'daily_analysis'
         ) {
-          socket.emit(
-            'sendMessageToTeam',
+          await handleDailyAnalysisChat(
+            socket,
             currentChatDetails,
-            inProgressConversation.id,
+            inProgressConversation,
             userQuery,
+            messages,
+            activeChatId
+          );
+        } else {
+          await callOpenAiAgent(
+            activeChatId,
+            currentChatDetails,
+            inProgressConversation,
+            socket,
             messages
           );
-          await updateCurrentChat({
-            id: activeChatId,
-            data: {
-              showLoader: false,
-              team_status: 'inprogress',
-            },
-          });
-        } else {
-          const response = await getAgentResponse({
-            chatId: activeChatId,
-            messages: messages,
-          });
-          if (!!response.customer_brief) {
-            socket.emit(
-              'sendMessageToTeam',
-              currentChatDetails,
-              inProgressConversation.id,
-              response.customer_brief,
-              messages,
-              response['team_name']
-            );
-          }
-          // Emit an event to check the smartSuggestion status
-          if (response['content'] && !response['is_exception_occured']) {
-            socket.emit('checkSmartSuggestionStatus', activeChatId);
-            await updateCurrentChat({
-              id: activeChatId,
-              data: {
-                streamAgentResponse: true,
-                showLoader: false,
-                smartSuggestions: response['smart_suggestions'],
-              },
-            });
-          }
-
-          response['content'] &&
-            (await updateCurrentConversation({
-              id: inProgressConversation.id,
-              data: {
-                isLoading: false,
-                message: response['content'],
-              },
-            }));
-
-          await updateCurrentChat({
-            id: activeChatId,
-            data: {
-              showLoader: false,
-              team_id: response['team_id'],
-              team_name: response['team_name'],
-              team_status: response['team_status'],
-              smartSuggestions: response['smart_suggestions'],
-              isExceptionOccured: response['is_exception_occured'] || false,
-              customerBrief: response['customer_brief'],
-            },
-          });
         }
       } catch (err: any) {
-        await updateCurrentChat({
-          id: activeChatId,
-          data: { showLoader: false },
-        });
-        console.log('Error: ' + err.message);
-        if (err.message === 'No Subscription Found') {
-          history.push('/pricing');
-        } else {
-          await updateCurrentConversation({
-            //@ts-ignore
-            id: inProgressConversation.id,
-            data: {
-              isLoading: false,
-              message: exceptionMessage,
-            },
-          });
-          await updateCurrentChat({
-            id: activeChatId,
-            data: {
-              showLoader: false,
-              smartSuggestions: {
-                suggestions: ["Let's try again"],
-                type: 'oneOf',
-              },
-              isExceptionOccured: true,
-            },
-          });
-        }
+        await handleChatError(
+          err,
+          activeChatId,
+          inProgressConversation,
+          history
+        );
       }
     }
   };
