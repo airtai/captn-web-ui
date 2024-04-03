@@ -1,6 +1,6 @@
 import { type Chat } from 'wasp/entities';
 import {
-  createNewChat,
+  retryTeamChat,
   createNewDailyAnalysisChat,
 } from 'wasp/client/operations';
 import React, { useState } from 'react';
@@ -30,8 +30,10 @@ export default function SmartSuggestionButton({
         history.push(`/chat/${newChat.uuid}`);
       } else {
         if (currentChatDetails.team_name) {
-          const chat: Chat = await createNewChat();
-          history.push(`/chat/${chat.uuid}`);
+          const [chat, lastConversationMessage] = await retryTeamChat(
+            currentChatDetails.id
+          );
+          history.push(`/chat/${chat.uuid}?msg=${lastConversationMessage}`);
         } else {
           setIsShowSuggestions(false);
           smartSuggestionOnClick(null, false, true);

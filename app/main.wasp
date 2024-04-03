@@ -357,6 +357,11 @@ action deleteLastConversationInChat {
   entities: [Conversation]
 }
 
+action retryTeamChat {
+  fn: import { retryTeamChat } from "@src/server/actions.js",
+  entities: [Chat, Conversation]
+}
+
 action createNewAndReturnAllConversations {
   fn: import { createNewAndReturnAllConversations } from "@src/server/actions.js",
   entities: [Conversation]

@@ -13,6 +13,7 @@ import {
   type UpdateCurrentConversation,
   type GetAgentResponse,
   type DeleteLastConversationInChat,
+  type RetryTeamChat,
 } from 'wasp/server/operations';
 
 import Stripe from 'stripe';
@@ -253,6 +254,57 @@ export const deleteLastConversationInChat: DeleteLastConversationInChat<
     orderBy: { id: 'asc' },
   });
   return allConversations;
+};
+
+export const retryTeamChat: RetryTeamChat<number, [Chat, string]> = async (
+  chatId: number,
+  context: any
+) => {
+  if (!context.user) {
+    throw new HttpError(401);
+  }
+
+  const newChat = await context.entities.Chat.create({
+    data: {
+      user: { connect: { id: context.user.id } },
+    },
+  });
+
+  const allChatConversations = await context.entities.Conversation.findMany({
+    where: { chatId: chatId, userId: context.user.id },
+    orderBy: { id: 'asc' },
+  });
+
+  const lastInitialConversationindex = allChatConversations.findIndex(
+    (conversation: Conversation) =>
+      conversation.agentConversationHistory !== null
+  );
+
+  let initialConversations = allChatConversations.slice(
+    0,
+    lastInitialConversationindex >= 0
+      ? lastInitialConversationindex
+      : allChatConversations.length
+  );
+  let lastConversation = initialConversations.pop();
+
+  initialConversations = initialConversations.map(
+    (conversation: Conversation) => {
+      return {
+        message: conversation.message,
+        role: conversation.role,
+        isLoading: conversation.isLoading,
+        chatId: newChat.id,
+        userId: context.user.id,
+      };
+    }
+  );
+
+  await context.entities.Conversation.createMany({
+    data: initialConversations,
+  });
+
+  return [newChat, lastConversation.message];
 };
 
 export const createNewAndReturnAllConversations: CreateNewAndReturnAllConversations<
