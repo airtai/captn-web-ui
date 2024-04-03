@@ -100,7 +100,7 @@ describe('chatUtils', () => {
   });
 
   test('getInProgressConversation', async () => {
-    const actual = await getInProgressConversation(1, 'Hello');
+    const actual = await getInProgressConversation(1, 'Hello', false);
 
     const expected = {
       role: 'assistant',
