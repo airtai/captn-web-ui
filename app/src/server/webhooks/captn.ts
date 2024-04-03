@@ -3,6 +3,7 @@ import {
   type CreateNewChatWebhook,
   type DeleteChatWebhook,
   type SmartSuggestionsWebHook,
+  type Metrics,
 } from 'wasp/server/api';
 
 async function createConversation(
@@ -182,4 +183,16 @@ export const smartSuggestionsWebHook: SmartSuggestionsWebHook = async (
   response.json({
     chatId: chatId,
   });
+};
+
+import { client } from '../../shared/constants';
+
+export const metrics: Metrics = async (
+  request: any,
+  response: any,
+  context: any
+) => {
+  let ret_val = await client.register.metrics();
+  ret_val += client.register.contentType;
+  response.json(ret_val);
 };

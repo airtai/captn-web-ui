@@ -12,7 +12,6 @@ import {
   type GetChats,
   type GetConversations,
   type GetChat,
-  type Metrics,
 } from 'wasp/server/operations';
 
 type DailyStatsWithSources = DailyStats & {
@@ -237,15 +236,4 @@ export const getChat: GetChat<GetChatPayload, Chat> = async (
     });
   }
   return chat;
-};
-
-import { client } from '../shared/constants';
-
-export const metrics: Metrics = async (
-  args: any,
-  context: any
-) => {
-  
-  return await client.register.metrics();
-  
 };

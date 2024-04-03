@@ -399,10 +399,7 @@ query getChatFromUUID {
   entities: [Chat]
 }
 
-query metrics {
-  fn: import { metrics } from "@src/server/queries.js",
-  entities: []
-}
+
 
 /*
  * 📡 These are custom Wasp API Endpoints. Use them for callbacks, webhooks, etc.
@@ -438,6 +435,11 @@ api smartSuggestionsWebHook {
   fn: import { smartSuggestionsWebHook } from "@src/server/webhooks/captn.js",
   entities: [Chat],
   httpRoute: (POST, "/smart-suggestions-webhook")
+}
+
+api metrics {
+  fn: import { metrics } from "@src/server/webhooks/captn.js",
+  httpRoute: (GET, "/metrics")
 }
 
 /* 🕵️‍♂️ These are the Wasp Jobs. Use them to set up recurring tasks and/or queues:

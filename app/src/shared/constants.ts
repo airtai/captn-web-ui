@@ -50,7 +50,6 @@ function checkStripePortalLinksExist(links: StripePortalUrls) {
   console.log(consoleMsg.color, consoleMsg.msg);
 }
 
-
 import * as _client from 'prom-client';
 export const client = _client;
 
