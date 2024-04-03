@@ -12,7 +12,7 @@ import {
   type UpdateCurrentChat,
   type UpdateCurrentConversation,
   type GetAgentResponse,
-  type DeleteConversation,
+  type DeleteLastConversationInChat,
 } from 'wasp/server/operations';
 
 import Stripe from 'stripe';
@@ -230,25 +230,29 @@ export const updateCurrentConversation: UpdateCurrentConversation<
   return conversation;
 };
 
-export const deleteConversation: DeleteConversation<number> = async (
-  id: number,
-  context: any
-) => {
+export const deleteLastConversationInChat: DeleteLastConversationInChat<
+  number,
+  Conversation[]
+> = async (chatId: number, context: any) => {
   if (!context.user) {
     throw new HttpError(401);
   }
 
-  const conversation = await context.entities.Conversation.findUnique({
-    where: { id: id },
+  const conversations = await context.entities.Conversation.findMany({
+    where: { chatId: chatId },
+    orderBy: { id: 'desc' },
   });
 
-  if (conversation) {
-    console.log('Deleting conversation with id:', id);
+  const lastConvId = conversations[0].id;
+  await context.entities.Conversation.delete({
+    where: { id: lastConvId },
+  });
 
-    await context.entities.Conversation.delete({
-      where: { id: id },
-    });
-  }
+  const allConversations = await context.entities.Conversation.findMany({
+    where: { chatId: chatId, userId: context.user.id },
+    orderBy: { id: 'asc' },
+  });
+  return allConversations;
 };
 
 export const createNewAndReturnAllConversations: CreateNewAndReturnAllConversations<

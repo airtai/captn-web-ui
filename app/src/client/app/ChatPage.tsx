@@ -68,7 +68,8 @@ const ChatPage = ({ user }: { user: User }) => {
 
   const handleFormSubmit = async (
     userQuery: string,
-    isUserRespondedWithNextAction: boolean = false
+    isUserRespondedWithNextAction: boolean = false,
+    retrySameChat: boolean = false
   ) => {
     if (currentChatDetails.userId !== user.id) {
       window.alert('Error: This chat does not belong to you.');
@@ -82,11 +83,13 @@ const ChatPage = ({ user }: { user: User }) => {
         );
         const messages: any = await getFormattedChatMessages(
           activeChatId,
-          userQuery
+          userQuery,
+          retrySameChat
         );
         inProgressConversation = await getInProgressConversation(
           activeChatId,
-          userQuery
+          userQuery,
+          retrySameChat
         );
         // if the chat has customerBrief already then directly send required detalils in socket event
         if (

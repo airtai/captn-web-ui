@@ -14,8 +14,6 @@ import AgentConversationHistory from './AgentConversationHistory';
 import AnimatedCharacterLoader from './AnimatedCharacterLoader';
 import logo from '../static/captn-logo.png';
 
-import { deleteConversation } from 'wasp/client/operations';
-
 type ConversationsListProps = {
   conversations: Conversation[];
   currentChatDetails: Chat;
@@ -54,17 +52,6 @@ export default function ConversationsList({
   useSocketListener('streamFromTeamFinished', () =>
     setStreamingAgentResponse('')
   );
-
-  const smartSuggestionButtonOnClick = async (
-    userQuery: string,
-    isUserRespondedWithNextAction: boolean = false
-  ) => {
-    // const lastConversatioID = conversations[lastConversationIdx].id;
-    // console.log('lastConversationIdx: ', lastConversationIdx);
-    // console.log('lastConversatioID: ', lastConversatioID);
-    // await deleteConversation(lastConversatioID);
-    handleFormSubmit(userQuery, isUserRespondedWithNextAction);
-  };
 
   return (
     <div data-testid='conversations-wrapper' className='w-full'>
@@ -192,7 +179,7 @@ export default function ConversationsList({
               currentChatDetails.smartSuggestions?.type == 'oneOf' ? (
                 <SmartSuggestionButton
                   currentChatDetails={currentChatDetails}
-                  smartSuggestionOnClick={smartSuggestionButtonOnClick}
+                  smartSuggestionOnClick={handleFormSubmit}
                 />
               ) : (
                 <SmartSuggestionCheckbox

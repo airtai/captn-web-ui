@@ -352,8 +352,8 @@ action updateCurrentConversation {
   entities: [Conversation]
 }
 
-action deleteConversation {
-  fn: import { deleteConversation } from "@src/server/actions.js",
+action deleteLastConversationInChat {
+  fn: import { deleteLastConversationInChat } from "@src/server/actions.js",
   entities: [Conversation]
 }
 

@@ -47,7 +47,7 @@ describe('chatUtils', () => {
   });
 
   test('getFormattedChatMessages', async () => {
-    const actual = await getFormattedChatMessages(1, 'Hello');
+    const actual = await getFormattedChatMessages(1, 'Hello', false);
 
     const expected = [
       { role: 'user', content: 'Hello' },

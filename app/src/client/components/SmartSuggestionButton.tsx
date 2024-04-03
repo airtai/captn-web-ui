@@ -29,8 +29,13 @@ export default function SmartSuggestionButton({
           await createNewDailyAnalysisChat(currentChatDetails);
         history.push(`/chat/${newChat.uuid}`);
       } else {
-        const chat: Chat = await createNewChat();
-        history.push(`/chat/${chat.uuid}`);
+        if (currentChatDetails.team_name) {
+          const chat: Chat = await createNewChat();
+          history.push(`/chat/${chat.uuid}`);
+        } else {
+          setIsShowSuggestions(false);
+          smartSuggestionOnClick(null, false, true);
+        }
       }
     } else {
       smartSuggestionOnClick(suggestion);
