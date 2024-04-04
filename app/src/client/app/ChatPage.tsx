@@ -68,7 +68,8 @@ const ChatPage = ({ user }: { user: User }) => {
 
   const handleFormSubmit = async (
     userQuery: string,
-    isUserRespondedWithNextAction: boolean = false
+    isUserRespondedWithNextAction: boolean = false,
+    retrySameChat: boolean = false
   ) => {
     if (currentChatDetails.userId !== user.id) {
       window.alert('Error: This chat does not belong to you.');
@@ -82,11 +83,13 @@ const ChatPage = ({ user }: { user: User }) => {
         );
         const messages: any = await getFormattedChatMessages(
           activeChatId,
-          userQuery
+          userQuery,
+          retrySameChat
         );
         inProgressConversation = await getInProgressConversation(
           activeChatId,
-          userQuery
+          userQuery,
+          retrySameChat
         );
         // if the chat has customerBrief already then directly send required detalils in socket event
         if (
@@ -130,12 +133,12 @@ const ChatPage = ({ user }: { user: User }) => {
     });
   };
 
-  let googleRedirectLoginMsg = queryParams.get('msg');
+  let triggerChatFormSubmitMsg = queryParams.get('msg');
   if (
-    googleRedirectLoginMsg &&
+    triggerChatFormSubmitMsg &&
     currentChatDetails?.userRespondedWithNextAction
   ) {
-    googleRedirectLoginMsg = null;
+    triggerChatFormSubmitMsg = null;
   }
 
   const userSelectedAction: any = queryParams.get('selected_user_action');
@@ -154,7 +157,7 @@ const ChatPage = ({ user }: { user: User }) => {
     <ChatLayout
       handleFormSubmit={handleFormSubmit}
       currentChatDetails={currentChatDetails}
-      googleRedirectLoginMsg={googleRedirectLoginMsg}
+      triggerChatFormSubmitMsg={triggerChatFormSubmitMsg}
     >
       <div className='flex h-full flex-col'>
         {currentChatDetails ? (

@@ -4,6 +4,7 @@ import {
   createNewAndReturnAllConversations,
   createNewAndReturnLastConversation,
   getAgentResponse,
+  deleteLastConversationInChat,
 } from 'wasp/client/operations';
 
 import { type Conversation } from 'wasp/entities';
@@ -43,13 +44,19 @@ export async function updateCurrentChatStatus(
 
 export async function getFormattedChatMessages(
   activeChatId: number,
-  userQuery: string
+  userQuery: string,
+  retrySameChat: boolean
 ) {
-  const allConversations = await createNewAndReturnAllConversations({
-    chatId: activeChatId,
-    userQuery,
-    role: 'user',
-  });
+  let allConversations;
+  if (retrySameChat) {
+    allConversations = await deleteLastConversationInChat(activeChatId);
+  } else {
+    allConversations = await createNewAndReturnAllConversations({
+      chatId: activeChatId,
+      userQuery,
+      role: 'user',
+    });
+  }
   const messages: any = prepareOpenAIRequest(allConversations);
   await updateCurrentChat({
     id: activeChatId,
@@ -62,11 +69,13 @@ export async function getFormattedChatMessages(
 
 export async function getInProgressConversation(
   activeChatId: number,
-  userQuery: string
+  userQuery: string,
+  retrySameChat: boolean
 ) {
+  const message = retrySameChat ? '' : userQuery;
   const inProgressConversation = await createNewAndReturnLastConversation({
     chatId: activeChatId,
-    userQuery,
+    userQuery: message,
     role: 'assistant',
     isLoading: true,
   });

@@ -1,5 +1,5 @@
-import { useSocketListener } from "wasp/client/webSocket";
-import { type Conversation, type Chat } from "wasp/entities";
+import { useSocketListener } from 'wasp/client/webSocket';
+import { type Conversation, type Chat } from 'wasp/entities';
 
 import React from 'react';
 import { useState, useEffect } from 'react';
