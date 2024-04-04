@@ -33,6 +33,7 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen }: ChatSidebarProps) => {
         id: chatId,
         data: {
           name: newChatName,
+          isChatNameUpdated: true,
         },
       });
     } catch (err: any) {

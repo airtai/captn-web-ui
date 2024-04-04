@@ -140,6 +140,8 @@ export const handleAgentResponse = async (
   messages: any,
   activeChatId: number
 ) => {
+  console.log('----------------');
+  console.log(response);
   if (!!response.customer_brief) {
     socket.emit(
       'sendMessageToTeam',
@@ -172,6 +174,12 @@ export const handleAgentResponse = async (
       },
     }));
 
+  const chatName = currentChatDetails.isChatNameUpdated
+    ? null
+    : response['conversation_name']
+      ? response['conversation_name']
+      : null;
+
   await updateCurrentChat({
     id: activeChatId,
     data: {
@@ -182,6 +190,10 @@ export const handleAgentResponse = async (
       smartSuggestions: response['smart_suggestions'],
       isExceptionOccured: response['is_exception_occured'] || false,
       customerBrief: response['customer_brief'],
+      ...(chatName && {
+        name: chatName,
+        isChatNameUpdated: true,
+      }),
     },
   });
 };
