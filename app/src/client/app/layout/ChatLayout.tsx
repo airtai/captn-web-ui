@@ -12,6 +12,7 @@ interface Props {
   handleFormSubmit: any;
   currentChatDetails?: Chat | null;
   triggerChatFormSubmitMsg?: string | null;
+  refetchAllChatDetails: boolean;
 }
 
 const ChatLayout: FC<Props> = ({
@@ -19,6 +20,7 @@ const ChatLayout: FC<Props> = ({
   handleFormSubmit,
   currentChatDetails,
   triggerChatFormSubmitMsg,
+  refetchAllChatDetails,
 }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: user } = useAuth();
@@ -66,6 +68,7 @@ const ChatLayout: FC<Props> = ({
         <ChatSidebar
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
+          refetchAllChatDetails={refetchAllChatDetails}
         />
         {/* <!-- ===== Sidebar End ===== --> */}
 

@@ -116,7 +116,8 @@ export const callOpenAiAgent = async (
   currentChatDetails: any,
   inProgressConversation: any,
   socket: any,
-  messages: any
+  messages: any,
+  refetchChatDetails: () => void
 ) => {
   const response = await getAgentResponse({
     chatId: activeChatId,
@@ -128,7 +129,8 @@ export const callOpenAiAgent = async (
     inProgressConversation,
     socket,
     messages,
-    activeChatId
+    activeChatId,
+    refetchChatDetails
   );
 };
 
@@ -138,10 +140,9 @@ export const handleAgentResponse = async (
   inProgressConversation: any,
   socket: any,
   messages: any,
-  activeChatId: number
+  activeChatId: number,
+  refetchChatDetails: () => void
 ) => {
-  console.log('----------------');
-  console.log(response);
   if (!!response.customer_brief) {
     socket.emit(
       'sendMessageToTeam',
@@ -196,6 +197,8 @@ export const handleAgentResponse = async (
       }),
     },
   });
+
+  chatName && refetchChatDetails();
 };
 
 export const handleChatError = async (

@@ -11,9 +11,14 @@ import { updateCurrentChat } from 'wasp/client/operations';
 interface ChatSidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
+  refetchAllChatDetails: boolean;
 }
 
-const ChatSidebar = ({ sidebarOpen, setSidebarOpen }: ChatSidebarProps) => {
+const ChatSidebar = ({
+  sidebarOpen,
+  setSidebarOpen,
+  refetchAllChatDetails,
+}: ChatSidebarProps) => {
   const history = useHistory();
   const location = useLocation();
   const { pathname } = location;
@@ -41,7 +46,15 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen }: ChatSidebarProps) => {
     }
   };
 
-  const { data: chats, isLoading: isLoadingChats } = useQuery(getChats);
+  const {
+    data: chats,
+    isLoading: isLoadingChats,
+    refetch: refetchChats,
+  } = useQuery(getChats);
+
+  useEffect(() => {
+    refetchChats();
+  }, [refetchAllChatDetails]);
 
   // close on click outside
   useEffect(() => {
@@ -97,7 +110,7 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen }: ChatSidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`border-r-2 absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-captn-dark-blue duration-300 ease-linear dark:bg-captn-dark-blue lg:static lg:translate-x-0 ${
+      className={`border-r-2 absolute left-0 top-0 z-9999 flex h-screen w-75 flex-col overflow-y-hidden bg-captn-dark-blue duration-300 ease-linear dark:bg-captn-dark-blue lg:static lg:translate-x-0 ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
@@ -202,7 +215,7 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen }: ChatSidebarProps) => {
                       >
                         <path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'></path>
                       </svg>
-                      <span className='ml-3'>
+                      <span>
                         <EditableChatName
                           chatId={chat.id}
                           chatName={chat.name ? chat.name : ''}
