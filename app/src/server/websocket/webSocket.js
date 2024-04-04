@@ -27,7 +27,8 @@ async function updateDB(
   chatId,
   message,
   conversationId,
-  socketConversationHistory
+  socketConversationHistory,
+  isExceptionOccured
 ) {
   let obj = {};
   try {
@@ -47,13 +48,21 @@ async function updateDB(
     },
   });
 
+  const smart_suggestions = isExceptionOccured
+    ? {
+        suggestions: ["Let's try again"],
+        type: 'oneOf',
+      }
+    : obj.smart_suggestions;
+
   await context.entities.Chat.update({
     where: {
       id: chatId,
     },
     data: {
       team_status: 'completed',
-      smartSuggestions: obj.smart_suggestions,
+      smartSuggestions: smart_suggestions,
+      isExceptionOccured: isExceptionOccured,
     },
   });
 }
@@ -100,11 +109,13 @@ function wsConnection(
   };
   ws.onclose = async function (event) {
     let message;
+    let isExceptionOccured = false;
     if (event.code === 1000) {
       message = lastSocketMessage;
     } else {
+      isExceptionOccured = true;
       message =
-        'We are sorry, but we are unable to continue the conversation. Please create a new chat in a few minutes to continue.';
+        "Ahoy, mate! It seems our voyage hit an unexpected squall. Let's trim the sails and set a new course. Cast off once more by clicking the button below.";
       console.log('WebSocket is closed with the event code:', event.code);
     }
     await updateDB(
@@ -112,7 +123,8 @@ function wsConnection(
       currentChatDetails.id,
       message,
       conversationId,
-      socketConversationHistory
+      socketConversationHistory,
+      isExceptionOccured
     );
     socket.emit('streamFromTeamFinished');
   };

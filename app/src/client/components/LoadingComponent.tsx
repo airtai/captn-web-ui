@@ -50,7 +50,7 @@ export default function LoadingComponent() {
               className='inline-flex items-center px-4 py-2 leading-6 text-sm shadow rounded-md transition ease-in-out duration-150 cursor-not-allowed border border-captn-dark-blue'
               disabled
             >
-              <MessageIcon /> Please wait a moment while we log you in.
+              <MessageIcon /> Loading...
             </button>
           </div>
         </div>

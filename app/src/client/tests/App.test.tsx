@@ -7,7 +7,7 @@ import App from '../App';
 test('renders App component', async () => {
   renderInContext(<App children={<div>Test</div>} />);
 
-  await screen.findByText('Please wait a moment while we log you in.');
+  await screen.findByText('Loading...');
 
   screen.debug();
 });
