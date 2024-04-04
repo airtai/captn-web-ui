@@ -11,8 +11,12 @@ vi.mock('wasp/client/operations', async (importOriginal) => {
   const mod = await importOriginal<typeof import('wasp/client/operations')>();
   return {
     ...mod,
-    createNewDailyAnalysisChat: vi.fn().mockResolvedValue({ uuid: '123' }),
-    retryTeamChat: vi.fn().mockResolvedValue({ uuid: '123' }),
+    createNewDailyAnalysisChat: vi
+      .fn()
+      .mockResolvedValue([{ uuid: '123' }, 'Sample user message']),
+    retryTeamChat: vi
+      .fn()
+      .mockResolvedValue([{ uuid: '123' }, 'Sample user message']),
   };
 });
 
