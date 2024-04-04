@@ -152,9 +152,20 @@ export const createNewChat: CreateNewChat<void, Chat> = async (
   return chat;
 };
 
+const resetSmartSuggestions = async (chatId: number, context: any) => {
+  await context.entities.Chat.update({
+    where: {
+      id: chatId,
+    },
+    data: {
+      smartSuggestions: { suggestions: [''], type: '' },
+    },
+  });
+};
+
 export const createNewDailyAnalysisChat: CreateNewDailyAnalysisChat<
   Chat,
-  Chat
+  [Chat, string]
 > = async (currentChatDetails, context) => {
   if (!context.user) {
     throw new HttpError(401);
@@ -164,6 +175,8 @@ export const createNewDailyAnalysisChat: CreateNewDailyAnalysisChat<
     throw new HttpError(500, 'No Subscription Found');
   }
 
+  await resetSmartSuggestions(currentChatDetails.id, context);
+
   const newChat = await context.entities.Chat.create({
     data: {
       user: { connect: { id: context.user.id } },
@@ -171,28 +184,25 @@ export const createNewDailyAnalysisChat: CreateNewDailyAnalysisChat<
       proposedUserAction: currentChatDetails.proposedUserAction,
       emailContent: currentChatDetails.emailContent,
       chatType: currentChatDetails.chatType,
-      smartSuggestions: {
-        suggestions: currentChatDetails.proposedUserAction,
-        type: 'manyOf',
-      },
     },
   });
   const allChatConversations = await context.entities.Conversation.findMany({
     where: { chatId: currentChatDetails.id, userId: context.user.id },
     orderBy: { id: 'asc' },
   });
-  const conversationMessage = allChatConversations[0].message;
+  const firstAgentMessage = allChatConversations[0].message;
+  const firstUserMessage = allChatConversations[1].message;
 
   const conversation = await context.entities.Conversation.create({
     data: {
       chat: { connect: { id: newChat.id } },
       user: { connect: { id: context.user.id } },
-      message: conversationMessage,
+      message: firstAgentMessage,
       role: 'assistant',
     },
   });
 
-  return newChat;
+  return [newChat, firstUserMessage];
 };
 
 export const updateCurrentChat: UpdateCurrentChat<
@@ -263,6 +273,8 @@ export const retryTeamChat: RetryTeamChat<number, [Chat, string]> = async (
   if (!context.user) {
     throw new HttpError(401);
   }
+
+  await resetSmartSuggestions(chatId, context);
 
   const newChat = await context.entities.Chat.create({
     data: {

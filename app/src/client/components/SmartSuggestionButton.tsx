@@ -25,9 +25,9 @@ export default function SmartSuggestionButton({
   ) {
     if (currentChatDetails.isExceptionOccured) {
       if (currentChatDetails.chatType === 'daily_analysis') {
-        const newChat: Chat =
+        const [newChat, lastConversationMessage] =
           await createNewDailyAnalysisChat(currentChatDetails);
-        history.push(`/chat/${newChat.uuid}`);
+        history.push(`/chat/${newChat.uuid}?msg=${lastConversationMessage}`);
       } else {
         if (currentChatDetails.team_name) {
           const [chat, lastConversationMessage] = await retryTeamChat(
