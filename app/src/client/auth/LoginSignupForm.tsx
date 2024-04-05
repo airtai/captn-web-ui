@@ -19,44 +19,9 @@ export const MessageError = styled(Message, {
   color: '#eae4d9',
 });
 
-const OrContinueWith = styled('div', {
-  position: 'relative',
-  marginTop: '1.5rem',
-});
-
-const OrContinueWithLineContainer = styled('div', {
-  position: 'absolute',
-  inset: '0px',
-  display: 'flex',
-  alignItems: 'center',
-});
-
-const OrContinueWithLine = styled('div', {
-  width: '100%',
-  borderTopWidth: '1px',
-  borderColor: '$gray500',
-});
-
-const OrContinueWithTextContainer = styled('div', {
-  position: 'relative',
-  display: 'flex',
-  justifyContent: 'center',
-  fontSize: '$sm',
-});
-
-const OrContinueWithText = styled('span', {
-  backgroundColor: 'white',
-  paddingLeft: '0.5rem',
-  paddingRight: '0.5rem',
-});
 const SocialAuth = styled('div', {
   marginTop: '1.5rem',
   marginBottom: '1.5rem',
-});
-
-const SocialAuthLabel = styled('div', {
-  fontWeight: '500',
-  fontSize: '$sm',
 });
 
 const SocialAuthButtons = styled('div', {
@@ -99,11 +64,13 @@ export const LoginSignupForm = ({
   socialButtonsDirection = 'horizontal',
   additionalSignupFields,
   errorMessage,
+  changeHeaderText,
 }: {
   state: 'login' | 'signup';
   socialButtonsDirection?: 'horizontal' | 'vertical';
   additionalSignupFields?: any;
   errorMessage?: any;
+  changeHeaderText: any;
 }) => {
   const { isLoading, setErrorMessage, setSuccessMessage, setIsLoading } =
     useContext(AuthContext);
@@ -112,6 +79,7 @@ export const LoginSignupForm = ({
   const history = useHistory();
   const [tocChecked, setTocChecked] = useState(false);
   const [marketingEmailsChecked, setMarketingEmailsChecked] = useState(false);
+  const [loginFlow, setLoginFlow] = useState('signUp');
   //   const onErrorHandler = (error) => {
   //     setErrorMessage({
   //       title: error.message,
@@ -163,65 +131,82 @@ export const LoginSignupForm = ({
     googleSignInUrl: string
   ) => {
     event.preventDefault();
-    if (tocChecked && marketingEmailsChecked) {
+    if (loginFlow === 'signIn') {
       window.location.href = googleSignInUrl;
     } else {
-      const err = {
-        title:
-          'To proceed, please ensure you have accepted the Terms & Conditions, Privacy Policy, and opted to receive marketing emails.',
-        description: '',
-      };
-      setErrorMessage(err);
+      if (tocChecked && marketingEmailsChecked) {
+        window.location.href = googleSignInUrl;
+      } else {
+        const err = {
+          title:
+            'To proceed, please ensure you have accepted the Terms & Conditions, Privacy Policy, and opted to receive marketing emails.',
+          description: '',
+        };
+        setErrorMessage(err);
+      }
     }
+  };
+
+  const toggleLoginFlow = () => {
+    const newLoginFlow = loginFlow === 'signIn' ? 'signUp' : 'signIn';
+    setLoginFlow(newLoginFlow);
+    setTocChecked(false);
+    setMarketingEmailsChecked(false);
+    setErrorMessage(null);
+    changeHeaderText(loginFlow);
   };
 
   return (
     <>
-      <div className='mt-3'>
-        <input
-          type='checkbox'
-          id='toc'
-          checked={tocChecked}
-          onChange={handleTocChange}
-        />
-        <label className='text-sm ml-2' htmlFor='toc'>
-          I agree to the{' '}
-          <Link
-            to='/toc'
-            className='no-underline hover:underline'
-            target='_blank'
-          >
-            Terms & Conditions
-          </Link>{' '}
-          and{' '}
-          <Link
-            to='/privacy'
-            className='no-underline hover:underline'
-            target='_blank'
-          >
-            Privacy Policy
-          </Link>
-        </label>
-      </div>
-      <div>
-        <input
-          type='checkbox'
-          id='marketingEmails'
-          checked={marketingEmailsChecked}
-          onChange={handleMarketingEmailsChange}
-        />
-        <label className='text-sm ml-2' htmlFor='marketingEmails'>
-          I agree to receiving marketing emails
-        </label>
-      </div>
-      {errorMessage && (
-        <div className='text-sm'>
-          <MessageError style={{ border: '1px solid #bb6e90' }}>
-            {errorMessage.title}
-            {errorMessage.description && ': '}
-            {errorMessage.description}
-          </MessageError>
-        </div>
+      {loginFlow === 'signUp' && (
+        <>
+          <div className='mt-3'>
+            <input
+              type='checkbox'
+              id='toc'
+              checked={tocChecked}
+              onChange={handleTocChange}
+            />
+            <label className='text-sm ml-2' htmlFor='toc'>
+              I agree to the{' '}
+              <Link
+                to='/toc'
+                className='no-underline hover:underline'
+                target='_blank'
+              >
+                Terms & Conditions
+              </Link>{' '}
+              and{' '}
+              <Link
+                to='/privacy'
+                className='no-underline hover:underline'
+                target='_blank'
+              >
+                Privacy Policy
+              </Link>
+            </label>
+          </div>
+          <div>
+            <input
+              type='checkbox'
+              id='marketingEmails'
+              checked={marketingEmailsChecked}
+              onChange={handleMarketingEmailsChange}
+            />
+            <label className='text-sm ml-2' htmlFor='marketingEmails'>
+              I agree to receiving marketing emails
+            </label>
+          </div>
+          {errorMessage && (
+            <div className='text-sm'>
+              <MessageError style={{ border: '1px solid #bb6e90' }}>
+                {errorMessage.title}
+                {errorMessage.description && ': '}
+                {errorMessage.description}
+              </MessageError>
+            </div>
+          )}
+        </>
       )}
       <SocialAuth>
         <SocialAuthButtons gap='large' direction={socialButtonsDirection}>
@@ -239,7 +224,7 @@ export const LoginSignupForm = ({
                   xmlns='http://www.w3.org/2000/svg'
                   viewBox='0 0 48 48'
                   xmlnsXlink='http://www.w3.org/1999/xlink'
-                  style={{ display: 'block' }}
+                  style={{ display: 'block;' }}
                 >
                   <path
                     fill='#EA4335'
@@ -266,126 +251,21 @@ export const LoginSignupForm = ({
               <span style={{ display: 'none' }}>Sign in with Google</span>
             </div>
           </button>
-          {/* <SocialButton href={googleSignInUrl} onClick={handleClick}>
-            <SocialIcons.Google />
-          </SocialButton> */}
         </SocialAuthButtons>
       </SocialAuth>
-      {/* <OrContinueWith>
-        <OrContinueWithLineContainer>
-          <OrContinueWithLine />
-        </OrContinueWithLineContainer>
-        <OrContinueWithTextContainer>
-          <OrContinueWithText>Or continue with</OrContinueWithText>
-        </OrContinueWithTextContainer>
-      </OrContinueWith> */}
-      {/* <Form onSubmit={hookFormHandleSubmit(onSubmit)}>
-        <FormItemGroup>
-          <FormLabel>Username</FormLabel>
-          <FormInput
-            {...register('username', {
-              required: 'Username is required',
-            })}
-            type='text'
-            disabled={isLoading}
-          />
-          {errors.username && <FormError>{errors.username.message}</FormError>}
-        </FormItemGroup>
-        <FormItemGroup>
-          <FormLabel>Password</FormLabel>
-          <FormInput
-            {...register('password', {
-              required: 'Password is required',
-            })}
-            type='password'
-            disabled={isLoading}
-          />
-          {errors.password && <FormError>{errors.password.message}</FormError>}
-        </FormItemGroup>
-        <AdditionalFormFields
-          hookForm={hookForm}
-          formState={{ isLoading }}
-          additionalSignupFields={additionalSignupFields}
-        />
-        <FormItemGroup>
-          <SubmitButton type='submit' disabled={isLoading}>
-            {cta}
-          </SubmitButton>
-        </FormItemGroup>
-      </Form> */}
+      <div className='flex items-center justify-center'>
+        <span className='text-sm block'>
+          {loginFlow === 'signIn'
+            ? "Don't have an account? "
+            : 'Already have an account? '}
+          <a
+            className='no-underline hover:underline cursor-pointer'
+            onClick={toggleLoginFlow}
+          >
+            {loginFlow === 'signIn' ? 'Sign Up' : 'Sign In'}
+          </a>
+        </span>
+      </div>
     </>
   );
 };
-
-// function AdditionalFormFields({
-//   hookForm,
-//   formState: { isLoading },
-//   additionalSignupFields,
-// }: {
-//   hookForm: UseFormReturn<LoginSignupFormFields>;
-//   formState: FormState;
-//   additionalSignupFields: AdditionalSignupFields;
-// }) {
-//   const {
-//     register,
-//     formState: { errors },
-//   } = hookForm;
-
-//   function renderField<ComponentType extends React.JSXElementConstructor<any>>(
-//     field: AdditionalSignupField,
-//     // Ideally we would use ComponentType here, but it doesn't work with react-hook-form
-//     Component: any,
-//     props?: React.ComponentProps<ComponentType>
-//   ) {
-//     return (
-//       <FormItemGroup key={field.name}>
-//         <FormLabel>{field.label}</FormLabel>
-//         <Component
-//           {...register(field.name, field.validations)}
-//           {...props}
-//           disabled={isLoading}
-//         />
-//         {errors[field.name] && (
-//           <FormError>{errors[field.name].message}</FormError>
-//         )}
-//       </FormItemGroup>
-//     );
-//   }
-
-//   if (areAdditionalFieldsRenderFn(additionalSignupFields)) {
-//     return additionalSignupFields(hookForm, { isLoading });
-//   }
-
-//   return (
-//     additionalSignupFields &&
-//     additionalSignupFields.map((field) => {
-//       if (isFieldRenderFn(field)) {
-//         return field(hookForm, { isLoading });
-//       }
-//       switch (field.type) {
-//         case 'input':
-//           return renderField<typeof FormInput>(field, FormInput, {
-//             type: 'text',
-//           });
-//         case 'textarea':
-//           return renderField<typeof FormTextarea>(field, FormTextarea);
-//         default:
-//           throw new Error(
-//             `Unsupported additional signup field type: ${field.type}`
-//           );
-//       }
-//     })
-//   );
-// }
-
-// function isFieldRenderFn(
-//   additionalSignupField: AdditionalSignupField | AdditionalSignupFieldRenderFn
-// ): additionalSignupField is AdditionalSignupFieldRenderFn {
-//   return typeof additionalSignupField === 'function';
-// }
-
-// function areAdditionalFieldsRenderFn(
-//   additionalSignupFields: AdditionalSignupFields
-// ): additionalSignupFields is AdditionalSignupFieldRenderFn {
-//   return typeof additionalSignupFields === 'function';
-// }

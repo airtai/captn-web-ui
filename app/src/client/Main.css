@@ -138,14 +138,14 @@ a {
   -webkit-flex-wrap: nowrap;
   flex-wrap: nowrap;
   height: 100%;
-  justify-content: space-between;
+  justify-content: center;
   position: relative;
   width: 100%;
 }
 
 .gsi-material-button .gsi-material-button-contents {
-  -webkit-flex-grow: 1;
-  flex-grow: 1;
+  -webkit-flex-grow: 0;
+  flex-grow: 0;
   font-family: 'Roboto', arial, sans-serif;
   font-weight: 500;
   overflow: hidden;
