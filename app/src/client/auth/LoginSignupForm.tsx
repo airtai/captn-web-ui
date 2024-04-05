@@ -156,6 +156,9 @@ export const LoginSignupForm = ({
     changeHeaderText(loginFlow);
   };
 
+  const googleBtnText =
+    loginFlow === 'signIn' ? 'Sign in with Google' : 'Sign up with Google';
+
   return (
     <>
       {loginFlow === 'signUp' && (
@@ -224,7 +227,7 @@ export const LoginSignupForm = ({
                   xmlns='http://www.w3.org/2000/svg'
                   viewBox='0 0 48 48'
                   xmlnsXlink='http://www.w3.org/1999/xlink'
-                  style={{ display: 'block;' }}
+                  style={{ display: 'block' }}
                 >
                   <path
                     fill='#EA4335'
@@ -246,9 +249,9 @@ export const LoginSignupForm = ({
                 </svg>
               </div>
               <span className='gsi-material-button-contents'>
-                Sign in with Google
+                {googleBtnText}
               </span>
-              <span style={{ display: 'none' }}>Sign in with Google</span>
+              <span style={{ display: 'none' }}>{googleBtnText}</span>
             </div>
           </button>
         </SocialAuthButtons>

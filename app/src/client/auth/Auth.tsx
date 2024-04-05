@@ -49,7 +49,7 @@ export const AuthContext = createContext({
 });
 
 const titles: Record<State, string> = {
-  login: 'Log in to your account',
+  login: 'Sign in to your account',
   signup: 'Create a new account',
 };
 
