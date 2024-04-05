@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useSocket, useSocketListener } from 'wasp/client/webSocket';
 import { type User } from 'wasp/entities';
 
@@ -23,8 +24,10 @@ import {
   callOpenAiAgent,
   handleChatError,
 } from '../utils/chatUtils';
+import { set } from 'zod';
 
 const ChatPage = ({ user }: { user: User }) => {
+  const [refetchAllChatDetails, setRefetchAllChatDetails] = useState(false);
   const { socket } = useSocket();
   const location = useLocation();
   const { pathname } = location;
@@ -64,6 +67,10 @@ const ChatPage = ({ user }: { user: User }) => {
     history.push({
       search: '', // This removes all query parameters
     });
+  };
+
+  const refetchChatDetails = () => {
+    setRefetchAllChatDetails(!refetchAllChatDetails);
   };
 
   const handleFormSubmit = async (
@@ -110,7 +117,8 @@ const ChatPage = ({ user }: { user: User }) => {
             currentChatDetails,
             inProgressConversation,
             socket,
-            messages
+            messages,
+            refetchChatDetails
           );
         }
       } catch (err: any) {
@@ -158,6 +166,7 @@ const ChatPage = ({ user }: { user: User }) => {
       handleFormSubmit={handleFormSubmit}
       currentChatDetails={currentChatDetails}
       triggerChatFormSubmitMsg={triggerChatFormSubmitMsg}
+      refetchAllChatDetails={refetchAllChatDetails}
     >
       <div className='flex h-full flex-col'>
         {currentChatDetails ? (

@@ -23,6 +23,10 @@ const EditableChatName: React.FC<EditableChatNameProps> = ({
     }
   }, [isEditing]);
 
+  useEffect(() => {
+    setInputValue(chatName);
+  }, [chatName]);
+
   const handleIconClick = (event: React.MouseEvent) => {
     event.preventDefault();
     setIsEditing(true);
@@ -44,7 +48,7 @@ const EditableChatName: React.FC<EditableChatNameProps> = ({
   };
 
   return (
-    <div className='editable-chat-name' style={{ width: '170px' }}>
+    <div className='editable-chat-name' style={{ width: '195px' }}>
       {!isEditing && (
         <span
           className='chat-name overflow-ellipsis overflow-hidden whitespace-nowrap'
@@ -72,7 +76,7 @@ const EditableChatName: React.FC<EditableChatNameProps> = ({
       )}
       {!isEditing && (
         <button
-          className='edit-button absolute right-3 top-3 text-xs'
+          className='edit-button absolute right-3 top-3 text-sm'
           onClick={handleIconClick}
           data-testid='edit-button'
         >

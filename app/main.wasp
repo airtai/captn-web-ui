@@ -136,6 +136,7 @@ entity Chat {=psl
     user        User?    @relation(fields: [userId], references: [id])
     userId      Int?
     name        String?          @default("New chat")
+    isChatNameUpdated Boolean         @default(false)
     conversations    Conversation[]
 psl=}
 

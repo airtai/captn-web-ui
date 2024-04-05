@@ -258,6 +258,7 @@ describe('chatUtils', () => {
     const inProgressConversation = { id: 1 };
     const messages: any[] = [];
     const activeChatId = 2;
+    const refetchChatDetails = vi.fn();
 
     await handleAgentResponse(
       response,
@@ -265,7 +266,8 @@ describe('chatUtils', () => {
       inProgressConversation,
       socket,
       messages,
-      activeChatId
+      activeChatId,
+      refetchChatDetails
     );
 
     expect(socket.emit).toHaveBeenCalledWith(
@@ -306,6 +308,7 @@ describe('chatUtils', () => {
     const inProgressConversation = { id: 1 };
     const messages: any[] = [];
     const activeChatId = 2;
+    const refetchChatDetails = vi.fn();
 
     await handleAgentResponse(
       response,
@@ -313,7 +316,8 @@ describe('chatUtils', () => {
       inProgressConversation,
       socket,
       messages,
-      activeChatId
+      activeChatId,
+      refetchChatDetails
     );
 
     expect(socket.emit).toHaveBeenCalledWith(
@@ -364,6 +368,7 @@ describe('chatUtils', () => {
     const inProgressConversation = { id: 1 };
     const messages: any = [];
     const activeChatId = 2;
+    const refetchChatDetails = vi.fn();
 
     await handleAgentResponse(
       response,
@@ -371,7 +376,8 @@ describe('chatUtils', () => {
       inProgressConversation,
       socket,
       messages,
-      activeChatId
+      activeChatId,
+      refetchChatDetails
     );
 
     expect(operations.updateCurrentConversation).toHaveBeenCalledWith({
@@ -409,6 +415,7 @@ describe('chatUtils', () => {
     const inProgressConversation = { id: 1 };
     const messages: any = [];
     const activeChatId = 2;
+    const refetchChatDetails = vi.fn();
 
     await handleAgentResponse(
       response,
@@ -416,7 +423,8 @@ describe('chatUtils', () => {
       inProgressConversation,
       socket,
       messages,
-      activeChatId
+      activeChatId,
+      refetchChatDetails
     );
 
     expect(operations.updateCurrentChat).toHaveBeenCalledWith({
