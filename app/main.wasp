@@ -87,8 +87,9 @@ entity User {=psl
   createdAt                 DateTime        @default(now())
   lastActiveTimestamp       DateTime        @default(now())
   isAdmin                   Boolean         @default(false)
-  hasAcceptedTos             Boolean         @default(true)
-  hasSubscribedToMarketingEmails  Boolean         @default(true)
+  hasAcceptedTos             Boolean         @default(false)
+  hasSubscribedToMarketingEmails  Boolean         @default(false)
+  isSignUpComplete          Boolean         @default(false)
   stripeId                  String? 
   checkoutSessionId         String?
   hasPaid                   Boolean         @default(false)

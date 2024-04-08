@@ -4,7 +4,8 @@ import './Main.css';
 import AppNavBar from './components/AppNavBar';
 import ServerNotRechableComponent from './components/ServerNotRechableComponent';
 import LoadingComponent from './components/LoadingComponent';
-import { useMemo, useEffect, ReactNode } from 'react';
+import TosAndMarketingEmailsModal from './components/TosAndMarketingEmailsModal';
+import { useMemo, useEffect, ReactNode, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const addServerErrorClass = () => {
@@ -25,6 +26,8 @@ const removeServerErrorClass = () => {
  */
 export default function App({ children }: { children: ReactNode }) {
   const location = useLocation();
+  const [showTosAndMarketingEmailsModal, setShowTosAndMarketingEmailsModal] =
+    useState(false);
   const { data: user, isError, isLoading } = useAuth();
 
   const shouldDisplayAppNavBar = useMemo(() => {
@@ -43,12 +46,38 @@ export default function App({ children }: { children: ReactNode }) {
     return location.pathname.startsWith('/chat');
   }, [location]);
 
+  const isToCPage = useMemo(() => {
+    return location.pathname.startsWith('/toc');
+  }, [location]);
+
+  const isPrivacyPage = useMemo(() => {
+    return location.pathname.startsWith('/privacy');
+  }, [location]);
+
   useEffect(() => {
     if (user) {
-      const lastSeenAt = new Date(user.lastActiveTimestamp);
-      const today = new Date();
-      if (today.getTime() - lastSeenAt.getTime() > 5 * 60 * 1000) {
-        updateCurrentUser({ lastActiveTimestamp: today });
+      if (!user.isSignUpComplete) {
+        const hasAcceptedTos =
+          localStorage.getItem('hasAcceptedTos') === 'true';
+        const hasSubscribedToMarketingEmails =
+          localStorage.getItem('hasSubscribedToMarketingEmails') === 'true';
+        if (!hasAcceptedTos || !hasSubscribedToMarketingEmails) {
+          setShowTosAndMarketingEmailsModal(true);
+        } else {
+          updateCurrentUser({
+            isSignUpComplete: true,
+            hasAcceptedTos: true,
+            hasSubscribedToMarketingEmails: true,
+          });
+          setShowTosAndMarketingEmailsModal(false);
+        }
+      } else {
+        setShowTosAndMarketingEmailsModal(false);
+        const lastSeenAt = new Date(user.lastActiveTimestamp);
+        const today = new Date();
+        if (today.getTime() - lastSeenAt.getTime() > 5 * 60 * 1000) {
+          updateCurrentUser({ lastActiveTimestamp: today });
+        }
       }
     }
   }, [user]);
@@ -68,7 +97,13 @@ export default function App({ children }: { children: ReactNode }) {
       <div className='min-h-screen dark:text-captn-light-cream dark:bg-boxdark-2 bg-captn-light-cream text-captn-dark-blue'>
         {isError && (addServerErrorClass(), (<ServerNotRechableComponent />))}
         {isAdminDashboard || isChatPage ? (
-          <>{children}</>
+          <>
+            {showTosAndMarketingEmailsModal && !isToCPage && !isPrivacyPage ? (
+              <TosAndMarketingEmailsModal />
+            ) : (
+              children
+            )}
+          </>
         ) : (
           <>
             {shouldDisplayAppNavBar && <AppNavBar />}
@@ -78,7 +113,14 @@ export default function App({ children }: { children: ReactNode }) {
               ) : isLoading ? (
                 <LoadingComponent />
               ) : (
-                (removeServerErrorClass(), children)
+                (removeServerErrorClass(),
+                showTosAndMarketingEmailsModal &&
+                !isToCPage &&
+                !isPrivacyPage ? (
+                  <TosAndMarketingEmailsModal />
+                ) : (
+                  children
+                ))
               )}
             </div>
           </>

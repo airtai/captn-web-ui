@@ -4,20 +4,8 @@ import { useForm } from 'react-hook-form';
 import { styled } from './configs/stitches.config';
 import { AuthContext } from './Auth';
 import { useHistory } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import config from './configs/config';
-
-export const Message = styled('div', {
-  padding: '0.5rem 0.75rem',
-  borderRadius: '0.375rem',
-  marginTop: '1rem',
-  background: '$gray400',
-});
-
-export const MessageError = styled(Message, {
-  background: '#bb6e90',
-  color: '#eae4d9',
-});
+import TosAndMarketingEmails from '../components/TosAndMarketingEmails';
 
 const SocialAuth = styled('div', {
   marginTop: '1.5rem',
@@ -54,6 +42,12 @@ const SocialAuthButtons = styled('div', {
 });
 
 const googleSignInUrl = `${config.apiUrl}/auth/google/login`;
+
+export const checkBoxErrMsg = {
+  title:
+    'To proceed, please ensure you have accepted the Terms & Conditions, Privacy Policy, and opted to receive marketing emails.',
+  description: '',
+};
 
 export type LoginSignupFormFields = {
   [key: string]: string;
@@ -92,23 +86,6 @@ export const LoginSignupForm = ({
     formState: { errors },
     handleSubmit: hookFormHandleSubmit,
   } = hookForm;
-  //   const { handleSubmit } = useUsernameAndPassword({
-  //     isLogin,
-  //     onError: onErrorHandler,
-  //     onSuccess() {
-  //       history.push('/chat');
-  //     },
-  //   });
-  //   async function onSubmit(data) {
-  //     setIsLoading(true);
-  //     setErrorMessage(null);
-  //     setSuccessMessage(null);
-  //     try {
-  //       await handleSubmit(data);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   }
 
   useEffect(() => {
     if (tocChecked && marketingEmailsChecked) {
@@ -126,23 +103,30 @@ export const LoginSignupForm = ({
     setMarketingEmailsChecked(event.target.checked);
   };
 
+  const updateLocalStorage = () => {
+    localStorage.removeItem('hasAcceptedTos');
+    localStorage.removeItem('hasSubscribedToMarketingEmails');
+    localStorage.setItem('hasAcceptedTos', JSON.stringify(tocChecked));
+    localStorage.setItem(
+      'hasSubscribedToMarketingEmails',
+      JSON.stringify(marketingEmailsChecked)
+    );
+  };
+
   const handleClick = (
     event: React.MouseEvent<HTMLButtonElement>,
     googleSignInUrl: string
   ) => {
     event.preventDefault();
     if (loginFlow === 'signIn') {
+      updateLocalStorage();
       window.location.href = googleSignInUrl;
     } else {
       if (tocChecked && marketingEmailsChecked) {
+        updateLocalStorage();
         window.location.href = googleSignInUrl;
       } else {
-        const err = {
-          title:
-            'To proceed, please ensure you have accepted the Terms & Conditions, Privacy Policy, and opted to receive marketing emails.',
-          description: '',
-        };
-        setErrorMessage(err);
+        setErrorMessage(checkBoxErrMsg);
       }
     }
   };
@@ -162,54 +146,13 @@ export const LoginSignupForm = ({
   return (
     <>
       {loginFlow === 'signUp' && (
-        <>
-          <div className='mt-3'>
-            <input
-              type='checkbox'
-              id='toc'
-              checked={tocChecked}
-              onChange={handleTocChange}
-            />
-            <label className='text-sm ml-2' htmlFor='toc'>
-              I agree to the{' '}
-              <Link
-                to='/toc'
-                className='no-underline hover:underline'
-                target='_blank'
-              >
-                Terms & Conditions
-              </Link>{' '}
-              and{' '}
-              <Link
-                to='/privacy'
-                className='no-underline hover:underline'
-                target='_blank'
-              >
-                Privacy Policy
-              </Link>
-            </label>
-          </div>
-          <div>
-            <input
-              type='checkbox'
-              id='marketingEmails'
-              checked={marketingEmailsChecked}
-              onChange={handleMarketingEmailsChange}
-            />
-            <label className='text-sm ml-2' htmlFor='marketingEmails'>
-              I agree to receiving marketing emails
-            </label>
-          </div>
-          {errorMessage && (
-            <div className='text-sm'>
-              <MessageError style={{ border: '1px solid #bb6e90' }}>
-                {errorMessage.title}
-                {errorMessage.description && ': '}
-                {errorMessage.description}
-              </MessageError>
-            </div>
-          )}
-        </>
+        <TosAndMarketingEmails
+          tocChecked={tocChecked}
+          handleTocChange={handleTocChange}
+          marketingEmailsChecked={marketingEmailsChecked}
+          handleMarketingEmailsChange={handleMarketingEmailsChange}
+          errorMessage={errorMessage}
+        />
       )}
       <SocialAuth>
         <SocialAuthButtons gap='large' direction={socialButtonsDirection}>

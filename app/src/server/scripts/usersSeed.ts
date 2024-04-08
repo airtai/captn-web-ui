@@ -37,6 +37,7 @@ export function createRandomUser() {
     subscriptionTier: faker.helpers.arrayElement([TierIds.HOBBY, TierIds.PRO]),
     hasAcceptedTos: true,
     hasSubscribedToMarketingEmails: true,
+    isSignUpComplete: true,
   };
   return user;
 }
