@@ -57,19 +57,26 @@ export default function App({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (user) {
       if (!user.isSignUpComplete) {
-        const hasAcceptedTos =
-          localStorage.getItem('hasAcceptedTos') === 'true';
-        const hasSubscribedToMarketingEmails =
-          localStorage.getItem('hasSubscribedToMarketingEmails') === 'true';
-        if (!hasAcceptedTos || !hasSubscribedToMarketingEmails) {
-          setShowTosAndMarketingEmailsModal(true);
-        } else {
+        if (user.hasAcceptedTos && user.hasSubscribedToMarketingEmails) {
           updateCurrentUser({
             isSignUpComplete: true,
-            hasAcceptedTos: true,
-            hasSubscribedToMarketingEmails: true,
           });
           setShowTosAndMarketingEmailsModal(false);
+        } else {
+          const hasAcceptedTos =
+            localStorage.getItem('hasAcceptedTos') === 'true';
+          const hasSubscribedToMarketingEmails =
+            localStorage.getItem('hasSubscribedToMarketingEmails') === 'true';
+          if (!hasAcceptedTos || !hasSubscribedToMarketingEmails) {
+            setShowTosAndMarketingEmailsModal(true);
+          } else {
+            updateCurrentUser({
+              isSignUpComplete: true,
+              hasAcceptedTos: true,
+              hasSubscribedToMarketingEmails: true,
+            });
+            setShowTosAndMarketingEmailsModal(false);
+          }
         }
       } else {
         setShowTosAndMarketingEmailsModal(false);
