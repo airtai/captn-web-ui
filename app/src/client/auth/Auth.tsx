@@ -48,6 +48,11 @@ export const AuthContext = createContext({
   setSuccessMessage: (successMessage: string | null) => {},
 });
 
+const titles: Record<State, string> = {
+  login: 'Sign in to your account',
+  signup: 'Create a new account',
+};
+
 function Auth({
   state,
   appearance,
@@ -62,20 +67,21 @@ function Auth({
   const [errorMessage, setErrorMessage] = useState<ErrorMessage | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [loginFlow, setLoginFlow] = useState(titles.signup);
 
   // TODO(matija): this is called on every render, is it a problem?
   // If we do it in useEffect(), then there is a glitch between the default color and the
   // user provided one.
   const customTheme = createTheme(appearance ?? {});
 
-  const titles: Record<State, string> = {
-    login: 'Log in to your account',
-    signup: 'Create a new account',
-  };
-  const title = titles[state];
+  // const title = titles[state];
 
   const socialButtonsDirection =
     socialLayout === 'vertical' ? 'vertical' : 'horizontal';
+
+  const changeHeaderText = (loginFlow: string) => {
+    setLoginFlow(loginFlow === 'signIn' ? titles.signup : titles.login);
+  };
 
   return (
     <div className={customTheme}>
@@ -89,7 +95,7 @@ function Auth({
           />
         )}
         {/* <HeaderText>{title}</HeaderText> */}
-        <p className='mt-7 text-2xl'>{title}</p>
+        <p className='mt-7 text-2xl'>{loginFlow}</p>
       </div>
 
       {/* {errorMessage && (
@@ -109,6 +115,7 @@ function Auth({
             socialButtonsDirection={socialButtonsDirection}
             additionalSignupFields={additionalSignupFields}
             errorMessage={errorMessage}
+            changeHeaderText={changeHeaderText}
           />
         )}
       </AuthContext.Provider>
