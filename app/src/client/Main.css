@@ -52,28 +52,95 @@ a {
   list-style: disc;
 }
 
-.custom-auth-wrapper input[type='checkbox'] {
+.toc-marketing-checkbox-wrapper .checkbox-container {
+  padding-left: 22px;
+  display: block;
+  position: relative;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+/* Hide the browser's default checkbox */
+.toc-marketing-checkbox-wrapper input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+/* Create a custom checkbox */
+.toc-marketing-checkbox-wrapper .checkmark {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 13px;
+  width: 13px;
+  background-color: #eae4d9;
+}
+
+.toc-marketing-checkbox-wrapper.light .checkmark {
+  background-color: #fff;
+}
+
+/* On mouse-over, add a grey background color */
+.toc-marketing-checkbox-wrapper .checkbox-container:hover input ~ .checkmark {
+  background-color: #eae4d9;
+}
+.toc-marketing-checkbox-wrapper.light .checkbox-container:hover input ~ .checkmark {
+  background-color: #fff;
+}
+
+
+/* When the checkbox is checked, add a blue background */
+.toc-marketing-checkbox-wrapper .checkbox-container input:checked ~ .checkmark {
+  background-color: #6faabc;
+}
+.toc-marketing-checkbox-wrapper.light .checkbox-container input:checked ~ .checkmark {
+  background-color: #fff;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.toc-marketing-checkbox-wrapper .checkmark:after {
+  content: "";
+  position: absolute;
   display: none;
 }
 
-.custom-auth-wrapper input[type='checkbox'] + label {
-  position: relative;
-  padding-left: 35px;
-  cursor: pointer;
+/* Show the checkmark when checked */
+.toc-marketing-checkbox-wrapper .checkbox-container input:checked ~ .checkmark:after {
+  display: block;
 }
 
-.custom-auth-wrapper input[type='checkbox'] + label:before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 15px;
-  height: 15px;
-  background: #eae4d9;
+/* Style the checkmark/indicator */
+.toc-marketing-checkbox-wrapper .checkbox-container .checkmark:after {
+  left: 4px;
+  top: 0px;
+  width: 6px;
+  height: 11px;
+  border: solid #eae4d9;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.toc-marketing-checkbox-wrapper.light .checkbox-container .checkmark:after {
+  border: solid #6faabc;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 
-.custom-auth-wrapper input[type='checkbox']:checked + label:before {
-  background: #6faabc;
+.toc-marketing-container{
+  -webkit-transition: max-height 0.5s; 
+  -moz-transition: max-height 0.5s; 
+  -ms-transition: max-height 0.5s; 
+  -o-transition: max-height 0.5s; 
+  transition: max-height 0.5s;
+  overflow: hidden;
+  max-height: 280px;
 }
 
 .custom-auth-wrapper div>a {
@@ -138,14 +205,14 @@ a {
   -webkit-flex-wrap: nowrap;
   flex-wrap: nowrap;
   height: 100%;
-  justify-content: space-between;
+  justify-content: center;
   position: relative;
   width: 100%;
 }
 
 .gsi-material-button .gsi-material-button-contents {
-  -webkit-flex-grow: 1;
-  flex-grow: 1;
+  -webkit-flex-grow: 0;
+  flex-grow: 0;
   font-family: 'Roboto', arial, sans-serif;
   font-weight: 500;
   overflow: hidden;

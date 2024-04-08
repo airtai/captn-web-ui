@@ -14,7 +14,7 @@ const NotificationBox: React.FC<NotificationBoxProps> = ({
   const isSuccess = type === 'success';
 
   return (
-    <div className='fixed inset-0 flex items-center justify-center z-50 p-16 bg-black bg-opacity-50 backdrop-blur-md'>
+    <div className='fixed inset-0 flex items-center justify-center z-50 p-16 backdrop-blur-sm bg-captn-light-cream/30'>
       <div className='bg-captn-light-cream rounded-lg shadow-lg p-8 m-4 max-w-sm mx-auto'>
         <h2 className='text-xl font-bold mb-4 text-captn-dark-blue'>
           {isSuccess ? 'Success' : 'Error'}
