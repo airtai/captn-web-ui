@@ -46,12 +46,12 @@ export default function App({ children }: { children: ReactNode }) {
     return location.pathname.startsWith('/chat');
   }, [location]);
 
-  const isToCPage = useMemo(() => {
-    return location.pathname.startsWith('/toc');
+  const isCheckoutPage = useMemo(() => {
+    return location.pathname.startsWith('/checkout');
   }, [location]);
 
-  const isPrivacyPage = useMemo(() => {
-    return location.pathname.startsWith('/privacy');
+  const isAccountPage = useMemo(() => {
+    return location.pathname.startsWith('/account');
   }, [location]);
 
   useEffect(() => {
@@ -98,8 +98,10 @@ export default function App({ children }: { children: ReactNode }) {
         {isError && (addServerErrorClass(), (<ServerNotRechableComponent />))}
         {isAdminDashboard || isChatPage ? (
           <>
-            {showTosAndMarketingEmailsModal && !isToCPage && !isPrivacyPage ? (
-              <TosAndMarketingEmailsModal />
+            {showTosAndMarketingEmailsModal ? (
+              <>
+                <TosAndMarketingEmailsModal />
+              </>
             ) : (
               children
             )}
@@ -109,15 +111,16 @@ export default function App({ children }: { children: ReactNode }) {
             {shouldDisplayAppNavBar && <AppNavBar />}
             <div className='mx-auto max-w-7xl sm:px-6 lg:px-8'>
               {isError ? (
-                <>{children}</>
+                children
               ) : isLoading ? (
                 <LoadingComponent />
               ) : (
                 (removeServerErrorClass(),
                 showTosAndMarketingEmailsModal &&
-                !isToCPage &&
-                !isPrivacyPage ? (
-                  <TosAndMarketingEmailsModal />
+                (isCheckoutPage || isAccountPage) ? (
+                  <>
+                    <TosAndMarketingEmailsModal />
+                  </>
                 ) : (
                   children
                 ))

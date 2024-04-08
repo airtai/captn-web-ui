@@ -68,7 +68,7 @@ export default function AppNavBar() {
         <div className='hidden lg:flex lg:flex-1 gap-3 justify-end items-center'>
           <ul className='flex justify-center items-center gap-2 sm:gap-4'>
             {/* <DarkModeSwitcher /> */}
-            {!user?.hasPaid && user?.isSignUpComplete && <FreeTrialButton />}
+            {!user?.hasPaid && <FreeTrialButton />}
           </ul>
 
           {isUserLoading ? null : !user ? (
