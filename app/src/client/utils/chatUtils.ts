@@ -116,7 +116,8 @@ export const callOpenAiAgent = async (
   currentChatDetails: any,
   inProgressConversation: any,
   socket: any,
-  messages: any
+  messages: any,
+  refetchChatDetails: () => void
 ) => {
   const response = await getAgentResponse({
     chatId: activeChatId,
@@ -128,7 +129,8 @@ export const callOpenAiAgent = async (
     inProgressConversation,
     socket,
     messages,
-    activeChatId
+    activeChatId,
+    refetchChatDetails
   );
 };
 
@@ -138,7 +140,8 @@ export const handleAgentResponse = async (
   inProgressConversation: any,
   socket: any,
   messages: any,
-  activeChatId: number
+  activeChatId: number,
+  refetchChatDetails: () => void
 ) => {
   if (!!response.customer_brief) {
     socket.emit(
@@ -172,6 +175,12 @@ export const handleAgentResponse = async (
       },
     }));
 
+  const chatName = currentChatDetails.isChatNameUpdated
+    ? null
+    : response['conversation_name']
+      ? response['conversation_name']
+      : null;
+
   await updateCurrentChat({
     id: activeChatId,
     data: {
@@ -182,8 +191,14 @@ export const handleAgentResponse = async (
       smartSuggestions: response['smart_suggestions'],
       isExceptionOccured: response['is_exception_occured'] || false,
       customerBrief: response['customer_brief'],
+      ...(chatName && {
+        name: chatName,
+        isChatNameUpdated: true,
+      }),
     },
   });
+
+  chatName && refetchChatDetails();
 };
 
 export const handleChatError = async (

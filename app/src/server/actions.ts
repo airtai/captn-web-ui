@@ -430,6 +430,9 @@ export const getAgentResponse: GetAgentResponse<
       ...(json['customer_brief'] !== undefined && {
         customer_brief: json['customer_brief'],
       }),
+      ...(json['conversation_name'] !== undefined && {
+        conversation_name: json['conversation_name'],
+      }),
       ...(json['is_exception_occured'] !== undefined && {
         is_exception_occured: Boolean(json['is_exception_occured']),
       }),
