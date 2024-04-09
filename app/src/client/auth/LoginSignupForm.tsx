@@ -45,7 +45,7 @@ const googleSignInUrl = `${config.apiUrl}/auth/google/login`;
 
 export const checkBoxErrMsg = {
   title:
-    'To proceed, please ensure you have accepted the Terms & Conditions, Privacy Policy, and opted to receive marketing emails.',
+    "To proceed, please ensure you've accepted our Terms & Conditions and Privacy Policy.",
   description: '',
 };
 
@@ -88,10 +88,10 @@ export const LoginSignupForm = ({
   } = hookForm;
 
   useEffect(() => {
-    if (tocChecked && marketingEmailsChecked) {
+    if (tocChecked) {
       setErrorMessage(null);
     }
-  }, [tocChecked, marketingEmailsChecked]);
+  }, [tocChecked]);
 
   const handleTocChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTocChecked(event.target.checked);
@@ -122,7 +122,7 @@ export const LoginSignupForm = ({
       updateLocalStorage();
       window.location.href = googleSignInUrl;
     } else {
-      if (tocChecked && marketingEmailsChecked) {
+      if (tocChecked) {
         updateLocalStorage();
         window.location.href = googleSignInUrl;
       } else {

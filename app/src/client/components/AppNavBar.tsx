@@ -10,12 +10,7 @@ import DropdownUser from './DropdownUser';
 import { UserMenuItems } from '../components/UserMenuItems';
 import FreeTrialButton from '../components/FreeTrialButton';
 
-export const navigation = [
-  { name: 'Home', href: '/' },
-  { name: 'Chat', href: '/chat' },
-  // { name: 'Documentation', href: DOCS_URL },
-  // { name: 'Blog', href: BLOG_URL },
-];
+import { navigation } from '../landing-page/contentSections';
 
 const NavLogo = () => (
   <img className='h-10 w-auto -ml-2' src={logo} alt='Capt’n.ai' />

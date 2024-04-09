@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Link } from 'wasp/client/router';
 import { type User } from 'wasp/entities';
 import { logout } from 'wasp/client/auth';
@@ -16,6 +17,14 @@ export const UserMenuItems = ({
   const handleMobileMenuClick = () => {
     if (setMobileMenuOpen) setMobileMenuOpen(false);
   };
+
+  const isChatPage = useMemo(() => {
+    return location.pathname.startsWith('/chat');
+  }, [location]);
+
+  const navFontColor = isChatPage
+    ? 'text-captn-light-cream'
+    : 'text-captn-dark-blue';
 
   return (
     <>
@@ -39,7 +48,7 @@ export const UserMenuItems = ({
           <Link
             to='/account'
             onClick={handleMobileMenuClick}
-            className='no-underline flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out text-captn-light-cream hover:text-captn-light-blue'
+            className={`${navFontColor} no-underline flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out lg:text-captn-light-cream hover:text-captn-light-blue`}
           >
             <svg
               className='fill-current'
@@ -72,7 +81,7 @@ export const UserMenuItems = ({
             <Link
               to='/admin'
               onClick={handleMobileMenuClick}
-              className='no-underline  flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out text-captn-light-cream hover:text-captn-light-blue'
+              className={`${navFontColor} no-underline  flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out lg:text-captn-light-cream hover:text-captn-light-blue`}
             >
               <TfiDashboard size='1.1rem' />
               Admin dashboard
