@@ -4,7 +4,9 @@ import { fireEvent, screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Router } from 'react-router-dom';
 
-import TosAndMarketingEmailsModal from '../components/TosAndMarketingEmailsModal';
+import TosAndMarketingEmailsModal, {
+  notificationMsg,
+} from '../components/TosAndMarketingEmailsModal';
 
 describe('TosAndMarketingEmailsModal', () => {
   test('renders TosAndMarketingEmailsModal component', async () => {
@@ -55,9 +57,7 @@ describe('TosAndMarketingEmailsModal', () => {
   test('renders error message when save button is clicked and checkboxes are not checked', async () => {
     renderInContext(<TosAndMarketingEmailsModal />);
     fireEvent.click(screen.getByText('Save'));
-    const errorItems = await screen.findAllByText(
-      'Before accessing the application, please confirm your agreement to the Terms & Conditions, Privacy Policy, and consent to receiving marketing emails by checking the boxes below'
-    );
+    const errorItems = await screen.findAllByText(notificationMsg);
     expect(errorItems).toHaveLength(1);
   });
 });
