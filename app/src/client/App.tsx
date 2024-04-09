@@ -57,7 +57,7 @@ export default function App({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (user) {
       if (!user.isSignUpComplete) {
-        if (user.hasAcceptedTos && user.hasSubscribedToMarketingEmails) {
+        if (user.hasAcceptedTos) {
           updateCurrentUser({
             isSignUpComplete: true,
           });
@@ -67,13 +67,13 @@ export default function App({ children }: { children: ReactNode }) {
             localStorage.getItem('hasAcceptedTos') === 'true';
           const hasSubscribedToMarketingEmails =
             localStorage.getItem('hasSubscribedToMarketingEmails') === 'true';
-          if (!hasAcceptedTos || !hasSubscribedToMarketingEmails) {
+          if (!hasAcceptedTos) {
             setShowTosAndMarketingEmailsModal(true);
           } else {
             updateCurrentUser({
               isSignUpComplete: true,
-              hasAcceptedTos: true,
-              hasSubscribedToMarketingEmails: true,
+              hasAcceptedTos: hasAcceptedTos,
+              hasSubscribedToMarketingEmails: hasSubscribedToMarketingEmails,
             });
             setShowTosAndMarketingEmailsModal(false);
           }
