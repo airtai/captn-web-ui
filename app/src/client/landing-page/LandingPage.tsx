@@ -80,7 +80,7 @@ export default function LandingPage() {
               <UserActionButton user={user} renderGoToChat={false} />
               {isUserLoading ? null : !user ? (
                 <Link to='/login'>
-                  <div className='flex justify-end items-center duration-300 ease-in-out text-captn-dark-blue hover:text-captn-light-blue dark:text-captn-light-cream'>
+                  <div className='text-sm font-semibold leading-6 ml-2 flex justify-end items-center duration-300 ease-in-out text-captn-dark-blue hover:text-captn-light-blue dark:text-captn-light-cream'>
                     Sign in <BiLogIn size='1.1rem' className='ml-1' />
                   </div>
                 </Link>

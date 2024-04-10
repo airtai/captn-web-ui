@@ -50,7 +50,7 @@ export const AuthContext = createContext({
 
 const titles: Record<State, string> = {
   login: 'Sign in to your account',
-  signup: 'Create a new account',
+  signup: 'Create an account',
 };
 
 function Auth({
