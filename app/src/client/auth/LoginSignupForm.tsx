@@ -6,6 +6,7 @@ import { AuthContext } from './Auth';
 import config from './configs/config';
 import TosAndMarketingEmails from '../components/TosAndMarketingEmails';
 import { State } from './Auth';
+import { Link } from 'wasp/client/router';
 
 const SocialAuth = styled('div', {
   marginTop: '1.5rem',
@@ -192,15 +193,23 @@ export const LoginSignupForm = ({
       </SocialAuth>
       <div className='flex items-center justify-center'>
         <span className='text-sm block'>
-          {loginFlow === State.Login
+          {/* {loginFlow === State.Login
             ? "Don't have an account? "
-            : 'Already have an account? '}
-          <a
+            : 'Already have an account? '} */}
+          {/* <a
             className='no-underline hover:underline cursor-pointer'
             onClick={toggleLoginFlow}
           >
             {loginFlow === State.Login ? State.Signup : State.Login}
-          </a>
+          </a> */}
+          <Link
+            to={loginFlow === State.Login ? '/signup' : '/login'}
+            className='underline'
+          >
+            {loginFlow === State.Login
+              ? "Don't have an account? "
+              : 'Already have an account? '}
+          </Link>
         </span>
       </div>
     </>
