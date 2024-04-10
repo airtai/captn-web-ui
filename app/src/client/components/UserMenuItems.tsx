@@ -112,7 +112,7 @@ export const UserMenuItems = ({
             fill=''
           />
         </svg>
-        Log out
+        Sign out
       </button>
     </>
   );
