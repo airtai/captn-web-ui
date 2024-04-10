@@ -1,4 +1,5 @@
-import { useAuth, type CustomizationOptions } from 'wasp/client/auth';
+import { createTheme } from '@stitches/react';
+import { useAuth } from 'wasp/client/auth';
 import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
@@ -26,7 +27,7 @@ export default function Login() {
 
   return (
     <AuthWrapper>
-      <LoginForm logo={imgUrl} />
+      <LoginForm logo={imgUrl} state={State.Login} />
       {/* <br />
       <span className='text-sm font-medium text-captn-dark-blue dark:text-captn-dark-blue'>
         Don't have an account yet?{' '}
@@ -47,17 +48,25 @@ export default function Login() {
   );
 }
 
+export type CustomizationOptions = {
+  logo?: string;
+  socialLayout?: 'horizontal' | 'vertical';
+  appearance?: Parameters<typeof createTheme>[0];
+  state: State;
+};
+
 export function LoginForm({
   appearance,
   logo,
   socialLayout,
+  state,
 }: CustomizationOptions) {
   return (
     <Auth
       appearance={appearance}
       logo={logo}
       socialLayout={socialLayout}
-      state={State.Login}
+      state={state}
     />
   );
 }
