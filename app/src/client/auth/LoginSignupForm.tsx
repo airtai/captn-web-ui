@@ -59,13 +59,11 @@ export const LoginSignupForm = ({
   socialButtonsDirection = 'horizontal',
   additionalSignupFields,
   errorMessage,
-  changeHeaderText,
 }: {
   state: 'login' | 'signup';
   socialButtonsDirection?: 'horizontal' | 'vertical';
   additionalSignupFields?: any;
   errorMessage?: any;
-  changeHeaderText: any;
 }) => {
   const { isLoading, setErrorMessage, setSuccessMessage, setIsLoading } =
     useContext(AuthContext);
@@ -121,15 +119,6 @@ export const LoginSignupForm = ({
         setErrorMessage(checkBoxErrMsg);
       }
     }
-  };
-
-  const toggleLoginFlow = () => {
-    const newLoginFlow = loginFlow === State.Login ? State.Signup : State.Login;
-    setLoginFlow(newLoginFlow);
-    setTocChecked(false);
-    setMarketingEmailsChecked(false);
-    setErrorMessage(null);
-    changeHeaderText(loginFlow);
   };
 
   const googleBtnText =
@@ -193,22 +182,14 @@ export const LoginSignupForm = ({
       </SocialAuth>
       <div className='flex items-center justify-center'>
         <span className='text-sm block'>
-          {/* {loginFlow === State.Login
+          {loginFlow === State.Login
             ? "Don't have an account? "
-            : 'Already have an account? '} */}
-          {/* <a
-            className='no-underline hover:underline cursor-pointer'
-            onClick={toggleLoginFlow}
-          >
-            {loginFlow === State.Login ? State.Signup : State.Login}
-          </a> */}
+            : 'Already have an account? '}
           <Link
             to={loginFlow === State.Login ? '/signup' : '/login'}
-            className='underline'
+            className='no-underline hover:underline cursor-pointer'
           >
-            {loginFlow === State.Login
-              ? "Don't have an account? "
-              : 'Already have an account? '}
+            {loginFlow === State.Login ? 'Sign up' : 'Sign in'}
           </Link>
         </span>
       </div>

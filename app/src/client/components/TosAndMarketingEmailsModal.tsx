@@ -57,10 +57,6 @@ const TosAndMarketingEmailsModal = () => {
     }
   };
 
-  const customStyle = errorMessage
-    ? { maxHeight: '400px' }
-    : { maxHeight: '280px' };
-
   const isAccountPage = useMemo(() => {
     return location.pathname.startsWith('/account');
   }, [location]);
@@ -70,10 +66,7 @@ const TosAndMarketingEmailsModal = () => {
       {!isAccountPage && <AppNavBar />}
 
       <div className='flex items-center justify-center z-50 p-16 backdrop-blur-sm bg-captn-light-cream/30 mt-16'>
-        <div
-          className='toc-marketing-container bg-captn-dark-blue rounded-lg shadow-lg p-8 m-4 max-w-xl mx-auto'
-          style={customStyle}
-        >
+        <div className='toc-marketing-container bg-captn-dark-blue rounded-lg shadow-lg p-8 m-4 max-w-xl mx-auto'>
           <div className='inner-wrapper'>
             <h2 className='text-xl font-bold mb-4 text-captn-light-cream'>
               Almost there...
