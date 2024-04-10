@@ -9,6 +9,7 @@ import logo from '../static/logo.png';
 import DropdownUser from './DropdownUser';
 import { UserMenuItems } from '../components/UserMenuItems';
 import FreeTrialButton from '../components/FreeTrialButton';
+import UserActionButton from '../components/UserActionButton';
 
 import { navigation } from '../landing-page/contentSections';
 
@@ -63,7 +64,7 @@ export default function AppNavBar() {
         <div className='hidden lg:flex lg:flex-1 gap-3 justify-end items-center'>
           <ul className='flex justify-center items-center gap-2 sm:gap-4'>
             {/* <DarkModeSwitcher /> */}
-            {!user?.hasPaid && <FreeTrialButton />}
+            <UserActionButton user={user} renderGoToChat={false} />
           </ul>
 
           {isUserLoading ? null : !user ? (
