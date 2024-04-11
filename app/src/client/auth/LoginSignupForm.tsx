@@ -3,9 +3,10 @@ import { useForm } from 'react-hook-form';
 
 import { styled } from './configs/stitches.config';
 import { AuthContext } from './Auth';
-import { useHistory } from 'react-router-dom';
 import config from './configs/config';
 import TosAndMarketingEmails from '../components/TosAndMarketingEmails';
+import { State } from './Auth';
+import { Link } from 'wasp/client/router';
 
 const SocialAuth = styled('div', {
   marginTop: '1.5rem',
@@ -58,28 +59,17 @@ export const LoginSignupForm = ({
   socialButtonsDirection = 'horizontal',
   additionalSignupFields,
   errorMessage,
-  changeHeaderText,
 }: {
   state: 'login' | 'signup';
   socialButtonsDirection?: 'horizontal' | 'vertical';
   additionalSignupFields?: any;
   errorMessage?: any;
-  changeHeaderText: any;
 }) => {
   const { isLoading, setErrorMessage, setSuccessMessage, setIsLoading } =
     useContext(AuthContext);
-  const isLogin = state === 'login';
-  const cta = isLogin ? 'Log in' : 'Sign up';
-  const history = useHistory();
   const [tocChecked, setTocChecked] = useState(false);
   const [marketingEmailsChecked, setMarketingEmailsChecked] = useState(false);
-  const [loginFlow, setLoginFlow] = useState('signUp');
-  //   const onErrorHandler = (error) => {
-  //     setErrorMessage({
-  //       title: error.message,
-  //       description: error.data?.data?.message,
-  //     });
-  //   };
+  const [loginFlow, setLoginFlow] = useState(state);
   const hookForm = useForm<LoginSignupFormFields>();
   const {
     register,
@@ -118,7 +108,7 @@ export const LoginSignupForm = ({
     googleSignInUrl: string
   ) => {
     event.preventDefault();
-    if (loginFlow === 'signIn') {
+    if (loginFlow === State.Login) {
       updateLocalStorage();
       window.location.href = googleSignInUrl;
     } else {
@@ -131,21 +121,12 @@ export const LoginSignupForm = ({
     }
   };
 
-  const toggleLoginFlow = () => {
-    const newLoginFlow = loginFlow === 'signIn' ? 'signUp' : 'signIn';
-    setLoginFlow(newLoginFlow);
-    setTocChecked(false);
-    setMarketingEmailsChecked(false);
-    setErrorMessage(null);
-    changeHeaderText(loginFlow);
-  };
-
   const googleBtnText =
-    loginFlow === 'signIn' ? 'Sign in with Google' : 'Sign up with Google';
+    loginFlow === State.Login ? 'Sign in with Google' : 'Sign up with Google';
 
   return (
     <>
-      {loginFlow === 'signUp' && (
+      {loginFlow === State.Signup && (
         <TosAndMarketingEmails
           tocChecked={tocChecked}
           handleTocChange={handleTocChange}
@@ -201,15 +182,15 @@ export const LoginSignupForm = ({
       </SocialAuth>
       <div className='flex items-center justify-center'>
         <span className='text-sm block'>
-          {loginFlow === 'signIn'
+          {loginFlow === State.Login
             ? "Don't have an account? "
             : 'Already have an account? '}
-          <a
+          <Link
+            to={loginFlow === State.Login ? '/signup' : '/login'}
             className='no-underline hover:underline cursor-pointer'
-            onClick={toggleLoginFlow}
           >
-            {loginFlow === 'signIn' ? 'Sign Up' : 'Sign In'}
-          </a>
+            {loginFlow === State.Login ? 'Sign up' : 'Sign in'}
+          </Link>
         </span>
       </div>
     </>
