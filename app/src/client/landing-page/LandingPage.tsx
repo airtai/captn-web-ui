@@ -17,7 +17,7 @@ import {
 } from './contentSections';
 import DropdownUser from '../components/DropdownUser';
 import { UserMenuItems } from '../components/UserMenuItems';
-import FreeTrialButton from '../components/FreeTrialButton';
+import Footer from '../components/Footer';
 import UserActionButton from '../components/UserActionButton';
 
 export default function LandingPage() {
@@ -389,7 +389,7 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <div className='mx-auto mt-6 max-w-7xl px-6 lg:px-8 dark:bg-boxdark-2'>
+      {/* <div className='mx-auto mt-6 max-w-7xl px-6 lg:px-8 dark:bg-boxdark-2'>
         <footer
           aria-labelledby='footer-heading'
           className='relative border-t border-gray-900/10 dark:border-gray-200/10 py-5 sm:mt-5'
@@ -398,44 +398,9 @@ export default function LandingPage() {
             Footer
           </h2>
           <div className='flex items-start justify-end mt-10 gap-20'>
-            {/* <div>
-              <h3 className='text-sm font-semibold leading-6 text-captn-dark-blue dark:text-captn-light-cream'>
-                App
-              </h3>
-              <ul role='list' className='mt-6 space-y-4'>
-                {footerNavigation.app.map((item) => (
-                  <li key={item.name}>
-                    <a
-                      href={item.href}
-                      className='text-sm leading-6 text-captn-dark-blue hover:text-captn-dark-blue dark:text-captn-light-cream'
-                    >
-                      {item.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div> */}
-            <div>
-              <h3 className='text-sm font-semibold leading-6 text-captn-dark-blue dark:text-captn-light-cream'>
-                Company
-              </h3>
-              <ul role='list' className='mt-6 space-y-4'>
-                {footerNavigation.company.map((item) => (
-                  <li key={item.name}>
-                    <a
-                      href={item.href}
-                      className='text-sm leading-6 text-captn-dark-blue hover:text-captn-light-blue dark:text-captn-light-cream'
-                      target={`${item.name === 'About' ? '_blank' : '_self'}`}
-                    >
-                      {item.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
           </div>
         </footer>
-      </div>
+      </div> */}
     </div>
   );
 }
