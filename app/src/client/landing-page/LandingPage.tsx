@@ -17,7 +17,8 @@ import {
 } from './contentSections';
 import DropdownUser from '../components/DropdownUser';
 import { UserMenuItems } from '../components/UserMenuItems';
-import FreeTrialButton from '../components/FreeTrialButton';
+import Footer from '../components/Footer';
+import UserActionButton from '../components/UserActionButton';
 
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -76,15 +77,11 @@ export default function LandingPage() {
               {/* <ul className='flex justify-center items-center gap-2 2xsm:gap-4'>
                 <DarkModeSwitcher />
               </ul> */}
-              {!user?.hasPaid && (
-                <div className='flex items-center justify-center'>
-                  <FreeTrialButton />
-                </div>
-              )}
+              <UserActionButton user={user} renderGoToChat={false} />
               {isUserLoading ? null : !user ? (
                 <Link to='/login'>
-                  <div className='flex justify-end items-center duration-300 ease-in-out text-captn-dark-blue hover:text-captn-light-blue dark:text-captn-light-cream'>
-                    Log in <BiLogIn size='1.1rem' className='ml-1' />
+                  <div className='text-sm font-semibold leading-6 ml-2 flex justify-end items-center duration-300 ease-in-out text-captn-dark-blue hover:text-captn-light-blue dark:text-captn-light-cream'>
+                    Sign in <BiLogIn size='1.1rem' className='ml-1' />
                   </div>
                 </Link>
               ) : (
@@ -131,11 +128,19 @@ export default function LandingPage() {
                 </div>
                 <div className='py-6'>
                   {isUserLoading ? null : !user ? (
-                    <Link to='/login'>
-                      <div className='flex justify-end items-center duration-300 ease-in-out text-captn-dark-blue hover:text-captn-light-blue dark:text-captn-light-cream'>
-                        Log in <BiLogIn size='1.1rem' className='ml-1' />
-                      </div>
-                    </Link>
+                    <div className='text-right'>
+                      <Link
+                        to='/signup'
+                        className='no-underline rounded-md px-3.5 py-2.5 text-sm text-captn-light-cream  hover:bg-captn-cta-green-hover shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:text-captn-light-cream bg-captn-cta-green'
+                      >
+                        Create an account
+                      </Link>
+                      <Link to='/login'>
+                        <div className='mt-5 flex justify-end items-center duration-300 ease-in-out text-captn-dark-blue hover:text-captn-light-blue dark:text-captn-light-cream text-sm'>
+                          Sign in <BiLogIn size='1.1rem' className='ml-1' />
+                        </div>
+                      </Link>
+                    </div>
                   ) : (
                     <UserMenuItems user={user} />
                   )}
@@ -189,16 +194,7 @@ export default function LandingPage() {
                   business. 30 days free trial, no credit card required!
                 </p>
                 <div className='mt-10 flex items-center justify-center gap-x-6'>
-                  {!user?.hasPaid ? (
-                    <FreeTrialButton />
-                  ) : (
-                    <a
-                      href='/chat'
-                      className='no-underline rounded-md px-3.5 py-2.5 text-sm text-captn-light-cream ring-1 ring-inset ring-gray-200 hover:ring-2 hover:ring-captn-light-blue shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:text-captn-light-cream bg-captn-cta-green'
-                    >
-                      Go to chat <span aria-hidden='true'>→</span>
-                    </a>
-                  )}
+                  <UserActionButton user={user} renderGoToChat={true} />
                 </div>
               </div>
               <div className='mt-14 flow-root sm:mt-14 '>
@@ -393,7 +389,7 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <div className='mx-auto mt-6 max-w-7xl px-6 lg:px-8 dark:bg-boxdark-2'>
+      {/* <div className='mx-auto mt-6 max-w-7xl px-6 lg:px-8 dark:bg-boxdark-2'>
         <footer
           aria-labelledby='footer-heading'
           className='relative border-t border-gray-900/10 dark:border-gray-200/10 py-5 sm:mt-5'
@@ -402,44 +398,9 @@ export default function LandingPage() {
             Footer
           </h2>
           <div className='flex items-start justify-end mt-10 gap-20'>
-            {/* <div>
-              <h3 className='text-sm font-semibold leading-6 text-captn-dark-blue dark:text-captn-light-cream'>
-                App
-              </h3>
-              <ul role='list' className='mt-6 space-y-4'>
-                {footerNavigation.app.map((item) => (
-                  <li key={item.name}>
-                    <a
-                      href={item.href}
-                      className='text-sm leading-6 text-captn-dark-blue hover:text-captn-dark-blue dark:text-captn-light-cream'
-                    >
-                      {item.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div> */}
-            <div>
-              <h3 className='text-sm font-semibold leading-6 text-captn-dark-blue dark:text-captn-light-cream'>
-                Company
-              </h3>
-              <ul role='list' className='mt-6 space-y-4'>
-                {footerNavigation.company.map((item) => (
-                  <li key={item.name}>
-                    <a
-                      href={item.href}
-                      className='text-sm leading-6 text-captn-dark-blue hover:text-captn-light-blue dark:text-captn-light-cream'
-                      target={`${item.name === 'About' ? '_blank' : '_self'}`}
-                    >
-                      {item.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
           </div>
         </footer>
-      </div>
+      </div> */}
     </div>
   );
 }

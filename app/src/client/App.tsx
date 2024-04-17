@@ -5,6 +5,7 @@ import AppNavBar from './components/AppNavBar';
 import ServerNotRechableComponent from './components/ServerNotRechableComponent';
 import LoadingComponent from './components/LoadingComponent';
 import TosAndMarketingEmailsModal from './components/TosAndMarketingEmailsModal';
+import Footer from './components/Footer';
 import { useMemo, useEffect, ReactNode, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -32,9 +33,10 @@ export default function App({ children }: { children: ReactNode }) {
 
   const shouldDisplayAppNavBar = useMemo(() => {
     return (
-      location.pathname !== '/' &&
-      location.pathname !== '/login' &&
-      location.pathname !== '/signup'
+      location.pathname !== '/'
+      // &&
+      // location.pathname !== '/login' &&
+      // location.pathname !== '/signup'
     );
   }, [location]);
 
@@ -114,9 +116,9 @@ export default function App({ children }: { children: ReactNode }) {
             )}
           </>
         ) : (
-          <>
+          <div className='relative flex flex-col min-h-screen justify-between'>
             {shouldDisplayAppNavBar && <AppNavBar />}
-            <div className='mx-auto max-w-7xl sm:px-6 lg:px-8'>
+            <div className='mx-auto max-w-7xl sm:px-6 lg:px-8 w-full'>
               {isError ? (
                 children
               ) : isLoading ? (
@@ -133,7 +135,15 @@ export default function App({ children }: { children: ReactNode }) {
                 ))
               )}
             </div>
-          </>
+            <div>
+              <Footer />
+              <div className='flex items-center h-20 '>
+                <p className='text-center w-full text-sm text-captn-dark-blue opacity-50'>
+                  © 2024 airt. All rights reserved.
+                </p>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </>

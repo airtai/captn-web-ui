@@ -9,6 +9,7 @@ import logo from '../static/logo.png';
 import DropdownUser from './DropdownUser';
 import { UserMenuItems } from '../components/UserMenuItems';
 import FreeTrialButton from '../components/FreeTrialButton';
+import UserActionButton from '../components/UserActionButton';
 
 import { navigation } from '../landing-page/contentSections';
 
@@ -63,7 +64,7 @@ export default function AppNavBar() {
         <div className='hidden lg:flex lg:flex-1 gap-3 justify-end items-center'>
           <ul className='flex justify-center items-center gap-2 sm:gap-4'>
             {/* <DarkModeSwitcher /> */}
-            {!user?.hasPaid && <FreeTrialButton />}
+            <UserActionButton user={user} renderGoToChat={false} />
           </ul>
 
           {isUserLoading ? null : !user ? (
@@ -72,7 +73,7 @@ export default function AppNavBar() {
               className='text-sm font-semibold leading-6 ml-4'
             >
               <div className='flex items-center duration-300 ease-in-out text-captn-dark-blue hover:text-captn-light-blue dark:text-captn-light-cream'>
-                Log in <BiLogIn size='1.1rem' className='ml-1 mt-[0.1rem]' />
+                Sign in <BiLogIn size='1.1rem' className='ml-1 mt-[0.1rem]' />
               </div>
             </a>
           ) : (
@@ -120,11 +121,19 @@ export default function AppNavBar() {
               </div>
               <div className='py-6'>
                 {isUserLoading ? null : !user ? (
-                  <Link to='/login'>
-                    <div className='flex justify-end items-center duration-300 ease-in-out text-captn-dark-blue hover:text-captn-light-blue dark:text-captn-light-cream'>
-                      Log in <BiLogIn size='1.1rem' className='ml-1' />
-                    </div>
-                  </Link>
+                  <div className='text-right'>
+                    <Link
+                      to='/signup'
+                      className='no-underline rounded-md px-3.5 py-2.5 text-sm text-captn-light-cream  hover:bg-captn-cta-green-hover shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:text-captn-light-cream bg-captn-cta-green'
+                    >
+                      Create an account
+                    </Link>
+                    <Link to='/login'>
+                      <div className='mt-5 flex justify-end items-center duration-300 ease-in-out text-captn-dark-blue hover:text-captn-light-blue dark:text-captn-light-cream text-sm'>
+                        Sign in <BiLogIn size='1.1rem' className='ml-1' />
+                      </div>
+                    </Link>
+                  </div>
                 ) : (
                   <UserMenuItems
                     user={user}
