@@ -114,6 +114,6 @@ export const footerNavigation = {
   ],
   company: [
     { name: 'Privacy Policy', href: '/privacy' },
-    { name: 'Terms of Service', href: '/toc' },
+    { name: 'Terms & Conditions', href: '/toc' },
   ],
 };
