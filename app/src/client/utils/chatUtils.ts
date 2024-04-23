@@ -7,7 +7,7 @@ import {
   deleteLastConversationInChat,
 } from 'wasp/client/operations';
 
-import { type Conversation } from 'wasp/entities';
+import { type Conversation, type Chat } from 'wasp/entities';
 
 export const exceptionMessage =
   "Ahoy, mate! It seems our voyage hit an unexpected squall. Let's trim the sails and set a new course. Cast off once more by clicking the button below.";
@@ -235,4 +235,8 @@ export const handleChatError = async (
       },
     });
   }
+};
+
+export const shouldRenderChat = (chat: Chat): boolean => {
+  return chat.chatType !== 'daily_analysis' || chat.shouldShowChat;
 };

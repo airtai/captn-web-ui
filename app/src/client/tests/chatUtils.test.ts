@@ -1,4 +1,4 @@
-import { test, expect, vi, describe } from 'vitest';
+import { test, expect, vi, describe, it } from 'vitest';
 
 import * as operations from 'wasp/client/operations';
 import { type Conversation } from 'wasp/entities';
@@ -12,7 +12,9 @@ import {
   handleAgentResponse,
   handleChatError,
   exceptionMessage,
+  shouldRenderChat,
 } from '../utils/chatUtils';
+import { type Chat } from 'wasp/entities';
 
 vi.mock('wasp/client/operations', async (importOriginal) => {
   const mod = await importOriginal<typeof import('wasp/client/operations')>();
@@ -484,5 +486,59 @@ describe('chatUtils', () => {
         isExceptionOccured: true,
       },
     });
+  });
+});
+
+const patialTestChatFields = {
+  id: 0,
+  uuid: null,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  team_id: null,
+  team_name: null,
+  team_status: null,
+  proposedUserAction: [],
+  userRespondedWithNextAction: false,
+  emailContent: null,
+  agentChatHistory: null,
+  isExceptionOccured: false,
+  showLoader: false,
+  smartSuggestions: null,
+  streamAgentResponse: false,
+  customerBrief: null,
+  userId: null,
+  name: null,
+  isChatNameUpdated: false,
+};
+
+describe('shouldRenderChat', () => {
+  it('should return true if chatType is "daily_analysis" and shouldShowChat is true', () => {
+    const chat: Chat = {
+      chatType: 'daily_analysis',
+      shouldShowChat: true,
+      ...patialTestChatFields,
+    };
+
+    expect(shouldRenderChat(chat)).toBe(true);
+  });
+
+  it('should return true if chatType is not "daily_analysis"', () => {
+    const chat = {
+      chatType: 'other_type',
+      shouldShowChat: false,
+      ...patialTestChatFields,
+    };
+
+    expect(shouldRenderChat(chat)).toBe(true);
+  });
+
+  it('should return false if shouldShowChat is false', () => {
+    const chat = {
+      chatType: 'daily_analysis',
+      shouldShowChat: false,
+      ...patialTestChatFields,
+    };
+
+    expect(shouldRenderChat(chat)).toBe(false);
   });
 });
