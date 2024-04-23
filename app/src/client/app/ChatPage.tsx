@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSocket, useSocketListener } from 'wasp/client/webSocket';
 import { type User } from 'wasp/entities';
 
@@ -53,6 +53,20 @@ const ChatPage = ({ user }: { user: User }) => {
     { chatId: activeChatId },
     { enabled: !!activeChatId }
   );
+
+  useEffect(() => {
+    if (
+      currentChatDetails &&
+      currentChatDetails.chatType === 'daily_analysis'
+    ) {
+      updateCurrentChat({
+        id: activeChatId,
+        data: {
+          shouldShowChat: true,
+        },
+      });
+    }
+  }, [activeChatUUId, currentChatDetails]);
 
   useSocketListener('smartSuggestionsAddedToDB', updateState);
   useSocketListener('streamFromTeamFinished', updateState);

@@ -125,6 +125,7 @@ entity Chat {=psl
     team_name                 String?
     team_status               String?
     chatType                 String?
+    shouldShowChat             Boolean         @default(false)
     proposedUserAction       String[]          @default([])
     userRespondedWithNextAction             Boolean         @default(false)
     emailContent             String?
