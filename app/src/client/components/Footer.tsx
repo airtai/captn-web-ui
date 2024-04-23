@@ -9,9 +9,9 @@ const Footer = () => {
       >
         <div className='flex items-start justify-end mt-10 gap-20 mx-auto max-w-7xl sm:px-6 lg:px-8'>
           <div>
-            <h3 className='text-sm font-semibold leading-6 text-captn-dark-blue dark:text-captn-light-cream'>
+            {/* <h3 className='text-sm font-semibold leading-6 text-captn-dark-blue dark:text-captn-light-cream'>
               Company
-            </h3>
+            </h3> */}
             <ul role='list' className='mt-6 space-y-4'>
               {footerNavigation.company.map((item) => (
                 <li key={item.name}>
