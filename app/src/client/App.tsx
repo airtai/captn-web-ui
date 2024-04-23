@@ -139,7 +139,15 @@ export default function App({ children }: { children: ReactNode }) {
               <Footer />
               <div className='flex items-center h-20 '>
                 <p className='text-center w-full text-sm text-captn-dark-blue opacity-50'>
-                  © 2024 airt. All rights reserved.
+                  © 2024{' '}
+                  <a
+                    href='https://airt.ai'
+                    className='text-sm leading-6 hover:text-captn-light-blue text-captn-dark-blue underline'
+                    target='_blank'
+                  >
+                    airt
+                  </a>
+                  . All rights reserved.
                 </p>
               </div>
             </div>
