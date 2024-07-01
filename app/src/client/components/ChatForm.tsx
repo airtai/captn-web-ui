@@ -1,5 +1,6 @@
 import { type Chat } from 'wasp/entities';
 import React, { useRef, useState, useEffect, useCallback } from 'react';
+import TextareaAutosize from 'react-textarea-autosize';
 
 interface ChatFormProps {
   handleFormSubmit: (userQuery: string) => void;
@@ -32,10 +33,8 @@ export default function ChatForm({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!currentChatDetails.showLoader) {
-      const target = event.target as HTMLFormElement;
-      const userQuery = target.userQuery.value;
       setFormInputValue('');
-      handleFormSubmit(userQuery);
+      handleFormSubmit(formInputValue);
     }
   };
 
@@ -49,8 +48,13 @@ export default function ChatForm({
           Search
         </label>
         <div className='relative bottom-0 left-0 right-0 flex items-center justify-between m-1'>
-          <input
-            type='search'
+          <TextareaAutosize
+            minRows={1}
+            maxRows={4}
+            style={{
+              lineHeight: 2,
+              resize: 'none',
+            }}
             id='userQuery'
             name='search'
             className='block rounded-lg w-full h-12 text-sm text-captn-light-cream bg-captn-dark-blue focus:outline-none focus:ring-0 focus:border-captn-light-blue'
@@ -59,6 +63,12 @@ export default function ChatForm({
             ref={formInputRef}
             value={formInputValue}
             onChange={(e) => setFormInputValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSubmit(e as any);
+              }
+            }}
           />
           <button
             type='submit'
