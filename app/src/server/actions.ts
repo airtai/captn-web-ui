@@ -124,17 +124,28 @@ export const createNewChat: CreateNewChat<void, Chat> = async (
     throw new HttpError(500, 'No Subscription Found');
   }
 
+  let smartSuggestions: string[] = [];
+  try {
+    const response = await fetch(
+      `${ADS_SERVER_URL}/smart-suggestions?user_id=${context.user.id}`,
+      {
+        method: 'GET',
+      }
+    );
+    if (!response.ok) {
+      throw new Error('Failed to fetch smart suggestions');
+    }
+    smartSuggestions = (await response.json()) as string[];
+  } catch (error) {
+    smartSuggestions = [];
+  }
+
   const chat = await context.entities.Chat.create({
     data: {
       user: { connect: { id: context.user.id } },
       smartSuggestions: {
         type: 'manyOf',
-        suggestions: [
-          'Boost sales',
-          'Increase brand awareness',
-          'Drive website traffic',
-          'Promote a product or service',
-        ],
+        suggestions: smartSuggestions,
       },
     },
   });
