@@ -143,10 +143,17 @@ export default function ConversationsList({
                       )}
                     </div>
                   )}
-                  {(idx !== lastConversationIdx ||
-                    (idx === lastConversationIdx && isUserConversation)) && (
+                  {idx !== lastConversationIdx && !isUserConversation && (
                     <div className='chat-conversations text-base flex flex-col gap-2'>
                       <Markdown>{conversation.message}</Markdown>
+                    </div>
+                  )}
+                  {isUserConversation && (
+                    <div className='chat-conversations text-base flex flex-col gap-2'>
+                      <Markdown>{`<p class="whitespace-pre-wrap break-words">${conversation.message.replaceAll(
+                        '\n',
+                        '<br />'
+                      )}</p>`}</Markdown>
                     </div>
                   )}
                   {conversation.agentConversationHistory && (
